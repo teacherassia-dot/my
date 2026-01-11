@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تخطيط البث العالمي - Global Streaming Planner</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-light: #f1f5f9;
+            --text-dark: #1e293b;
+            --card-white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background: var(--card-white);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        h2 { color: var(--primary); font-size: 1.25rem; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #475569; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus { border-color: var(--accent); outline: none; }
+
+        .btn-calc {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+        .btn-calc:hover { background-color: #2563eb; }
+
+        /* Report Styles */
+        #reportSection { display: none; animation: slideUp 0.5s ease; }
+        
+        .alert-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+        .alert-info { background: #e0f2fe; color: #075985; border: 1px solid #7dd3fc; }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .comparison-table th { background-color: #f8fafc; color: #64748b; }
+        .best-value { background-color: #ecfdf5; font-weight: bold; color: var(--success); }
+
+        .alternatives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .alt-card {
+            border: 1px solid #cbd5e1;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .alt-card:hover { border-color: var(--accent); background: #f0f9ff; }
+        .alt-card.selected { border: 2px solid var(--accent); background: #eff6ff; }
+
+        .footer-sig {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #cbd5e1;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌍 حاسبة هندسة البث العالمية</h1>
+        <p>تحليل السعة، التوزيع الجغرافي العالمي، وبدائل السيرفرات</p>
+    </header>
+
+    <!-- Inputs -->
+    <div class="card">
+        <h2>1. بيانات البث والجمهور</h2>
+        <div class="grid-2">
+            <div>
+                <label>عدد المشاهدين المتوقع (عالمياً)</label>
+                <input type="number" id="viewers" value="2500">
+            </div>
+            <div>
+                <label>مدة البث (ساعات)</label>
+                <input type="number" id="duration" value="2">
+            </div>
+            <div>
+                <label>جودة البث (Bitrate)</label>
+                <select id="bitrate">
+                    <option value="2.5">HD 720p (2.5 Mbps)</option>
+                    <option value="4.5" selected="">FHD 1080p (4.5 Mbps)</option>
+                    <option value="6.0">FHD+ 1080p60 (6.0 Mbps)</option>
+                    <option value="8.0">4K UHD (8.0 Mbps)</option>
+                </select>
+            </div>
+            <div>
+                <label>سعة السيرفر الحالي (Upload Speed)</label>
+                <select id="serverCap">
+                    <option value="1000">1 Gbps (Standard)</option>
+                    <option value="2000">2 Gbps (Bonded/High)</option>
+                    <option value="10000">10 Gbps (Enterprise)</option>
+                    <option value="500">500 Mbps (VPS - Weak)</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-calc" onclick="generateReport()">تحليل هندسي وحساب التكاليف</button>
+    </div>
+
+    <div id="reportSection">
+        
+        <!-- Analysis -->
+        <div class="card">
+            <h2>2. تحليل السيرفر والشبكة (Global Reach Analysis)</h2>
+            <div id="bandwidthAnalysis"></div>
+            
+            <div id="serverAlternativeSection" style="display:none; margin-top:20px;">
+                <div class="alert-info">
+                    💡 <strong>مطلوب تدخل هندسي:</strong> بما أن السيرفر الحالي غير كافٍ أو أن الجمهور عالمي، يرجى اختيار بديل لاحتساب التكلفة:
+                </div>
+                <div class="alternatives-grid">
+                    <div class="alt-card" onclick="selectAlt(this, 'nimble')">
+                        <strong>Nimble Streamer</strong><br>
+                        <small>أداء أعلى 3x من Wowza على نفس العتاد. رخيص الترخيص.</small>
+                    </div>
+                    <div class="alt-card" onclick="selectAlt(this, 'wowza_cloud')">
+                        <strong>Wowza Video (SaaS)</strong><br>
+                        <small>خدمة سحابية مدارة بالكامل. لا تحتاج صيانة.</small>
+                    </div>
+                    <div class="alt-card" onclick="selectAlt(this, 'ant_media')">
+                        <strong>Ant Media Enterprise</strong><br>
+                        <small>خيار ممتاز للـ Ultra Low Latency.</small>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedAlt" value="">
+            </div>
+        </div>
+
+        <!-- Costs -->
+        <div class="card">
+            <h2>3. التكاليف التقديرية (توزيع عالمي مختلط)</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">
+                تم حساب الأسعار بناءً على "Blended Rate" (متوسط موزون) يشمل ارتفاع الأسعار في أفريقيا وآسيا وانخفاضها في أوروبا وأمريكا.
+            </p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>المزود (CDN Provider)</th>
+                        <th>نموذج التسعير</th>
+                        <th>التكلفة التقديرية للحدث</th>
+                        <th>ملاحظات المنطقة</th>
+                    </tr>
+                </thead>
+                <tbody id="costTableBody">
+                    <!-- JS will populate this -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Final Recommendation -->
+        <div class="card" style="border-right: 5px solid var(--primary);">
+            <h2>4. التقرير النهائي والتوصية</h2>
+            <div id="finalRecommendationText" style="white-space: pre-line; color: #334155;"></div>
+        </div>
+
+        <div class="footer-sig">
+            من إعداد م. عامر نوجا<br>
+            مدير الإدارة الهندسية
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function selectAlt(element, type) {
+        document.querySelectorAll('.alt-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedAlt').value = type;
+        // Re-run calculation with alternative selected
+        generateReport(true);
+    }
+
+    function generateReport(isUpdate = false) {
+        const viewers = parseInt(document.getElementById('viewers').value);
+        const duration = parseFloat(document.getElementById('duration').value);
+        const bitrate = parseFloat(document.getElementById('bitrate').value);
+        const serverCap = parseInt(document.getElementById('serverCap').value);
+        const selectedAlt = document.getElementById('selectedAlt').value;
+
+        // 1. Bandwidth Physics
+        const requiredBandwidthMbps = viewers * bitrate;
+        const safeLimit = serverCap * 0.8; // 80% efficiency
+        const isServerOverloaded = requiredBandwidthMbps > safeLimit;
+        
+        // 2. Data Volume (GB)
+        const totalDataGB = (requiredBandwidthMbps * duration * 3600) / 8 / 1024;
+        const totalMinutes = viewers * duration * 60;
+
+        // 3. Global Pricing Logic (Blended Rates for Global Audience)
+        // Assumptions: 30% NA/EU (Cheap), 40% Asia (Mid), 30% Africa/LatAm (Expensive)
+        const awsBlendedRate = (0.085 * 0.3) + (0.114 * 0.4) + (0.15 * 0.3); // Avg ~$0.116
+        const fastlyBlendedRate = 0.14; // Flat global avg estimate
+        const bunnyVolumeRate = 0.04; // Very cheap volume tier
+        const cloudflareRate = 1.0; // Per 1000 mins (Region agnostic mostly)
+
+        const costAWS = totalDataGB * awsBlendedRate;
+        const costFastly = totalDataGB * fastlyBlendedRate;
+        const costBunny = totalDataGB * bunnyVolumeRate; 
+        const costCloudflare = (totalMinutes / 1000) * cloudflareRate;
+
+        // Show Report
+        document.getElementById('reportSection').style.display = 'block';
+        if(!isUpdate) document.getElementById('reportSection').scrollIntoView({behavior:'smooth'});
+
+        // Analysis Output
+        const analysisDiv = document.getElementById('bandwidthAnalysis');
+        let analysisHTML = "";
+
+        if (isServerOverloaded) {
+            analysisHTML += `<div class="alert-danger">⚠️ تحذير حرج: السيرفر المحلي غير كافٍ!</div>`;
+            analysisHTML += `<p>أنت بحاجة إلى <strong>${requiredBandwidthMbps.toFixed(0)} Mbps</strong>، وسيرفرك يوفر فقط <strong>${safeLimit.toFixed(0)} Mbps</strong> بشكل آمن.</p>`;
+            document.getElementById('serverAlternativeSection').style.display = 'block';
+        } else {
+            analysisHTML += `<div class="alert-success">✅ السعة المحلية كافية (نظرياً)، ولكن...</div>`;
+            analysisHTML += `<p>رغم أن السيرفر يتحمل الحمل، إلا أن <strong>التغطية العالمية (أفريقيا/آسيا)</strong> تتطلب استخدام CDN إجبارياً لتفادي الـ Latency العالي.</p>`;
+            document.getElementById('serverAlternativeSection').style.display = 'block'; // Still show alternatives for better performance
+        }
+        analysisDiv.innerHTML = analysisHTML;
+
+        // Cost Table Output
+        const tableBody = document.getElementById('costTableBody');
+        let rows = `
+            <tr>
+                <td>Cloudflare Stream</td>
+                <td>بالدقيقة المشاهدة</td>
+                <td class="${costCloudflare < costAWS ? 'best-value' : ''}">$${costCloudflare.toFixed(2)}</td>
+                <td>سعر موحد عالمياً (ممتاز لأفريقيا)</td>
+            </tr>
+            <tr>
+                <td>AWS CloudFront</td>
+                <td>بالجيجابايت (Blended)</td>
+                <td>$${costAWS.toFixed(2)}</td>
+                <td>تغطية ممتازة ولكن مكلفة في الأسواق الناشئة</td>
+            </tr>
+            <tr>
+                <td>Fastly</td>
+                <td>بالجيجابايت (Premium)</td>
+                <td>$${costFastly.toFixed(2)}</td>
+                <td>الأسرع استجابة، الأغلى سعراً</td>
+            </tr>
+            <tr>
+                <td>BunnyCDN (Volume)</td>
+                <td>بالجيجابايت (Budget)</td>
+                <td class="${costBunny < costCloudflare ? 'best-value' : ''}">$${costBunny.toFixed(2)}</td>
+                <td>الخيار الاقتصادي الأفضل للبيانات الضخمة</td>
+            </tr>
+        `;
+        tableBody.innerHTML = rows;
+
+        // Final Recommendation Logic
+        let recText = `بناءً على المعطيات الهندسية لجمهور عالمي موزع: \n`;
+        
+        if (selectedAlt === 'nimble') {
+            recText += `🔹 **خيار السيرفر:** اخترت **Nimble Streamer**. هذا سيوفر عليك تكاليف العتاد مقارنة بـ Wowza، حيث يستهلك موارد أقل بنسبة كبيرة. قم بتنصيبه على سيرفر (Bare Metal) واربطه بـ CDN.\n`;
+        } else if (selectedAlt === 'wowza_cloud') {
+            recText += `🔹 **خيار السيرفر:** اخترت **Wowza Video**. هذا الخيار يلغي الحاجة لحسابات الـ CDN أعلاه لأنها مدمجة في الخدمة (Pass-through cost)، لكن تكلفة الاشتراك الشهري ستكون أعلى.\n`;
+        } else if (selectedAlt === 'ant_media') {
+            recText += `🔹 **خيار السيرفر:** اخترت **Ant Media**. خيار ممتاز إذا كان التأخير (Latency) هو الهاجس الأكبر لديك.\n`;
+        } else {
+            recText += `🔹 **خيار السيرفر:** يرجى تحديد بديل من القائمة أعلاه للحصول على توصية دقيقة بخصوص الـ Origin.\n`;
+        }
+
+        recText += `\n🔹 **توصية الـ CDN:** \n`;
+        if (costBunny < costCloudflare && costBunny < costAWS) {
+            recText += `نوصي بـ **BunnyCDN** كخيار اقتصادي جداً للتوزيع العالمي، خاصة أنك تغطي مناطق ذات تكلفة عالية (أفريقيا).`;
+        } else if (costCloudflare < costAWS) {
+            recText += `نوصي بـ **Cloudflare Stream**. ميزته الكبرى أنك لا تدفع فرق العملة للمناطق الغالية (أفريقيا/آسيا)، السعر ثابت مما يسهل التنبؤ بالميزانية.`;
+        } else {
+            recText += `نوصي بـ **AWS CloudFront** إذا كان لديك بنية تحتية موجودة مسبقاً على AWS، لسهولة التكامل.`;
+        }
+
+        document.getElementById('finalRecommendationText').innerText = recText;
+    }
+</script>
+
+
+
+</body></html>

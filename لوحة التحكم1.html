@@ -1,0 +1,523 @@
+<!DOCTYPE html><html><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;"><meta http-equiv="x-dns-prefetch-control" content="off"><script src="https://puc.poecdn.net/authenticated_preview_page/standard.3ef2c256959faf5a756d.js"></script>
+    <meta charset="utf-8">
+    <title>Poe</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://puc.poecdn.net/authenticated_preview_page/disableWebRTC.9710cebe07429a9e8e06.js"></script><meta name="x-poe-allow-downloads" content="true"><meta name="x-poe-datastore-behavior" content="disabled"><script src="https://puc.poecdn.net/authenticated_preview_page/tw.b9024aecac666455e183.js"></script><script src="https://puc.poecdn.net/authenticated_preview_page/deps.faccd16000d314dc16d5.js"></script><script src="https://puc.poecdn.net/authenticated_preview_page/exports.b0f0f482cdeb5302b0b9.js"></script><script src="https://puc.poecdn.net/authenticated_preview_page/renderer.75c73ae6b4235f62945a.js"></script><script>Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _react = require('react'); var _react2 = _interopRequireDefault(_react);
+var _recharts = require('recharts');
+var _lucidereact = require('lucide-react');
+
+// الألوان المستخدمة في التصميم
+const COLORS = {
+  bg: '#fdfbf7',
+  primary: '#4b8b9a',
+  red: '#ef5350',
+  dark: '#1f3a47',
+  badge: '#548c98',
+};
+
+const DefaultData = {
+  reportDate: '01/11/2025 - 30/11/2025',
+  totalNews: 263,
+  contributions: [
+    { name: 'Iran', value: 22 },
+    { name: 'Senegal', value: 8 },
+    { name: 'Chad', value: 19 },
+    { name: 'Malaysia', value: 9 },
+    { name: 'OSBU', value: 96 },
+    { name: 'Uganda', value: 0 },
+    { name: 'Benin', value: 0 },
+    { name: 'OIC', value: 0 },
+    { name: 'Gabon', value: 4 },
+    { name: 'Palestine', value: 4 },
+    { name: 'Indonesia', value: 5 },
+    { name: 'AUB', value: 11 },
+    { name: 'ASBU', value: 7 },
+    { name: 'UNIFEED', value: 78 },
+  ],
+  categories: [
+    { name: 'Pol. \\ Sec.', value: 129 },
+    { name: 'Soc. \\ Eco.', value: 76 },
+    { name: 'Sports', value: 18 },
+    { name: 'Cultural', value: 25 },
+    { name: 'Religious', value: 15 },
+  ],
+  events: [
+    {
+      id: 1,
+      type: 'Sports',
+      title: 'Islamic Solidarity Games ISG',
+      details: 'From 3 NOV till 21 NOV 2025 for (102) hours (30) Minutes'
+    },
+    {
+      id: 2,
+      type: 'Culture',
+      title: 'Opening ceremony of the Grand Egyptian Museum',
+      details: '2 NOV 2025 (3 hours = 180 minutes)'
+    },
+    {
+      id: 3,
+      type: 'Social',
+      title: 'Qatar: World Social Summit',
+      details: '4 - 6 NOV 2025\n3 hours (180 Minutes) per day\n3 Days (540 Minutes)'
+    },
+    {
+      id: 4,
+      type: 'Political',
+      title: 'Palestine: International Day of Solidarity',
+      details: '29 NOV 2025\n4 hours (240 Minutes)'
+    }
+  ],
+  contributor: {
+    name: 'Arezou Abdi IRIB',
+    country: 'Iran',
+    rank: 1
+  }
+};
+
+ function DynamicReportGenerator() {
+  const [data, setData] = _react.useState.call(void 0, DefaultData);
+  const [activeTab, setActiveTab] = _react.useState.call(void 0, 'general');
+  const [isPrintMode, setIsPrintMode] = _react.useState.call(void 0, false); // حالة جديدة للتحكم في وضع الطباعة
+
+  // --- Handlers ---
+  const handleGeneralChange = (e) => {
+    const { name, value } = e.target;
+    setData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const updateChartData = (chartKey, index, field, value) => {
+    const newData = [...data[chartKey]];
+    newData[index][field] = field === 'value' ? Number(value) : value;
+    setData(prev => ({ ...prev, [chartKey]: newData }));
+  };
+
+  const addChartItem = (chartKey) => {
+    const newItem = { name: 'New', value: 0 };
+    setData(prev => ({ ...prev, [chartKey]: [...prev[chartKey], newItem] }));
+  };
+
+  const removeChartItem = (chartKey, index) => {
+    const newData = data[chartKey].filter((_, i) => i !== index);
+    setData(prev => ({ ...prev, [chartKey]: newData }));
+  };
+
+  const updateEvent = (id, field, value) => {
+    const newEvents = data.events.map(ev => ev.id === id ? { ...ev, [field]: value } : ev);
+    setData(prev => ({ ...prev, events: newEvents }));
+  };
+
+  const addEvent = () => {
+    const newEvent = { id: Date.now(), type: 'Social', title: 'New Event', details: 'Details here...' };
+    setData(prev => ({ ...prev, events: [...prev.events, newEvent] }));
+  };
+
+  const removeEvent = (id) => {
+    setData(prev => ({ ...prev, events: prev.events.filter(ev => ev.id !== id) }));
+  };
+
+  // بدلاً من window.print، نقوم بتبديل وضع العرض
+  const togglePrintMode = () => {
+    setIsPrintMode(!isPrintMode);
+  };
+
+  return (
+    _react2.default.createElement('div', { className: "min-h-screen bg-gray-100 font-sans flex flex-col md:flex-row"     ,}
+
+      /* --- CSS for Print --- */
+      , _react2.default.createElement('style', null, `
+        @media print {
+          .no-print { display: none !important; }
+          .print-area { width: 100% !important; max-width: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; }
+          body { background: white; }
+          .page-break { page-break-inside: avoid; }
+          /* إخفاء زر الإغلاق عند الطباعة الفعلية */
+          .close-print-btn { display: none !important; }
+        }
+      `)
+
+      /* --- LEFT PANEL: CONTROL DASHBOARD (Hidden in Print Mode) --- */
+      , !isPrintMode && (
+        _react2.default.createElement('div', { className: "w-full md:w-1/3 bg-white border-r border-gray-200 h-screen overflow-y-auto no-print shadow-lg z-10"         ,}
+          , _react2.default.createElement('div', { className: "p-6 bg-slate-800 text-white sticky top-0 z-20"     ,}
+            , _react2.default.createElement('h2', { className: "text-xl font-bold flex items-center gap-2"    ,}
+              , _react2.default.createElement(_lucidereact.Layout, { size: 20,} ), " لوحة التحكم"
+            )
+            , _react2.default.createElement('p', { className: "text-slate-400 text-sm mt-1"  ,}, "أدخل البيانات لتحديث التقرير"   )
+          )
+
+          , _react2.default.createElement('div', { className: "p-4 space-y-6" ,}
+
+            /* Navigation Tabs */
+            , _react2.default.createElement('div', { className: "flex space-x-1 bg-gray-100 p-1 rounded-lg rtl:space-x-reverse"     ,}
+              , ['general', 'charts', 'events', 'contributor'].map(tab => (
+                _react2.default.createElement('button', {
+                  key: tab,
+                  onClick: () => setActiveTab(tab),
+                  className: `flex-1 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === tab ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`,}
+
+                  , tab === 'general' && 'عام'
+                  , tab === 'charts' && 'الرسوم'
+                  , tab === 'events' && 'الأحداث'
+                  , tab === 'contributor' && 'المساهم'
+                )
+              ))
+            )
+
+            /* TAB: GENERAL */
+            , activeTab === 'general' && (
+              _react2.default.createElement('div', { className: "space-y-4 animate-in fade-in slide-in-from-left-4 duration-300"    ,}
+                , _react2.default.createElement('div', null
+                  , _react2.default.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-1"    ,}, "الفترة الزمنية" )
+                  , _react2.default.createElement('div', { className: "flex items-center border rounded-md px-3 py-2 bg-gray-50"      ,}
+                    , _react2.default.createElement(_lucidereact.Calendar, { size: 16, className: "text-gray-400 mr-2" ,} )
+                    , _react2.default.createElement('input', { 
+                      type: "text", 
+                      name: "reportDate",
+                      value: data.reportDate,
+                      onChange: handleGeneralChange,
+                      className: "w-full bg-transparent outline-none text-sm"   ,}
+                    )
+                  )
+                )
+                , _react2.default.createElement('div', null
+                  , _react2.default.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-1"    ,}, "إجمالي الأخبار المتبادلة"  )
+                  , _react2.default.createElement('div', { className: "flex items-center border rounded-md px-3 py-2 bg-gray-50"      ,}
+                    , _react2.default.createElement(_lucidereact.Activity, { size: 16, className: "text-gray-400 mr-2" ,} )
+                    , _react2.default.createElement('input', { 
+                      type: "number", 
+                      name: "totalNews",
+                      value: data.totalNews,
+                      onChange: handleGeneralChange,
+                      className: "w-full bg-transparent outline-none text-sm"   ,}
+                    )
+                  )
+                )
+                , _react2.default.createElement('div', { className: "pt-4 border-t" ,}
+                  , _react2.default.createElement('button', { 
+                    onClick: togglePrintMode,
+                    className: "w-full bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"          ,}
+
+                    , _react2.default.createElement(_lucidereact.Printer, { size: 18,} ), " تجهيز للطباعة (عرض كامل)"
+                  )
+                  , _react2.default.createElement('p', { className: "text-xs text-gray-500 mt-2 text-center"   ,}, "بعد الضغط، استخدم Ctrl+P لطباعة الصفحة"
+
+                  )
+                )
+              )
+            )
+
+            /* TAB: CHARTS */
+            , activeTab === 'charts' && (
+              _react2.default.createElement('div', { className: "space-y-6 animate-in fade-in slide-in-from-left-4 duration-300"    ,}
+                /* Contributions Chart */
+                , _react2.default.createElement('div', null
+                  , _react2.default.createElement('div', { className: "flex justify-between items-center mb-2"   ,}
+                    , _react2.default.createElement('h3', { className: "font-bold text-slate-700 text-sm"  ,}, "مساهمات المنظمات" )
+                    , _react2.default.createElement('button', { onClick: () => addChartItem('contributions'), className: "text-blue-600 hover:bg-blue-50 p-1 rounded"   ,}, _react2.default.createElement(_lucidereact.Plus, { size: 16,}))
+                  )
+                  , _react2.default.createElement('div', { className: "space-y-2 max-h-60 overflow-y-auto pr-1"   ,}
+                    , data.contributions.map((item, idx) => (
+                      _react2.default.createElement('div', { key: idx, className: "flex gap-2 items-center"  ,}
+                        , _react2.default.createElement('input', { 
+                          type: "text", 
+                          value: item.name, 
+                          onChange: (e) => updateChartData('contributions', idx, 'name', e.target.value),
+                          className: "border rounded px-2 py-1 text-sm w-24"     ,}
+                        )
+                        , _react2.default.createElement('input', { 
+                          type: "number", 
+                          value: item.value, 
+                          onChange: (e) => updateChartData('contributions', idx, 'value', e.target.value),
+                          className: "border rounded px-2 py-1 text-sm w-16"     ,}
+                        )
+                        , _react2.default.createElement('button', { onClick: () => removeChartItem('contributions', idx), className: "text-red-400 hover:text-red-600" ,}, _react2.default.createElement(_lucidereact.Trash2, { size: 14,}))
+                      )
+                    ))
+                  )
+                )
+
+                , _react2.default.createElement('hr', null )
+
+                /* Categories Chart */
+                , _react2.default.createElement('div', null
+                  , _react2.default.createElement('div', { className: "flex justify-between items-center mb-2"   ,}
+                    , _react2.default.createElement('h3', { className: "font-bold text-slate-700 text-sm"  ,}, "فئات الأخبار" )
+                    , _react2.default.createElement('button', { onClick: () => addChartItem('categories'), className: "text-blue-600 hover:bg-blue-50 p-1 rounded"   ,}, _react2.default.createElement(_lucidereact.Plus, { size: 16,}))
+                  )
+                  , _react2.default.createElement('div', { className: "space-y-2",}
+                    , data.categories.map((item, idx) => (
+                      _react2.default.createElement('div', { key: idx, className: "flex gap-2 items-center"  ,}
+                        , _react2.default.createElement('input', { 
+                          type: "text", 
+                          value: item.name, 
+                          onChange: (e) => updateChartData('categories', idx, 'name', e.target.value),
+                          className: "border rounded px-2 py-1 text-sm w-24"     ,}
+                        )
+                        , _react2.default.createElement('input', { 
+                          type: "number", 
+                          value: item.value, 
+                          onChange: (e) => updateChartData('categories', idx, 'value', e.target.value),
+                          className: "border rounded px-2 py-1 text-sm w-16"     ,}
+                        )
+                        , _react2.default.createElement('button', { onClick: () => removeChartItem('categories', idx), className: "text-red-400 hover:text-red-600" ,}, _react2.default.createElement(_lucidereact.Trash2, { size: 14,}))
+                      )
+                    ))
+                  )
+                )
+              )
+            )
+
+            /* TAB: EVENTS */
+            , activeTab === 'events' && (
+              _react2.default.createElement('div', { className: "space-y-4 animate-in fade-in slide-in-from-left-4 duration-300"    ,}
+                , _react2.default.createElement('div', { className: "flex justify-between items-center"  ,}
+                  , _react2.default.createElement('h3', { className: "font-bold text-slate-700" ,}, "قائمة الأحداث" )
+                  , _react2.default.createElement('button', { onClick: addEvent, className: "bg-blue-600 text-white px-3 py-1 rounded text-xs flex items-center gap-1 hover:bg-blue-700"         ,}
+                    , _react2.default.createElement(_lucidereact.Plus, { size: 14,}), " إضافة حدث"
+                  )
+                )
+                , _react2.default.createElement('div', { className: "space-y-4",}
+                  , data.events.map((ev) => (
+                    _react2.default.createElement('div', { key: ev.id, className: "border p-3 rounded-lg bg-gray-50 relative group"     ,}
+                      , _react2.default.createElement('button', { onClick: () => removeEvent(ev.id), className: "absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"       ,}
+                        , _react2.default.createElement(_lucidereact.Trash2, { size: 16,} )
+                      )
+                      , _react2.default.createElement('div', { className: "grid gap-2" ,}
+                        , _react2.default.createElement('select', { 
+                          value: ev.type,
+                          onChange: (e) => updateEvent(ev.id, 'type', e.target.value),
+                          className: "border rounded px-2 py-1 text-xs w-full"     ,}
+
+                          , _react2.default.createElement('option', { value: "Sports",}, "Sports")
+                          , _react2.default.createElement('option', { value: "Culture",}, "Culture")
+                          , _react2.default.createElement('option', { value: "Social",}, "Social")
+                          , _react2.default.createElement('option', { value: "Political",}, "Political")
+                        )
+                        , _react2.default.createElement('input', { 
+                          type: "text", 
+                          value: ev.title,
+                          onChange: (e) => updateEvent(ev.id, 'title', e.target.value),
+                          className: "border rounded px-2 py-1 text-sm font-bold w-full"      ,
+                          placeholder: "Event Title" ,}
+                        )
+                        , _react2.default.createElement('textarea', { 
+                          value: ev.details,
+                          onChange: (e) => updateEvent(ev.id, 'details', e.target.value),
+                          className: "border rounded px-2 py-1 text-xs w-full h-16"      ,
+                          placeholder: "Details...",}
+                        )
+                      )
+                    )
+                  ))
+                )
+              )
+            )
+
+            /* TAB: CONTRIBUTOR */
+            , activeTab === 'contributor' && (
+              _react2.default.createElement('div', { className: "space-y-4 animate-in fade-in slide-in-from-left-4 duration-300"    ,}
+                , _react2.default.createElement('h3', { className: "font-bold text-slate-700" ,}, "أفضل مساهم" )
+                , _react2.default.createElement('div', null
+                  , _react2.default.createElement('label', { className: "block text-xs font-bold text-gray-500 uppercase"    ,}, "الاسم")
+                  , _react2.default.createElement('input', { 
+                    type: "text", 
+                    value: data.contributor.name,
+                    onChange: (e) => setData(prev => ({...prev, contributor: {...prev.contributor, name: e.target.value}})),
+                    className: "border rounded w-full px-3 py-2 mt-1"     ,}
+                  )
+                )
+                , _react2.default.createElement('div', null
+                  , _react2.default.createElement('label', { className: "block text-xs font-bold text-gray-500 uppercase"    ,}, "الدولة")
+                  , _react2.default.createElement('input', { 
+                    type: "text", 
+                    value: data.contributor.country,
+                    onChange: (e) => setData(prev => ({...prev, contributor: {...prev.contributor, country: e.target.value}})),
+                    className: "border rounded w-full px-3 py-2 mt-1"     ,}
+                  )
+                )
+              )
+            )
+
+          )
+        )
+      )
+
+      /* --- RIGHT PANEL: LIVE PREVIEW --- */
+      , _react2.default.createElement('div', { className: `w-full ${isPrintMode ? 'h-auto bg-white' : 'md:w-2/3 bg-gray-200 h-screen'} overflow-y-auto p-4 md:p-8 flex justify-center transition-all duration-300`,}
+
+        /* زر إغلاق وضع الطباعة */
+        , isPrintMode && (
+          _react2.default.createElement('button', { 
+            onClick: togglePrintMode,
+            className: "close-print-btn fixed top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-2 hover:bg-red-700"              ,}
+
+            , _react2.default.createElement(_lucidereact.X, { size: 20,} ), " إغلاق وضع الطباعة"
+          )
+        )
+
+        /* REPORT CONTAINER */
+        , _react2.default.createElement('div', { className: `print-area bg-[#fdfbf7] w-full max-w-[900px] shadow-2xl p-8 relative text-[#1a3c4d] ${isPrintMode ? 'min-h-0' : 'min-h-[1100px]'}`,}
+
+          /* Header */
+          , _react2.default.createElement('header', { className: "flex justify-between items-start border-b-2 border-gray-100 pb-6 mb-8"      ,}
+            , _react2.default.createElement('div', { className: "flex items-center gap-4"  ,}
+              , _react2.default.createElement('div', { className: "w-16 h-16 rounded-full border-2 border-green-700 flex items-center justify-center relative"        ,}
+                 , _react2.default.createElement('div', { className: "absolute top-1 text-green-700 text-[8px] font-bold"    ,}, "OIC")
+                 , _react2.default.createElement(_lucidereact.Activity, { className: "text-yellow-600", size: 32,} )
+              )
+              , _react2.default.createElement('div', null
+                , _react2.default.createElement('h2', { className: "text-green-800 font-bold text-sm uppercase tracking-wide"    ,}, "O.I.C States Broadcasting Union"   )
+                , _react2.default.createElement('h2', { className: "text-green-700 text-xs font-light"  ,}, "Union des Radios et Télévisions des pays de l'OCI"        )
+              )
+            )
+            , _react2.default.createElement('div', { className: "text-right",}
+              , _react2.default.createElement('h1', { className: "text-3xl font-black text-[#1a3c4d] mb-2"   ,}, "Monthly exchange activity report"   )
+              , _react2.default.createElement('div', { className: "inline-block border-2 border-[#a88bc4] text-[#548c98] px-4 py-1 font-bold text-lg rounded"        ,}, "("
+                , data.reportDate, ")"
+              )
+            )
+          )
+
+          /* Main Grid */
+          , _react2.default.createElement('div', { className: "grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-10"   ,}
+
+            /* Left Column */
+            , _react2.default.createElement('div', { className: "space-y-8",}
+
+              /* Section 1 */
+              , _react2.default.createElement('div', { className: "flex items-center gap-3"  ,}
+                , _react2.default.createElement('div', { className: "w-8 h-8 rounded-full bg-[#548c98] text-white flex items-center justify-center font-bold text-lg"         ,}, "1")
+                , _react2.default.createElement('h3', { className: "text-xl font-bold" ,}, "Exchanged news items: "   , _react2.default.createElement('span', { className: "text-[#ef5350] text-2xl ml-2"  ,}, data.totalNews))
+              )
+
+              /* Section 2 */
+              , _react2.default.createElement('div', null
+                , _react2.default.createElement('div', { className: "flex items-center gap-3 mb-4"   ,}
+                  , _react2.default.createElement('div', { className: "w-8 h-8 rounded-full bg-[#548c98] text-white flex items-center justify-center font-bold text-lg"         ,}, "2")
+                  , _react2.default.createElement('h3', { className: "text-xl font-bold" ,}, "Contributions from organisations:"  )
+                )
+
+                /* Chart 1 */
+                , _react2.default.createElement('div', { className: "h-64 w-full" ,}
+                  , _react2.default.createElement(_recharts.ResponsiveContainer, { width: "100%", height: "100%",}
+                    , _react2.default.createElement(_recharts.BarChart, { data: data.contributions, margin: { top: 20, right: 10, left: -20, bottom: 40 },}
+                      , _react2.default.createElement(_recharts.CartesianGrid, { strokeDasharray: "3 3" , vertical: false, stroke: "#e0e0e0",} )
+                      , _react2.default.createElement(_recharts.XAxis, { dataKey: "name", angle: -45, textAnchor: "end", interval: 0, tick: {fontSize: 10, fill: '#333'},} )
+                      , _react2.default.createElement(_recharts.YAxis, { tick: {fontSize: 10},} )
+                      , _react2.default.createElement(_recharts.Bar, { dataKey: "value", fill: COLORS.red, radius: [2, 2, 0, 0],}
+                        , _react2.default.createElement(_recharts.LabelList, { dataKey: "value", position: "top", style: { fill: 'black', fontSize: 11, fontWeight: 'bold' },} )
+                        , data.contributions.map((entry, index) => (
+                           _react2.default.createElement(_recharts.Cell, { key: `cell-${index}`, fill: entry.value > 50 ? COLORS.red : COLORS.red,} )
+                        ))
+                      )
+                    )
+                  )
+                )
+              )
+
+              /* Section 3 */
+              , _react2.default.createElement('div', null
+                , _react2.default.createElement('div', { className: "flex items-center gap-3 mb-4"   ,}
+                  , _react2.default.createElement('div', { className: "w-8 h-8 rounded-full bg-[#548c98] text-white flex items-center justify-center font-bold text-lg"         ,}, "3")
+                  , _react2.default.createElement('h3', { className: "text-xl font-bold" ,}, "Category of news items:"   )
+                )
+
+                /* Chart 2 */
+                , _react2.default.createElement('div', { className: "h-56 w-full" ,}
+                  , _react2.default.createElement(_recharts.ResponsiveContainer, { width: "100%", height: "100%",}
+                    , _react2.default.createElement(_recharts.BarChart, { data: data.categories, margin: { top: 20, right: 10, left: -20, bottom: 20 },}
+                      , _react2.default.createElement(_recharts.CartesianGrid, { strokeDasharray: "3 3" , vertical: false, stroke: "#e0e0e0",} )
+                      , _react2.default.createElement(_recharts.XAxis, { dataKey: "name", tick: {fontSize: 11, fill: '#333'},} )
+                      , _react2.default.createElement(_recharts.YAxis, { tick: {fontSize: 10},} )
+                      , _react2.default.createElement(_recharts.Bar, { dataKey: "value", fill: COLORS.dark, radius: [2, 2, 0, 0], barSize: 60,}
+                        , _react2.default.createElement(_recharts.LabelList, { dataKey: "value", position: "top", style: { fill: COLORS.red, fontSize: 12, fontWeight: 'bold' },} )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+
+            /* Right Column */
+            , _react2.default.createElement('div', { className: "space-y-6",}
+
+              /* Section 4 */
+              , _react2.default.createElement('div', null
+                , _react2.default.createElement('div', { className: "flex items-center gap-3 mb-2"   ,}
+                  , _react2.default.createElement('div', { className: "w-8 h-8 rounded-full bg-[#548c98] text-white flex items-center justify-center font-bold text-lg"         ,}, "4")
+                  , _react2.default.createElement('h3', { className: "text-xl font-bold" ,}, "Major events" )
+                )
+
+                , _react2.default.createElement('div', { className: "bg-[#548c98] text-white rounded-2xl p-5 shadow-sm"    ,}
+                  /* Logos Placeholder */
+                  , _react2.default.createElement('div', { className: "flex gap-2 mb-4 bg-white/90 p-2 rounded-lg justify-center"      ,}
+                     , _react2.default.createElement('div', { className: "h-8 w-8 bg-blue-500 rounded-full"   ,})
+                     , _react2.default.createElement('div', { className: "h-8 w-8 bg-red-500 rounded-full"   ,})
+                     , _react2.default.createElement('div', { className: "h-8 w-8 bg-green-500 rounded-full"   ,})
+                  )
+
+                  , _react2.default.createElement('div', { className: "space-y-4",}
+                    , data.events.map((ev) => (
+                      _react2.default.createElement('div', { key: ev.id, className: "border-b border-white/20 pb-3 last:border-0 last:pb-0"    ,}
+                        , _react2.default.createElement('span', { 
+                          className: `inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase mb-1 mr-2
+                            ${ev.type === 'Sports' ? 'bg-[#e74c3c]' : ''}
+                            ${ev.type === 'Culture' ? 'bg-[#e67e22]' : ''}
+                            ${ev.type === 'Social' ? 'bg-[#e74c3c]' : ''}
+                            ${ev.type === 'Political' ? 'bg-[#e74c3c]' : ''}
+                          `,}
+
+                          , ev.type
+                        )
+                        , _react2.default.createElement('span', { className: "font-bold text-[#ffeb3b] text-sm leading-tight"   ,}, ev.title)
+                        , _react2.default.createElement('div', { className: "text-xs mt-1 opacity-90 whitespace-pre-line leading-relaxed"    ,}
+                          , ev.details
+                        )
+                      )
+                    ))
+                  )
+                )
+              )
+
+              /* Section 5 */
+              , _react2.default.createElement('div', { className: "text-center pt-4" ,}
+                , _react2.default.createElement('div', { className: "flex items-center justify-center gap-3 mb-2"    ,}
+                  , _react2.default.createElement('div', { className: "w-8 h-8 rounded-full bg-[#548c98] text-white flex items-center justify-center font-bold text-lg"         ,}, "5")
+                  , _react2.default.createElement('h3', { className: "text-xl font-bold leading-tight"  ,}, "Best Contributor" , _react2.default.createElement('br', null), "of the month"  )
+                )
+
+                , _react2.default.createElement('div', { className: "flex flex-col items-center"  ,}
+                  , _react2.default.createElement('h4', { className: "text-[#e74c3c] font-bold text-xl mb-2"   ,}, data.contributor.name)
+                  , _react2.default.createElement('div', { className: "flex items-end gap-4"  ,}
+                    , _react2.default.createElement('div', { className: "flex items-center gap-2"  ,}
+                      /* Flag Placeholder */
+                      , _react2.default.createElement('div', { className: "w-10 h-10 rounded-full border border-gray-200 overflow-hidden relative shadow-sm"       ,}
+                        , _react2.default.createElement('div', { className: "w-full h-1/3 bg-green-600"  ,})
+                        , _react2.default.createElement('div', { className: "w-full h-1/3 bg-white flex justify-center items-center text-[8px]"      ,}, "🇮🇷")
+                        , _react2.default.createElement('div', { className: "w-full h-1/3 bg-red-600"  ,})
+                      )
+                      , _react2.default.createElement('div', { className: "w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-yellow-800 font-bold border-2 border-yellow-200 shadow-sm"           ,}
+                        , data.contributor.rank
+                      )
+                    )
+                    /* Portrait Placeholder */
+                    , _react2.default.createElement('div', { className: "w-24 h-28 bg-gray-800 rounded-xl overflow-hidden border-2 border-gray-300 shadow-md"       ,}
+                      , _react2.default.createElement('img', { src: "https://placehold.co/100x120/333/fff?text=Photo", alt: "Profile", className: "w-full h-full object-cover opacity-80"   ,} )
+                    )
+                  )
+                )
+              )
+
+            )
+          )
+
+        )
+      )
+    )
+  );
+} exports.default = DynamicReportGenerator;
+</script></head>
+  <body>
+  
+
+<div id="preview-app"></div></body></html>

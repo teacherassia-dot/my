@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>محاسب البث المباشر - Grok-4</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      text-align: right;
+    }
+    h1, h2 {
+      color: #007BFF;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+    input, select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #218838;
+    }
+    #report {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e9f7ef;
+      border: 1px solid #28a745;
+      border-radius: 10px;
+      display: none;
+    }
+    .section {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #007BFF;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>محاسب البث المباشر - مساعد اختيار Streaming Engine</h1>
+    <p>أدخل التفاصيل للحصول على تقرير شامل يساعدك في اختيار الـ Streaming Engine المناسب، حساب عدد المشاهدين المدعوم، استهلاك البيانات، وتكاليف CDN.</p>
+    
+    <form id="inputForm">
+      <label for="viewers">عدد المشاهدين المتزامنين المتوقع:</label>
+      <input type="number" id="viewers" min="1" value="1000" required="">
+      
+      <label for="bitrate">جودة البث (Bitrate في Mbps، مثال: 2.5 لـ720p):</label>
+      <input type="number" id="bitrate" step="0.1" min="0.5" value="2.5" required="">
+      
+      <label for="bandwidth">سعة الشبكة المتاحة (في Gbps، مثال: 1):</label>
+      <input type="number" id="bandwidth" step="0.1" min="0.1" value="1" required="">
+      
+      <label for="ram">الذاكرة المتاحة (RAM فيV2 (في GB):</label>
+      <input type="number" id="ram" min="4" value="16" required="">
+      
+      <label for="duration">مدة البث اليومية (بالساعات):</label>
+      <input type="number" id="duration" min="1" value="2" required="">
+      
+      <label for="transcoding">هل تحتاج إلى Transcoding؟</label>
+      <select id="transcoding">
+        <option value="no">لا (Passthrough)</option>
+        <option value="yes">نعم</option>
+      </select>
+      
+      <button type="submit">احسب التقرير</button>
+    </form>
+    
+    <div id="report">
+      <h2>التقرير الشامل</h2>
+      <div id="summary" class="section"></div>
+      <div id="viewersCalc" class="section"></div>
+      <div id="hardware" class="section"></div>
+      <div id="dataConsumption" class="section"></div>
+      <div id="cdnCosts" class="section"></div>
+      <div id="recommendation" class="section"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('inputForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const viewers = parseInt(document.getElementById('viewers').value);
+      const bitrate = parseFloat(document.getElementById('bitrate').value);
+      const bandwidthGbps = parseFloat(document.getElementById('bandwidth').value);
+      const ram = parseInt(document.getElementById('ram').value);
+      const duration = parseInt(document.getElementById('duration').value);
+      const transcoding = document.getElementById('transcoding').value === 'yes';
+
+      // حسابات أساسية
+      const bandwidthMbps = bandwidthGbps * 1000;
+      const maxViewersTheoretical = Math.floor(bandwidthMbps / bitrate);
+      const headroom = 0.8; // 20% هامش
+      const maxViewers = Math.floor(maxViewersTheoretical * headroom);
+
+      // اقتراح Streaming Engine
+      let engine = 'Wowza Streaming Engine';
+      if (viewers > 2000) engine += ' مع CDN';
+      if (transcoding) engine += ' (مع Transcoding)';
+
+      // استهلاك البيانات لجودتين
+      const bitrate720p = 2.5; // Mbps
+      const bitrate1080p = 5; // Mbps
+      const data720p = (bitrate720p / 8) * 3600 * duration * viewers / 1000; // GB يومياً
+      const data1080p = (bitrate1080p / 8) * 3600 * duration * viewers / 1000; // GB يومياً
+
+      // اقتراح عتاد
+      const requiredRam = Math.ceil((viewers / 1000) * (transcoding ? 4 : 2)) + 4; // GB إضافي
+      const ramStatus = ram >= requiredRam ? 'كافية' : 'غير كافية (مطلوب ' + requiredRam + ' GB)';
+
+      // تكاليف CDN (3 مزودين)
+      const cloudfrontCost = (data1080p / 1000) * 0.085 * 30; // شهرياً، افتراضي أمريكا/أوروبا
+      const cloudflareCost = ((viewers * duration * 60 * 30) / 1000) * 1; // دقائق مشاهدة شهرياً
+      const fastlyCost = (data1080p / 1000) * 0.12 * 30; // شهرياً
+
+      // عرض التقرير
+      document.getElementById('summary').innerHTML = `<strong>الملخص:</strong> لـ ${viewers} مشاهد متزامن، يُفضل ${engine}. التكلفة الشهرية التقريبية لـ CDN: ${Math.min(cloudfrontCost, cloudflareCost, fastlyCost).toFixed(2)}$ (أقل خيار).`;
+
+      document.getElementById('viewersCalc').innerHTML = `<strong>حساب عدد المشاهدين:</strong><br>أقصى عدد نظري: ${maxViewersTheoretical}<br>مع هامش 20%: ${maxViewers}<br>${viewers > maxViewers ? 'تحتاج شبكة أكبر أو CDN' : 'مدعوم'}`;
+
+      document.getElementById('hardware').innerHTML = `<strong>اقتراح العتاد:</strong><br>الذاكرة: ${ramStatus}<br>المعالج: ${transcoding ? 'متعدد الأنوية قوي (مثل Xeon 8+ أنوية)' : 'أساسي (Quad-Core)'}`;
+
+      document.getElementById('dataConsumption').innerHTML = `<strong>استهلاك البيانات اليومي (GB):</strong><br>جودة 720p: ${data720p.toFixed(2)}<br>جودة 1080p: ${data1080p.toFixed(2)}`;
+
+      document.getElementById('cdnCosts').innerHTML = `<strong>تكاليف CDN شهرية تقريبية (بناءً على 1080p):</strong><br>Amazon CloudFront: ${cloudfrontCost.toFixed(2)}$<br>Cloudflare Stream: ${cloudflareCost.toFixed(2)}$<br>Fastly: ${fastlyCost.toFixed(2)}$<br><em>أفضل خيار: ${cloudflareCost < cloudfrontCost && cloudflareCost < fastlyCost ? 'Cloudflare' : (cloudfrontCost < fastlyCost ? 'CloudFront' : 'Fastly')}</em>`;
+
+      document.getElementById('recommendation').innerHTML = `<strong>التوصية:</strong><br>إذا تجاوزت ${maxViewers}، استخدم CDN لتوزيع الحمل. لآلاف المشاهدين، ربط Wowza كـ Origin مع HTTP Pull.`;
+
+      document.getElementById('report').style.display = 'block';
+    });
+  </script>
+
+
+</body></html>

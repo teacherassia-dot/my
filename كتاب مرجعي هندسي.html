@@ -1,0 +1,1132 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>كتاب مرجعي هندسي/استراتيجي — منظومة تبادل OSBU (Hybrid SRT/RTMP)</title>
+  <style>
+    :root{
+      --osbu-900:#064e3b;
+      --osbu-800:#065f46;
+      --osbu-700:#047857;
+      --osbu-600:#059669;
+      --osbu-500:#10b981;
+      --osbu-200:#a7f3d0;
+      --osbu-100:#d1fae5;
+      --ink:#0b1220;
+      --muted:#5b6474;
+      --paper:#ffffff;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --line:#e6ebf2;
+      --shadow: 0 10px 30px rgba(2,6,23,.08);
+      --radius: 16px;
+      --code:#0b1020;
+      --code2:#111a33;
+      --warning:#92400e;
+      --warning-bg:#fffbeb;
+      --ok:#065f46;
+      --ok-bg:#ecfdf5;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --ink:#eaf0ff;
+        --muted:#b7c0d6;
+        --paper:#0b1020;
+        --bg:#070a14;
+        --card:#0c1226;
+        --line:#1c2746;
+        --shadow: 0 10px 30px rgba(0,0,0,.35);
+        --code:#070a14;
+        --code2:#0b1020;
+        --warning-bg:#1a1408;
+        --ok-bg:#05170f;
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      color:var(--ink);
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(16,185,129,.18), transparent 60%),
+                  radial-gradient(900px 500px at 10% 0%, rgba(4,120,87,.15), transparent 55%),
+                  var(--bg);
+      line-height:1.85;
+    }
+    a{color:var(--osbu-700); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1180px; margin:0 auto; padding:18px}
+    header.hero{
+      border-radius: calc(var(--radius) + 8px);
+      background:
+        linear-gradient(135deg, rgba(6,95,70,.95), rgba(16,185,129,.75)),
+        radial-gradient(900px 420px at 30% 20%, rgba(255,255,255,.18), transparent 55%);
+      color:#fff;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-inner{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      padding:22px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .hero-inner{grid-template-columns:1fr}
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:13px;
+      letter-spacing:.2px;
+      backdrop-filter: blur(6px);
+    }
+    .title{
+      margin:10px 0 0;
+      font-size: 26px;
+      line-height:1.35;
+      font-weight:800;
+    }
+    .subtitle{
+      margin:10px 0 0;
+      opacity:.95;
+      color: rgba(255,255,255,.92);
+      font-size:14px;
+    }
+    .meta{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      opacity:.95;
+      font-size:13px;
+    }
+    .meta .pill{
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.20);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .hero-card{
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius: var(--radius);
+      padding:14px;
+      backdrop-filter: blur(6px);
+    }
+    .hero-card h3{margin:0 0 8px; font-size:14px}
+    .hero-card ul{margin:0; padding:0 18px}
+    .hero-card li{margin:4px 0; font-size:13px; color: rgba(255,255,255,.92)}
+    nav.toc{
+      margin:18px 0;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 900px){
+      nav.toc{grid-template-columns:1fr}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .toc .card{padding:14px}
+    .toc h2{
+      margin:0 0 8px;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .small{font-size:13px; color:var(--muted)}
+    .toc ol{margin:10px 0 0; padding:0 18px}
+    .toc li{margin:6px 0}
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin:16px 0;
+    }
+    .toolbar .actions{display:flex; gap:10px; flex-wrap:wrap}
+    button{
+      font:inherit;
+      border-radius: 12px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background:var(--paper);
+      color:var(--ink);
+      cursor:pointer;
+      box-shadow: 0 8px 18px rgba(2,6,23,.06);
+    }
+    button.primary{
+      background: linear-gradient(135deg, var(--osbu-800), var(--osbu-600));
+      border-color: rgba(16,185,129,.45);
+      color:#fff;
+    }
+    button:hover{transform: translateY(-1px)}
+    button:active{transform: translateY(0)}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 340px;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 1000px){
+      .grid{grid-template-columns:1fr}
+    }
+    aside.sticky{
+      position:sticky;
+      top:14px;
+      padding:14px;
+    }
+    .note{
+      border-inline-start: 4px solid var(--osbu-600);
+      padding:10px 12px;
+      background: linear-gradient(0deg, rgba(16,185,129,.08), rgba(16,185,129,.08));
+      border-radius: 12px;
+      margin:10px 0;
+      color:var(--ink);
+    }
+    .note.warn{
+      border-inline-start-color: var(--warning);
+      background: var(--warning-bg);
+    }
+    .note.ok{
+      border-inline-start-color: var(--ok);
+      background: var(--ok-bg);
+    }
+    section.chapter{
+      padding:18px;
+      margin-bottom:14px;
+    }
+    section.chapter h2{
+      margin:0 0 6px;
+      font-size:20px;
+      color:var(--osbu-900);
+    }
+    section.chapter h3{
+      margin:16px 0 8px;
+      font-size:16px;
+      color:var(--osbu-800);
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 700px){
+      .kpi{grid-template-columns:1fr}
+    }
+    .kpi .box{
+      background: linear-gradient(180deg, rgba(16,185,129,.12), transparent);
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px;
+    }
+    .kpi .num{font-weight:800; font-size:18px}
+    .kpi .lbl{font-size:13px; color:var(--muted)}
+    .table-wrap{overflow:auto; border:1px solid var(--line); border-radius:14px}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:760px;
+      background:var(--paper);
+    }
+    th,td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      text-align:right;
+      font-size:13px;
+    }
+    th{
+      position:sticky;
+      top:0;
+      background: linear-gradient(0deg, rgba(16,185,129,.10), rgba(16,185,129,.10));
+      z-index:1;
+      color:var(--osbu-900);
+      font-weight:700;
+    }
+    tr:hover td{background: rgba(16,185,129,.06)}
+    code, pre{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    pre{
+      background: linear-gradient(180deg, var(--code2), var(--code));
+      color:#e8f1ff;
+      padding:12px;
+      border-radius:14px;
+      overflow:auto;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .diagram{
+      border:1px dashed rgba(16,185,129,.55);
+      border-radius:14px;
+      padding:12px;
+      background: linear-gradient(0deg, rgba(16,185,129,.06), transparent);
+      overflow:auto;
+    }
+    .diagram svg{max-width:100%; height:auto; display:block}
+    .footer{
+      margin:18px 0 40px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    /* Print */
+    @media print{
+      body{background:#fff; color:#000}
+      header.hero, .toc, .toolbar, aside.sticky{display:none !important}
+      .container{max-width: none; padding:0}
+      .card{box-shadow:none}
+      section.chapter{page-break-inside: avoid}
+      h2{page-break-after:avoid}
+      a{color:#000; text-decoration:none}
+      table{min-width:0}
+      th{position:static}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div>
+          <div class="badge">OSBU • مرجع هندسي/استراتيجي • Hybrid SRT/RTMP</div>
+          <h1 class="title">كتاب مرجعي هندسي/استراتيجي متكامل لمنظومة تبادل إخباري وبرامجي (Hybrid SRT/RTMP)</h1>
+          <p class="subtitle">
+            موجّه للاتحادات الإعلامية الناشئة لتأسيس وحدة تبادل قابلة للنمو، مع حالة تطبيق مرجعية على اتحاد OSBU
+            (منظمة التعاون الإسلامي).
+          </p>
+          <div class="meta">
+            <div class="pill"><strong>إعداد:</strong> م. عامر نوجا — المدير الهندسي لاتحاد OSBU</div>
+            <div class="pill"><strong>الإصدار:</strong> مسودة تشغيلية / مرجعية</div>
+            <div class="pill"><strong>النطاق:</strong> استقبال ساتلايت + Ingest/MAM + Multiview + SRT/RTMP + أمن + DR</div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>المخرجات الإلزامية (ملخّص)</h3>
+          <ul>
+            <li>ملف HTML واحد متجاوب بهوية OSBU (الأخضر وتدرجاته).</li>
+            <li>ميثاق عمل هندسي (Engineering Charter).</li>
+            <li>خطة إدارة التراخيص + سجل أصول برمجية.</li>
+            <li>BOQ (CAPEX &amp; OPEX) + مخططات وWorkflows.</li>
+            <li>تشغيل معياري + مراقبة + DR/BCP.</li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="actions">
+        <button class="primary" onclick="window.print()">طباعة / PDF</button>
+        <button onclick="document.getElementById('toc').scrollIntoView({behavior:'smooth'})">جدول المحتويات</button>
+        <button onclick="toggleAll(true)">فتح كل الفصول</button>
+        <button onclick="toggleAll(false)">طيّ كل الفصول</button>
+      </div>
+      <div class="small">ملاحظة: هذا المستند مُعد ليكون قابلاً للطباعة A4 وقراءة الهاتف.</div>
+    </div>
+
+    <nav class="toc" id="toc" aria-label="جدول المحتويات">
+      <div class="card">
+        <h2>جدول المحتويات <span class="small">12 فصل</span></h2>
+        <ol>
+          <li><a href="#ch1">الفصل 1: الرؤية الاستراتيجية والاستدامة</a></li>
+          <li><a href="#ch2">الفصل 2: نظرة عامة على SRT/RTMP والسيناريو الهجين</a></li>
+          <li><a href="#ch3">الفصل 3: خرائط المنظومة (Maps &amp; Flows)</a></li>
+          <li><a href="#ch4">الفصل 4: الهندسة التأسيسية (Infrastructure)</a></li>
+          <li><a href="#ch5">الفصل 5: المعدات والبرمجيات (Hardware &amp; Software)</a></li>
+          <li><a href="#ch6">الفصل 6: إدارة التراخيص والبرمجيات المدفوعة</a></li>
+          <li><a href="#ch7">الفصل 7: ميثاق العمل الهندسي وتطوير الكادر</a></li>
+          <li><a href="#ch8">الفصل 8: التشغيل والصيانة (Operations)</a></li>
+          <li><a href="#ch9">الفصل 9: الأمن السيبراني (Cyber Security)</a></li>
+          <li><a href="#ch10">الفصل 10: درء الكوارث واستمرارية الأعمال (DR/BCP)</a></li>
+          <li><a href="#ch11">الفصل 11: النموذج المالي وBOQ</a></li>
+          <li><a href="#ch12">الفصل 12: الخاتمة والتوصيات</a></li>
+        </ol>
+      </div>
+      <div class="card">
+        <h2>الملاحق العملية <span class="small">نماذج وجداول</span></h2>
+        <ol>
+          <li><a href="#app-a">ملحق A: قاموس مصطلحات مختصر</a></li>
+          <li><a href="#app-b">ملحق B: مخطط كتلي/توبولوجي (Block/Topology)</a></li>
+          <li><a href="#app-c">ملحق C: Workflow تشغيلي للتبادل</a></li>
+          <li><a href="#app-d">ملحق D: سجل التراخيص (نموذج جاهز)</a></li>
+          <li><a href="#app-e">ملحق E: سجل الأرشفة والتسمية (Nomenclature)</a></li>
+        </ol>
+        <div class="note warn">
+          <strong>تنبيه امتثال:</strong> أي بث لأحداث/مواد بدون حقوق قانونية يعرض المنظومة لإيقاف مزودي الخدمة
+          (Takedown) ومسؤولية قانونية. هذا الكتاب يركز على “النقل التقني” ضمن أطر الحقوق والاتفاقيات.
+        </div>
+      </div>
+    </nav>
+
+    <div class="grid">
+      <main>
+        <!-- Chapter 1 -->
+        <section class="chapter card" id="ch1">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 1 (افتح/اطوِ)</summary>
+            <h2>الفصل 1: الرؤية الاستراتيجية والاستدامة</h2>
+            <p>
+              جوهر وحدة التبادل في الاتحادات الناشئة ليس “مشروعاً تجارياً محضاً”، بل <strong>استثماراً عاماً استراتيجياً</strong>
+              يهدف إلى بناء سيادة إعلامية، وتخفيض كلفة الاعتماد على مصادر خارجية، وخلق قيمة مركبة للدول الأعضاء على المدى المتوسط والطويل.
+              المنظومة التقنية هنا تُبنى لخدمة “المحتوى” و”الاستمرارية”، لا لتكديس أجهزة.
+            </p>
+
+            <div class="kpi">
+              <div class="box">
+                <div class="num">Hybrid</div>
+                <div class="lbl">منهجية الجمع بين الاستقبال الفضائي + التوزيع عبر الإنترنت</div>
+              </div>
+              <div class="box">
+                <div class="num">SRT/RTMP</div>
+                <div class="lbl">SRT للتوزيع الآمن منخفض الكمون + RTMP للتوافق</div>
+              </div>
+              <div class="box">
+                <div class="num">TCO / ROI</div>
+                <div class="lbl">قرار تقني مبني على تكلفة الملكية والعائد التشغيلي</div>
+              </div>
+            </div>
+
+            <h3>1.1 لماذا “وحدة التبادل” محور اقتصادي/سيادي؟</h3>
+            <ul>
+              <li><strong>خفض التكاليف التشغيلية:</strong> تقليل الاعتماد على وكالات خارجية مكلفة عبر تبادل مباشر بين الأعضاء.</li>
+              <li><strong>رفع الكفاءة:</strong> توحيد قنوات الاستقبال والتسجيل والفهرسة والتوزيع بدل “جزر تقنية” منفصلة.</li>
+              <li><strong>تأثير مضاعف:</strong> التدريب، الإنتاج، الدعم، والفعاليات المرتبطة تُنتج قيمة اقتصادية محلية.</li>
+              <li><strong>نموذج الاستدامة:</strong> منصة تبادل + خدمات تقنية + تدريب + بيع محتوى + فعاليات.</li>
+            </ul>
+
+            <h3>1.2 فلسفة الانتقال: من الساتلايت إلى الحلول الهجينة</h3>
+            <p>
+              الأقمار الصناعية ممتازة للاستقبال واسع النطاق، لكن التوزيع الحديث يتطلب مرونة الإنترنت: تحكم بالوصول، قياس استخدام،
+              تسليم انتقائي للدول، وربط سريع بالمنصات. لذلك يُعتمد النموذج الهجين: <strong>Satellite Ingest → IP Processing → SRT/RTMP Distribution</strong>.
+            </p>
+
+            <div class="note ok">
+              <strong>قاعدة قرار:</strong> أي خيار تقني لا يضمن “استمرارية الخدمة” و”قابلية التوسع” و”سهولة التشغيل” ضمن ميزانية محدودة
+              هو خيار مرحلي فقط، وليس معياراً.
+            </div>
+          </details>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section class="chapter card" id="ch2">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 2 (افتح/اطوِ)</summary>
+            <h2>الفصل 2: نظرة عامة على SRT/RTMP والسيناريو الهجين</h2>
+
+            <h3>2.1 لماذا SRT؟ ولماذا RTMP؟</h3>
+            <ul>
+              <li><strong>SRT:</strong> مناسب لتوزيع روابط عالية الجودة للدول الأعضاء عبر الإنترنت العام، مع تشفير، تصحيح أخطاء، وكمون منخفض.</li>
+              <li><strong>RTMP:</strong> مطلوب للتوافق مع بعض منصات البث/الأدوات القديمة أو تكاملات CDN تقليدية.</li>
+            </ul>
+
+            <h3>2.2 تعريف السيناريو الهجين “المرن”</h3>
+            <p>
+              السيناريو الهجين الموصى به في وثائق المنظومة يعتمد على:
+              استقبال فضائي مستقر + معالجة IP مركزية + توزيع SRT/RTMP + أرشفة وفهرسة عبر MAM.
+              جوهره تقليل عدد الأجهزة المكلفة (IRDs) قدر الإمكان مع الحفاظ على خطط بديلة (Failover).
+            </p>
+
+            <div class="note warn">
+              <strong>ملاحظة تشغيلية:</strong> السيناريوهات المعتمدة على “كمبيوتر واحد” دون احتياطي تُعد مخاطرة تشغيلية؛
+              الحد الأدنى المقبول هو وجود جهاز احتياطي جاهز + نسخ إعدادات + آلية مراقبة واستبدال.
+            </div>
+          </details>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section class="chapter card" id="ch3">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 3 (افتح/اطوِ)</summary>
+            <h2>الفصل 3: خرائط المنظومة (Maps &amp; Flows)</h2>
+
+            <h3>3.1 المنظومة كطبقات (Layered Architecture)</h3>
+            <ol>
+              <li><strong>طبقة الاستقبال (RF/Satellite):</strong> أطباق + LNB + Multiswitch + كوابل محورية.</li>
+              <li><strong>طبقة الالتقاط/التحويل (Ingest/Transcoding):</strong> كروت TBS/أو IRD → تحويل إلى IP.</li>
+              <li><strong>طبقة الإدارة والأرشفة (MAM):</strong> فهرسة، Metadata، واجهة ويب، سياسات احتفاظ.</li>
+              <li><strong>طبقة المراقبة (Multiview/QC):</strong> متابعة القنوات وجودة الإشارة.</li>
+              <li><strong>طبقة التوزيع (SRT/RTMP):</strong> Gateways/Reflectors + تحكم وصول.</li>
+              <li><strong>طبقة الأمن والحوكمة:</strong> VLAN/QoS + جدران حماية + سجلات + صلاحيات.</li>
+            </ol>
+
+            <h3>3.2 مخطط كتلي مبسط</h3>
+            <div class="diagram" role="img" aria-label="مخطط كتلي مبسط لمنظومة الاستقبال والتسجيل والمراقبة والتوزيع">
+              <svg viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#065f46" stop-opacity="0.95"></stop>
+                    <stop offset="1" stop-color="#10b981" stop-opacity="0.85"></stop>
+                  </linearGradient>
+                  <style>
+                    .b{fill:rgba(16,185,129,.08);stroke:#10b981;stroke-width:2}
+                    .h{fill:url(#g);stroke:#064e3b;stroke-width:2}
+                    .t{font: 16px system-ui, -apple-system, "Segoe UI", Tahoma, Arial; fill:#0b1220}
+                    .tw{font: 15px system-ui, -apple-system, "Segoe UI", Tahoma, Arial; fill:#fff}
+                    .s{stroke:#10b981; stroke-width:3; fill:none; marker-end:url(#arrow)}
+                    .m{font: 13px system-ui, -apple-system, "Segoe UI", Tahoma, Arial; fill:#334155}
+                  </style>
+                  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"></path>
+                  </marker>
+                </defs>
+
+                <rect x="30" y="40" width="240" height="110" rx="16" class="b"></rect>
+                <text x="150" y="85" text-anchor="middle" class="t">الأطباق + LNB</text>
+                <text x="150" y="110" text-anchor="middle" class="m">RF / Ku &amp; C</text>
+
+                <rect x="30" y="190" width="240" height="110" rx="16" class="b"></rect>
+                <text x="150" y="235" text-anchor="middle" class="t">Multiswitch</text>
+                <text x="150" y="260" text-anchor="middle" class="m">تجميع/توزيع + Earthing</text>
+
+                <rect x="30" y="340" width="240" height="140" rx="16" class="b"></rect>
+                <text x="150" y="390" text-anchor="middle" class="t">Ingest (TBS/IRD)</text>
+                <text x="150" y="415" text-anchor="middle" class="m">TS/IP → Server</text>
+
+                <rect x="340" y="80" width="260" height="120" rx="16" class="h"></rect>
+                <text x="470" y="130" text-anchor="middle" class="tw">شبكة البث</text>
+                <text x="470" y="155" text-anchor="middle" class="tw">10G Switch + VLAN/QoS</text>
+
+                <rect x="650" y="40" width="420" height="120" rx="16" class="b"></rect>
+                <text x="860" y="85" text-anchor="middle" class="t">MAM / Ingest</text>
+                <text x="860" y="110" text-anchor="middle" class="m">Metus (مرشح) أو Cinegy</text>
+                <text x="860" y="135" text-anchor="middle" class="m">فهرسة + أرشفة + Web Access</text>
+
+                <rect x="650" y="190" width="420" height="120" rx="16" class="b"></rect>
+                <text x="860" y="235" text-anchor="middle" class="t">Multiview/QC</text>
+                <text x="860" y="260" text-anchor="middle" class="m">StreamLabs (مرشح) / TAG</text>
+                <text x="860" y="285" text-anchor="middle" class="m">مراقبة 24/7</text>
+
+                <rect x="650" y="340" width="420" height="140" rx="16" class="b"></rect>
+                <text x="860" y="385" text-anchor="middle" class="t">Distribution</text>
+                <text x="860" y="410" text-anchor="middle" class="m">SRT (أساسي) + RTMP (توافق)</text>
+                <text x="860" y="435" text-anchor="middle" class="m">Authentication + Logs</text>
+
+                <path class="s" d="M270 95 L340 120"></path>
+                <path class="s" d="M150 150 L150 190"></path>
+                <path class="s" d="M150 300 L150 340"></path>
+                <path class="s" d="M270 410 L340 160"></path>
+                <path class="s" d="M600 140 L650 100"></path>
+                <path class="s" d="M600 140 L650 250"></path>
+                <path class="s" d="M600 140 L650 400"></path>
+              </svg>
+            </div>
+
+            <h3>3.3 سير العمل القياسي للتبادل</h3>
+            <ol>
+              <li>استقبال Feed/Channel عبر الساتلايت.</li>
+              <li>تسجيل/التقاط القناة (Ingest) مع تعريف المصدر والحدث.</li>
+              <li>مراقبة الجودة (Multiview + مؤشرات Signal/CPU/Bitrate).</li>
+              <li>فهرسة/Metadata داخل MAM + تحديد سياسات الاحتفاظ.</li>
+              <li>توزيع فوري (SRT/RTMP) للدول + روابط محكومة الصلاحيات.</li>
+              <li>إخراج “حقيبة يومية/أسبوعية” + أرشفة نهائية.</li>
+            </ol>
+          </details>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section class="chapter card" id="ch4">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 4 (افتح/اطوِ)</summary>
+            <h2>الفصل 4: الهندسة التأسيسية (Infrastructure)</h2>
+
+            <h3>4.1 أسس الموقع والتركيب</h3>
+            <ul>
+              <li><strong>قواعد خرسانية</strong> ثابتة ومستوية، وخط رؤية خالٍ من العوائق.</li>
+              <li><strong>تأريض معياري</strong> للحماية من الصواعق وربط الـ Multiswitch والراك.</li>
+              <li><strong>حماية الكوابل</strong> عبر مواسير PVC ومسارات معرّفة ومرقمة.</li>
+            </ul>
+
+            <h3>4.2 الطاقة والتبريد</h3>
+            <ul>
+              <li>UPS Online Double Conversion (مثال 6kVA) لإتاحة إغلاق آمن واستمرارية قصيرة.</li>
+              <li>Rack 42U مع إدارة كوابل وتهوية (ومن الأفضل تبريد دقيق للسيرفرات 7/24 عند الضغط).</li>
+              <li>مراقبة حرارة/رطوبة + إنذار مبكر.</li>
+            </ul>
+
+            <h3>4.3 الشبكات (Network)</h3>
+            <ul>
+              <li><strong>VLAN للبث</strong> منفصلة عن شبكة المكاتب.</li>
+              <li><strong>QoS</strong> لإعطاء أولوية لتدفقات الفيديو.</li>
+              <li>Switch 10G (Managed) + بطاقات 10G للخوادم الحرجة.</li>
+            </ul>
+          </details>
+        </section>
+
+        <!-- Chapter 5 -->
+        <section class="chapter card" id="ch5">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 5 (افتح/اطوِ)</summary>
+            <h2>الفصل 5: المعدات والبرمجيات (Hardware &amp; Software)</h2>
+
+            <h3>5.1 نظام إدارة المحتوى والتسجيل (MAM/Ingest)</h3>
+            <p>
+              وفق الدراسة الفنية/المالية: تم ترشيح <strong>Metus MAM + Ingest</strong> كحل اقتصادي مستقر
+              يتوافق مع بيئة كروت TBS ويقلل الالتزامات السنوية الإلزامية مقارنة بخيارات مؤسسية أعلى كلفة.
+            </p>
+
+            <h3>5.2 نظام الملتي فيور (Multiviewer)</h3>
+            <p>
+              خيار برمجي مثل <strong>StreamLabs Multiscreen</strong> قادر على استقبال TS/IP مباشرة ويُعد مناسباً للميزانيات المحدودة.
+            </p>
+
+            <h3>5.3 التخزين (NAS/SAN)</h3>
+            <ul>
+              <li>NAS Enterprise 80TB+ (Synology/QNAP) حسب تقدير الدراسة.</li>
+              <li>سياسة احتفاظ: “خام/أولي” + “نسخة تحرير” + “أرشيف نهائي”.</li>
+              <li>تسمية موحدة للمحتوى + جداول Metadata.</li>
+            </ul>
+
+            <h3>5.4 برمجيات التشغيل المساندة</h3>
+            <ul>
+              <li>FFmpeg للتحويل والترميز والبث.</li>
+              <li>OBS/vMix عند الحاجة لإنتاج/إخراج.</li>
+              <li>خادم توزيع (حسب النموذج): Nginx RTMP / Nimble / MediaMTX / Live SRT Server.</li>
+            </ul>
+          </details>
+        </section>
+
+        <!-- Chapter 6 -->
+        <section class="chapter card" id="ch6">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 6 (افتح/اطوِ)</summary>
+            <h2>الفصل 6: إدارة التراخيص والبرمجيات المدفوعة (License Management)</h2>
+
+            <p>
+              إدارة التراخيص ليست إجراءً إدارياً ثانوياً؛ هي جزء من استمرارية الأعمال. أي ترخيص ينتهي دون متابعة
+              قد يوقف التسجيل، أو الأرشفة، أو البث، أو الدعم الفني في وقت حساس.
+              لذلك نعتمد <strong>سجل أصول برمجية</strong> (Software Asset Register) مع مسؤوليات واضحة وتذكير مبكر.
+            </p>
+
+            <h3>6.1 استراتيجية التراخيص: Perpetual vs Subscription</h3>
+            <ul>
+              <li><strong>Perpetual (شراء لمرة واحدة):</strong> يقلل OPEX الإلزامي ويُناسب الميزانيات المحدودة، مع تحديثات اختيارية.</li>
+              <li><strong>Subscription/SaaS:</strong> يقلل عبء البنية التحتية المحلية لكنه يفرض OPEX ثابتاً ويعتمد على الدفع المستمر.</li>
+            </ul>
+
+            <h3>6.2 الميزانية التشغيلية (Software OPEX)</h3>
+            <p>
+              تُحتسب سنوياً: دعم/تحديثات (SLA) + تراخيص VPS/Streamer + أي Plugins مدفوعة + شهادات/مفاتيح تشفير عند اللزوم.
+              الهدف: <strong>منع المفاجآت</strong> عبر وضع بند ثابت في الميزانية التشغيلية.
+            </p>
+
+            <h3>6.3 نموذج سجل التراخيص (جدول متابعة)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>البرنامج/الخدمة</th>
+                    <th>نوع الترخيص</th>
+                    <th>الاستخدام/الدور</th>
+                    <th>تاريخ البدء</th>
+                    <th>تاريخ الانتهاء/التجديد</th>
+                    <th>الكلفة السنوية (OPEX)</th>
+                    <th>المسؤول</th>
+                    <th>مستوى الأهمية</th>
+                    <th>ملاحظات امتثال/بدائل</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Metus MAM + Ingest</td>
+                    <td>Perpetual + SLA اختياري</td>
+                    <td>تسجيل/فهرسة/أرشفة + Web</td>
+                    <td>____</td>
+                    <td>تحديثات: سنوي (اختياري)</td>
+                    <td>~4,000$ (اختياري)</td>
+                    <td>مدير الأنظمة / مسؤول البرمجيات</td>
+                    <td>حرج</td>
+                    <td>بديل أعلى كلفة: Cinegy (SLA إلزامي)</td>
+                  </tr>
+                  <tr>
+                    <td>StreamLabs Multiscreen</td>
+                    <td>Perpetual / حسب العرض</td>
+                    <td>Multiview/QC</td>
+                    <td>____</td>
+                    <td>____</td>
+                    <td>____</td>
+                    <td>مهندس غرفة التحكم</td>
+                    <td>عالي</td>
+                    <td>بديل مكلف: TAG VS</td>
+                  </tr>
+                  <tr>
+                    <td>VPS/Streaming License (مثال: MENOS / Nimble Panel)</td>
+                    <td>Subscription</td>
+                    <td>Gateway/Reflector للبث</td>
+                    <td>____</td>
+                    <td>شهري/سنوي</td>
+                    <td>حسب الخطة</td>
+                    <td>مسؤول الشبكات</td>
+                    <td>حرج</td>
+                    <td>بديل مفتوح المصدر: MediaMTX/Live SRT (يتطلب خبرة)</td>
+                  </tr>
+                  <tr>
+                    <td>vMix / Plugins (عند الحاجة)</td>
+                    <td>Perpetual / Subscription</td>
+                    <td>إنتاج/إخراج</td>
+                    <td>____</td>
+                    <td>____</td>
+                    <td>____</td>
+                    <td>مسؤول الإنتاج التقني</td>
+                    <td>متوسط</td>
+                    <td>بديل مجاني: OBS (مع قيود)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>6.4 ضوابط الامتثال</h3>
+            <ul>
+              <li>يُمنع تشغيل أي برنامج “غير أصلي/غير مرخص” على خوادم البث والأرشفة.</li>
+              <li>حفظ مفاتيح التراخيص في مخزن آمن (Password Manager/Sealed Envelope) وتحديد صلاحيات الوصول.</li>
+              <li>مراجعة ربع سنوية لسجل التراخيص + تنبيه قبل 60/30/7 يوم من الانتهاء.</li>
+            </ul>
+
+            <div class="note ok">
+              <strong>قاعدة تشغيل:</strong> الترخيص الذي يوقف خدمة حرجة يجب أن يكون له (بديل جاهز) أو (خطة تمديد مؤكدة) قبل 30 يوماً على الأقل.
+            </div>
+          </details>
+        </section>
+
+        <!-- Chapter 7 -->
+        <section class="chapter card" id="ch7">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 7 (افتح/اطوِ)</summary>
+            <h2>الفصل 7: ميثاق العمل الهندسي وتطوير الكادر البشري (Engineering Charter)</h2>
+
+            <div class="note warn">
+              <strong>طبيعة الميثاق:</strong> هذا الفصل مكتوب بصياغة إدارية ملزمة، ويُعد مرجعاً للتكليف والمساءلة والتحسين المستمر.
+            </div>
+
+            <h3>7.1 الغرض والنطاق</h3>
+            <p>
+              يحدد هذا الميثاق مسؤوليات الإدارة الهندسية في وحدة التبادل، وحدود التداخل مع إدارة الأخبار/المحتوى،
+              وآليات التشغيل، والتصعيد، وقياس الأداء. الهدف هو ضمان أن تعمل المنظومة <strong>7/24</strong> بأعلى استقرار ممكن ضمن الموارد المتاحة.
+            </p>
+
+            <h3>7.2 مبادئ حاكمة (Principles)</h3>
+            <ol>
+              <li><strong>التقنية لخدمة الإبداع:</strong> دور الهندسة هو تبسيط وأتمتة الأنظمة لتفريغ المنسقين والمحررين لإنتاج قيمة محتوى.</li>
+              <li><strong>الاستمرارية قبل الرفاهية:</strong> أي إضافة تقنية لا تُحسن الاستقرار أو قابلية التشغيل تُؤجل.</li>
+              <li><strong>التدرج المعياري:</strong> البناء Modular يسمح بالنمو دون إعادة تأسيس.</li>
+              <li><strong>الشفافية التشغيلية:</strong> كل عطل يُوثق، وكل تغيير يُسجل، وكل قرار يُراجع.</li>
+            </ol>
+
+            <h3>7.3 المسؤوليات الأساسية للإدارة الهندسية</h3>
+            <ul>
+              <li><strong>تشغيل المنظومة:</strong> استقبال، تسجيل، مراقبة، توزيع، وأرشفة وفق إجراءات تشغيل معيارية (SOP).</li>
+              <li><strong>الصيانة الوقائية:</strong> تبريد، UPS، كوابل، تحديثات نظام، فحوصات دورية للإشارة.</li>
+              <li><strong>إدارة التغيير (Change Management):</strong> لا تغيير على الخوادم أو الشبكة دون تذكرة تغيير مع اختبار رجوع (Rollback).</li>
+              <li><strong>إدارة الأصول البرمجية:</strong> سجل تراخيص، نسخ إعدادات، مستودع أكواد/سكربتات، وتحديثات مُدارَة.</li>
+              <li><strong>الدعم والتدريب:</strong> تدريب المنسقين والصحفيين على الاستخدام الصحيح للمنصات لتقليل الأخطاء وتسرّع الاستجابة.</li>
+            </ul>
+
+            <h3>7.4 العلاقة مع إدارة الأخبار/المحتوى (RACI مبسط)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>المهمة</th>
+                    <th>مسؤول (R)</th>
+                    <th>معتمد (A)</th>
+                    <th>مستشار (C)</th>
+                    <th>مُبلّغ (I)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>تشغيل الاستقبال والتسجيل (Ingest)</td>
+                    <td>الهندسة</td>
+                    <td>مدير الهندسة</td>
+                    <td>المحتوى</td>
+                    <td>الإدارة</td>
+                  </tr>
+                  <tr>
+                    <td>تحديد أولويات التبادل وجدولة المحتوى</td>
+                    <td>المحتوى</td>
+                    <td>مدير وحدة التبادل</td>
+                    <td>الهندسة</td>
+                    <td>الدول الأعضاء</td>
+                  </tr>
+                  <tr>
+                    <td>إتاحة روابط SRT/RTMP وإدارة الوصول</td>
+                    <td>الهندسة</td>
+                    <td>مدير الهندسة</td>
+                    <td>الأمن/الإدارة</td>
+                    <td>المحتوى/الأعضاء</td>
+                  </tr>
+                  <tr>
+                    <td>نشر سياسة الأرشفة والتسمية</td>
+                    <td>الهندسة + الأرشفة</td>
+                    <td>الإدارة</td>
+                    <td>المحتوى</td>
+                    <td>الجميع</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>7.5 واجبات الأفراد والانضباط التشغيلي</h3>
+            <ul>
+              <li>أي خلل يُبلّغ عبر قناة معتمدة (تذكرة/نموذج) مع وقت ومصدر وخطوات إعادة الإنتاج.</li>
+              <li>يُمنع تغيير إعدادات السيرفر/الشبكة دون إذن وتوثيق.</li>
+              <li>يلتزم الجميع بسياسة كلمات المرور، وعدم مشاركة الحسابات.</li>
+              <li>الالتزام بحدود الصلاحيات (Least Privilege) وتجنب “الحلول السريعة غير الموثقة”.</li>
+            </ul>
+
+            <h3>7.6 تطوير الكادر: خارطة تدريب مختصرة مرتبطة بالمنظومة</h3>
+            <p class="small">
+              (يُستكمل بالتفصيل وفق خطة تطوير الكوادر 2025–2027: شبكات، أمن، أرشفة، SMPTE 2110، تشغيل غرف التحكم، DRills الطوارئ…)
+            </p>
+            <ul>
+              <li>شهر 1–2: أساسيات غرفة التحكم + Troubleshooting Under Pressure.</li>
+              <li>شهر 3–6: شبكات (VLAN/QoS/Multicast) + أمن أساسي.</li>
+              <li>شهر 6–12: MAM/أرشفة + أتمتة Python + مراقبة SNMP.</li>
+            </ul>
+
+            <div class="note ok">
+              <strong>خلاصة الميثاق:</strong> المنظومة لا تُدار بالأجهزة وحدها؛ تُدار بعقلية تشغيل منضبطة، وتوثيق، وتدريب، ومسؤوليات واضحة.
+            </div>
+          </details>
+        </section>
+
+        <!-- Chapter 8 -->
+        <section class="chapter card" id="ch8">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 8 (افتح/اطوِ)</summary>
+            <h2>الفصل 8: التشغيل والصيانة (Operations)</h2>
+
+            <h3>8.1 إجراءات التشغيل القياسية (SOPs) — الحد الأدنى</h3>
+            <ol>
+              <li>فحص جودة الإشارة (Signal Quality ≥ 70%) قبل أي حدث.</li>
+              <li>تأكيد جاهزية التخزين ومساحة NAS.</li>
+              <li>فحص البث (SRT/RTMP) عبر نقطة اختبار داخلية وخارجية.</li>
+              <li>تفعيل المراقبة (SNMP/Logs) قبل التشغيل.</li>
+              <li>توثيق كل بث: المصدر، الوقت، الدولة المستفيدة، نوع الحقوق.</li>
+            </ol>
+
+            <h3>8.2 صيانة وقائية (نموذج مختصر)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>النشاط</th>
+                    <th>التكرار</th>
+                    <th>الوقت</th>
+                    <th>المسؤول</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>فحص جودة الإشارة آلياً</td>
+                    <td>يومي</td>
+                    <td>مستمر</td>
+                    <td>نظام مراقبة</td>
+                  </tr>
+                  <tr>
+                    <td>تنظيف فلاتر التبريد</td>
+                    <td>أسبوعي</td>
+                    <td>15 دقيقة</td>
+                    <td>فني صيانة</td>
+                  </tr>
+                  <tr>
+                    <td>نسخ احتياطي كامل (Image)</td>
+                    <td>أسبوعي</td>
+                    <td>2 ساعة</td>
+                    <td>نظام آلي</td>
+                  </tr>
+                  <tr>
+                    <td>اختبار Failover</td>
+                    <td>شهري</td>
+                    <td>30 دقيقة</td>
+                    <td>مهندس النظام</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </section>
+
+        <!-- Chapter 9 -->
+        <section class="chapter card" id="ch9">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 9 (افتح/اطوِ)</summary>
+            <h2>الفصل 9: الأمن السيبراني (Cyber Security)</h2>
+
+            <h3>9.1 مبدأ الدفاع متعدد الطبقات (Defense in Depth)</h3>
+            <ul>
+              <li>فصل الشبكات (VLAN/Segmentation) + جدار حماية.</li>
+              <li>تقييد المنافذ والبروتوكولات (SRT/UDP ports) حسب الحاجة فقط.</li>
+              <li>حسابات منفصلة، MFA حيث أمكن، ومبدأ أقل صلاحية.</li>
+              <li>سجلات مركزية (Syslog) + مراقبة SNMP/Alerts.</li>
+            </ul>
+
+            <h3>9.2 سياسات إلزامية مختصرة</h3>
+            <ul>
+              <li>لا إدارة عن بعد بدون VPN/قناة مؤمنة.</li>
+              <li>تحديثات أمنية مجدولة واختبارية قبل الإنتاج.</li>
+              <li>خطة استجابة للحوادث: عزل → تحويل للاحتياطي → تحليل → استعادة.</li>
+            </ul>
+          </details>
+        </section>
+
+        <!-- Chapter 10 -->
+        <section class="chapter card" id="ch10">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 10 (افتح/اطوِ)</summary>
+            <h2>الفصل 10: درء الكوارث واستمرارية الأعمال (DR/BCP)</h2>
+
+            <h3>10.1 أهداف الاستعادة (RTO/RPO)</h3>
+            <ul>
+              <li><strong>RTO:</strong> زمن العودة للخدمة (هدف واقعي: دقائق للبث، ساعات للأرشفة حسب السيناريو).</li>
+              <li><strong>RPO:</strong> مقدار البيانات المسموح فقدها (هدف: إعدادات يومية + Image أسبوعي).</li>
+            </ul>
+
+            <h3>10.2 مكوّنات DR الأساسية</h3>
+            <ul>
+              <li>جهاز احتياطي Standby بمواصفات مماثلة.</li>
+              <li>كرت TBS احتياطي/بديل أو عدد محدود من IRDs للقنوات الحرجة.</li>
+              <li>نسخ إعدادات تلقائي (rsync) + Repository Git للسكريبتات.</li>
+              <li>UPS مزدوج (أو 2N تدريجياً) + مزودا إنترنت عند الإمكان.</li>
+            </ul>
+
+            <h3>10.3 نموذج سكربت مراقبة (اختصار)</h3>
+            <pre># مثال اختصاري لفكرة المراقبة (Cron كل دقيقة)
+# - فحص وجود كرت TBS
+# - فحص جودة الإشارة
+# - فحص توفر البث
+# - تنبيه + تحويل للاحتياطي حسب السياسة</pre>
+          </details>
+        </section>
+
+        <!-- Chapter 11 -->
+        <section class="chapter card" id="ch11">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 11 (افتح/اطوِ)</summary>
+            <h2>الفصل 11: النموذج المالي وBOQ (CAPEX &amp; OPEX)</h2>
+
+            <h3>11.1 ملخص مالي (نموذج MAM + Multiview + بنية تحتية)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>البند</th>
+                    <th>التفاصيل</th>
+                    <th>التكلفة التقديرية (USD)</th>
+                    <th>تصنيف</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Metus Software MAM + Ingest</td>
+                    <td>ترخيص + قنوات تسجيل 4–8</td>
+                    <td>32,000</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td>StreamLabs Software Multiview</td>
+                    <td>حتى 48 قناة</td>
+                    <td>8,000</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td>Workstations/Servers + كروت TBS</td>
+                    <td>2 (التقاط) + 1 (MAM/MV)</td>
+                    <td>8,000</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td>NAS 80TB+</td>
+                    <td>Synology/QNAP Enterprise</td>
+                    <td>8,000</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td>Network</td>
+                    <td>10G Switch + Cards</td>
+                    <td>4,000</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td>Infrastructure</td>
+                    <td>Rack 42U + UPS 6kVA + Cables</td>
+                    <td>6,200</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td>Services</td>
+                    <td>تركيب + برمجة + تدريب 3–5 أيام</td>
+                    <td>6,000</td>
+                    <td>CAPEX</td>
+                  </tr>
+                  <tr>
+                    <td><strong>الإجمالي التقديري</strong></td>
+                    <td>Budgetary Quote (قد ينخفض 10–15%)</td>
+                    <td><strong>~72,200</strong></td>
+                    <td>—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>11.2 OPEX سنوي (نموذج تقديري)</h3>
+            <ul>
+              <li>SLA/Updates (اختياري حسب السياسة) + استضافة VPS إن وجدت + صيانة/قطع غيار + إنترنت.</li>
+              <li>مبدأ الترشيد: اختيار تراخيص Perpetual حيث يكون الأثر التشغيلي عالياً وتكاليف الاشتراك مرهقة.</li>
+            </ul>
+
+            <div class="note">
+              <strong>ملاحظة مالية:</strong> القرار الصحيح هو الذي يخفض TCO ويمنع “الرسوم الإلزامية” ما أمكن، مع الحفاظ على دعم تقني حدّه الأدنى للمكونات الحرجة.
+            </div>
+          </details>
+        </section>
+
+        <!-- Chapter 12 -->
+        <section class="chapter card" id="ch12">
+          <details open="">
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">الفصل 12 (افتح/اطوِ)</summary>
+            <h2>الفصل 12: الخاتمة والتوصيات</h2>
+
+            <p>
+              التأسيس الصحيح لوحدة التبادل يبدأ بتحديد “النموذج التشغيلي” قبل شراء الأجهزة: من هو المسؤول؟ ما هي إجراءات التشغيل؟
+              كيف نقيس الأداء؟ وكيف نضمن الاستمرارية؟
+              النموذج الهجين (Satellite + IP + SRT/RTMP) هو الأكثر واقعية للاتحادات الناشئة لأنه يوازن بين
+              الاستقرار والميزانية والمرونة.
+            </p>
+
+            <h3>توصيات تنفيذية مختصرة</h3>
+            <ul>
+              <li>البدء بتأسيس البنية (Rack/UPS/Network/VLAN/QoS) قبل توسعة القنوات.</li>
+              <li>اعتماد MAM اقتصادي مستقر (Metus) لتقليل OPEX الإلزامي.</li>
+              <li>تنفيذ DR من اليوم الأول: جهاز احتياطي + نسخ إعدادات + اختبار شهري.</li>
+              <li>استثمار التدريب المستمر: الشبكات، الأمن، الأرشفة، الأتمتة.</li>
+              <li>تطبيق ميثاق العمل الهندسي كوثيقة تشغيل ومساءلة وتحسين.</li>
+            </ul>
+          </details>
+        </section>
+
+        <!-- Appendices -->
+        <section class="chapter card" id="app-a">
+          <details>
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">ملحق A (افتح/اطوِ)</summary>
+            <h2>ملحق A: قاموس مصطلحات مختصر</h2>
+            <ul>
+              <li><strong>Ingest:</strong> إدخال/التقاط الإشارة للتسجيل والمعالجة.</li>
+              <li><strong>MAM:</strong> إدارة الأصول الإعلامية (Metadata, Search, Archive).</li>
+              <li><strong>Multiview:</strong> عرض متعدد لمراقبة عدة قنوات في وقت واحد.</li>
+              <li><strong>SRT:</strong> بروتوكول نقل آمن وموثوق منخفض الكمون.</li>
+              <li><strong>RTMP:</strong> بروتوكول بث قديم نسبياً للتوافق مع منصات عديدة.</li>
+              <li><strong>DR/BCP:</strong> درء الكوارث/استمرارية الأعمال.</li>
+              <li><strong>CAPEX/OPEX:</strong> نفقات رأسمالية/تشغيلية.</li>
+            </ul>
+          </details>
+        </section>
+
+        <section class="chapter card" id="app-b">
+          <details>
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">ملحق B (افتح/اطوِ)</summary>
+            <h2>ملحق B: مخطط كتلي/توبولوجي (إرشادي)</h2>
+            <p class="small">
+              يُستكمل هذا الملحق بإدراج المخططات الأصلية كصور داخل هذا HTML عند توفر ملفاتها (PNG/SVG) محلياً.
+              حالياً تم تضمين مخطط SVG توليدي في الفصل 3 يعبّر عن نفس الفكرة.
+            </p>
+          </details>
+        </section>
+
+        <section class="chapter card" id="app-c">
+          <details>
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">ملحق C (افتح/اطوِ)</summary>
+            <h2>ملحق C: Workflow تشغيلي للتبادل (مختصر)</h2>
+            <ol>
+              <li>استلام خطة اليوم من وحدة المحتوى (أحداث/أولويات/حقوق).</li>
+              <li>تهيئة الاستقبال والتسجيل لكل مصدر.</li>
+              <li>توزيع روابط SRT للدول حسب قائمة الصلاحيات.</li>
+              <li>تجميع الحقيبة اليومية (أخبار/رياضة/برامج) وتصديرها.</li>
+              <li>أرشفة نهائية مع تسمية معيارية + Metadata.</li>
+              <li>تقرير يومي: الأعطال/الزمن/الاستخدام/التوصيات.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section class="chapter card" id="app-d">
+          <details>
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">ملحق D (افتح/اطوِ)</summary>
+            <h2>ملحق D: سجل التراخيص (نموذج جاهز للنسخ)</h2>
+            <pre>البرنامج/الخدمة | نوع الترخيص | رقم العقد/المفتاح | تاريخ البدء | تاريخ التجديد | كلفة سنوية | مسؤول | بديل | ملاحظات
+Metus MAM+Ingest | Perpetual+SLA اختياري | ____ | ____ | ____ | ____ | ____ | Cinegy | —
+Multiview | Perpetual | ____ | ____ | ____ | ____ | ____ | TAG | —
+VPS Streaming | Subscription | ____ | ____ | ____ | ____ | ____ | Self-host | —
+Plugins/Tools | Mixed | ____ | ____ | ____ | ____ | ____ | OSS | —</pre>
+          </details>
+        </section>
+
+        <section class="chapter card" id="app-e">
+          <details>
+            <summary class="small" style="cursor:pointer; font-weight:700; color:var(--osbu-800)">ملحق E (افتح/اطوِ)</summary>
+            <h2>ملحق E: سجل الأرشفة والتسمية (Nomenclature)</h2>
+            <p>
+              يعتمد نجاح الأرشفة على الاتساق. يُنصح بتطبيق نظام تسمية موحد يتضمن: الاسم، السنة، النوع، الحلقة/الجزء، المنتج، اللغة
+              أو استخدام ترميز مختصر (D_R_23_P1_AR) حسب سياسة الاتحاد.
+            </p>
+          </details>
+        </section>
+
+        <div class="footer">
+          © OSBU — وثيقة مرجعية تشغيلية. صيغت بهوية OSBU وبتنظيم قابل للطباعة والتطوير.
+        </div>
+      </main>
+
+      <aside class="card sticky">
+        <h3 style="margin:0 0 8px; color:var(--osbu-900)">لوحة تحكم سريعة</h3>
+        <p class="small" style="margin:0 0 10px">
+          استخدمها للتنقل السريع وإعداد المستند للطباعة.
+        </p>
+        <div class="note">
+          <strong>للوصول إلى 35–40 صفحة مطبوعة:</strong>
+          أضف في كل فصل: (تفاصيل تنفيذ، أمثلة إعداد، جداول SOP، حالات استخدام، نماذج تقارير، صور المخططات الأصلية).
+          البنية هنا جاهزة للتوسعة.
+        </div>
+        <div class="actions" style="display:flex; flex-direction:column; gap:10px">
+          <button class="primary" onclick="window.print()">طباعة / PDF</button>
+          <button onclick="jump('#ch6')">اذهب إلى فصل إدارة التراخيص</button>
+          <button onclick="jump('#ch7')">اذهب إلى ميثاق العمل الهندسي</button>
+          <button onclick="jump('#ch11')">اذهب إلى BOQ والميزانية</button>
+          <button onclick="jump('#top')">أعلى الصفحة</button>
+        </div>
+        <div class="note warn">
+          <strong>نقطة إكمال:</strong> لإدراج الصور المرفقة (الشعارات/المخططات) داخل هذا HTML بدون روابط خارجية،
+          أرسل ملفات الصور أو Base64 وسأدمجها كـ <code>data:</code> داخل المستند.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    function jump(id){
+      const el = document.querySelector(id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    function toggleAll(open){
+      document.querySelectorAll('main details').forEach(d => d.open = open);
+    }
+  </script>
+
+
+</body></html>

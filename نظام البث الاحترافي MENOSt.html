@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل إنشاء سيرفر البث MENOSt - النظام الاحترافي المتكامل</title>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.header h1 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 2.5em;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+h2 {
+  color: #34495e;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  position: relative;
+}
+h2:before {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: #764ba2;
+}
+h3 {
+  color: #667eea;
+  margin-top: 25px;
+  font-size: 1.3em;
+}
+.equipment-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  border-left: 5px solid #667eea;
+}
+.equipment-card h4 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 1.2em;
+}
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+th {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+tr:hover td {
+  background: #f8f9fa;
+}
+.diagram-box {
+  background: #2c3e50;
+  color: #ecf0f1;
+  padding: 25px;
+  border-radius: 12px;
+  margin: 20px 0;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+}
+.note {
+  background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px 0;
+  border-left: 4px solid #f39c12;
+  color: #2c3e50;
+}
+.alert {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.success {
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+code {
+  background: #34495e;
+  color: #1abc9c;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+}
+pre {
+  background: #2c3e50;
+  color: #1abc9c;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+}
+.cost-summary {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  color: white;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 30px 0;
+  text-align: center;
+}
+.cost-summary h3 {
+  color: white;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+.satellite-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+.satellite-card {
+  background: white;
+  border: 2px solid #667eea;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+.satellite-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+.specs-list {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+}
+.specs-list li {
+  margin: 8px 0;
+  padding-left: 20px;
+  position: relative;
+}
+.specs-list li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #00b894;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header">
+<h1>🛰️ نظام البث الاحترافي MENOSt</h1>
+<p style="color: #7f8c8d; font-size: 1.2em;">الدليل الشامل لإنشاء محطة بث فضائية احترافية متكاملة</p>
+</div>
+
+<div class="section">
+<h2>🎯 نظرة عامة على النظام المتكامل</h2>
+<p style="font-size: 1.1em; line-height: 1.8;">
+يوفر نظام <strong>MENOSt</strong> الاحترافي بنية تحتية متكاملة للبث الفضائي والأرضي، حيث يجمع بين استقبال القنوات الفضائية من الأقمار الصناعية وإعادة بثها عبر الإنترنت بتقنيات RTMP و SRT، مع القدرة على معالجة وتحويل المحتوى بجودة عالية.
+</p>
+
+<div class="success">
+<strong>🚀 القدرات الأساسية:</strong> استقبال 96 قناة فضائية متزامنة • بث 4 قنوات مباشرة عبر الإنترنت • معالجة احترافية للإشارات • تغطية شاملة لدول منظمة التعاون الإسلامي
+</div>
+</div>
+
+<div class="section">
+<h2>📡 المعدات الاحترافية للاستقبال الفضائي</h2>
+
+<h3>🔧 أجهزة البث الاحترافية (Broadcast Servers)</h3>
+
+<div class="equipment-card">
+<h4>الجهاز الأول: MENOSt-Master Server</h4>
+<div class="specs-list">
+<ul style="list-style: none;">
+<li>معالج: Intel Xeon Gold 6248R (24 نواة / 48 خيط)</li>
+<li>ذاكرة: 256GB DDR4 ECC RAM</li>
+<li>تخزين: 8x 4TB NVMe SSD في RAID 10</li>
+<li>كرت استقبال: TBS 6909-X V2 (8 موالفات DVB-S2X)</li>
+<li>نظام التشغيل: Ubuntu Server 22.04 LTS</li>
+<li>برامج البث: TVHeadend + FFmpeg + Nginx RTMP</li>
+</ul>
+</div>
+</div>
+
+<div class="equipment-card">
+<h4>الجهاز الثاني: MENOSt-Secondary Server</h4>
+<div class="specs-list">
+<ul style="list-style: none;">
+<li>معالج: AMD EPYC 7543 (32 نواة / 64 خيط)</li>
+<li>ذاكرة: 512GB DDR4 ECC RAM</li>
+<li>تخزين: 12x 8TB NVMe SSD في RAID 6</li>
+<li>كرت استقبال: TBS 6916 (16 موالفات DVB-S2X/S2)</li>
+<li>وحدة معالجة رسومية: NVIDIA Quadro RTX 6000</li>
+<li>برامج البث: Wowza Streaming Engine + OBS Studio Enterprise</li>
+</ul>
+</div>
+</div>
+
+<div class="equipment-card">
+<h4>الجهاز الثالث: MENOSt-Backup Server</h4>
+<div class="specs-list">
+<ul style="list-style: none;">
+<li>معالج: Intel Xeon Platinum 8280 (28 نواة / 56 خيط)</li>
+<li>ذاكرة: 384GB DDR4 ECC RAM</li>
+<li>تخزين: 16x 2TB NVMe SSD في RAID 50</li>
+<li>كرت استقبال: TBS 6522H (8 موالفات Multi-standard)</li>
+<li>نظام النسخ الاحتياطي: Veeam Backup Enterprise</li>
+<li>برامج المراقبة: Zabbix + Grafana + Prometheus</li>
+</ul>
+</div>
+</div>
+
+<h3>🛰️ كروت الاستقبال الاحترافية TBS</h3>
+
+<table>
+<tr>
+<th>الموديل</th>
+<th>عدد الموالفات</th>
+<th>المعايير المدعومة</th>
+<th>الخصائص</th>
+<th>السعر (USD)</th>
+</tr>
+<tr>
+<td>TBS 6909-X V2</td>
+<td>8 موالفات</td>
+<td>DVB-S2X/S2/S</td>
+<td>PCIe 3.0، استقبال 8K، معدل رمز 200Msps</td>
+<td>$899</td>
+</tr>
+<tr>
+<td>TBS 6916</td>
+<td>16 موالفات</td>
+<td>DVB-S2X/S2</td>
+<td>PCIe 4.0، دعم VCM/ACM، استقبال متعدد</td>
+<td>$1,599</td>
+</tr>
+<tr>
+<td>TBS 6522H</td>
+<td>8 موالفات</td>
+<td>Multi-standard</td>
+<td>DVB-S2X/T2/C2، مرونة كاملة</td>
+<td>$1,299</td>
+</tr>
+</table>
+</div>
+
+<div class="section">
+<h2>📡 نظام الأطباق والأقمار الصناعية</h2>
+
+<h3>🥇 الأطباق الاحترافية الخمسة الرئيسية</h3>
+
+<div class="satellite-grid">
+<div class="satellite-card">
+<h4>الطبق الأول</h4>
+<strong>القطر:</strong> 3.7 متر<br>
+<strong>النوع:</strong> Prodelin 3.7m Series 1374<br>
+<strong>القمر:</strong> Arabsat 5C @ 20°E<br>
+<strong>LNB:</strong> Norsat 3000 C-Band<br>
+<strong>التغطية:</strong> الشرق الأوسط وشمال أفريقيا
+</div>
+
+<div class="satellite-card">
+<h4>الطبق الثاني</h4>
+<strong>القطر:</strong> 4.5 متر<br>
+<strong>النوع:</strong> Andrew 4.5m ESA<br>
+<strong>القمر:</strong> Nilesat 201 @ 7°W<br>
+<strong>LNB:</strong> SMW PLL LNB Quad<br>
+<strong>التغطية:</strong> مصر والسودان وليبيا
+</div>
+
+<div class="satellite-card">
+<h4>الطبق الثالث</h4>
+<strong>القطر:</strong> 3.0 متر<br>
+<strong>النوع:</strong> GD Satcom 3.0m<br>
+<strong>القمر:</strong> Turksat 4A @ 42°E<br>
+<strong>LNB:</strong> Inverto Black Ultra<br>
+<strong>التغطية:</strong> تركيا وآسيا الوسطى
+</div>
+
+<div class="satellite-card">
+<h4>الطبق الرابع</h4>
+<strong>القطر:</strong> 2.4 متر<br>
+<strong>النوع:</strong> Jonsa 2.4m Prime Focus<br>
+<strong>القمر:</strong> Yahsat 1A @ 52.5°E<br>
+<strong>LNB:</strong> Chaparral Corotor II+<br>
+<strong>التغطية:</strong> الخليج واليمن
+</div>
+
+<div class="satellite-card">
+<h4>الطبق الخامس</h4>
+<strong>القطر:</strong> 3.2 متر<br>
+<strong>النوع:</strong> Patriot 3.2m<br>
+<strong>القمر:</strong> AsiaSat 7 @ 105.5°E<br>
+<strong>LNB:</strong> CalAmp 150528<br>
+<strong>التغطية:</strong> جنوب شرق آسيا
+</div>
+</div>
+
+<h3>🥈 الأطباق الإضافية السبعة</h3>
+
+<table>
+<tr>
+<th>#</th>
+<th>القطر</th>
+<th>الموديل</th>
+<th>القمر المستهدف</th>
+<th>منطقة التغطية</th>
+</tr>
+<tr>
+<td>6</td>
+<td>1.8م</td>
+<td>Channel Master 1.8m</td>
+<td>Badr 4/5/6/7 @ 26°E</td>
+<td>السعودية والخليج</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2.0م</td>
+<td>Fortec Star FC200CM</td>
+<td>Hotbird 13B/C/E @ 13°E</td>
+<td>أوروبا والمغرب العربي</td>
+</tr>
+<tr>
+<td>8</td>
+<td>1.5م</td>
+<td>Gibertini OP150L</td>
+<td>Eutelsat 7 West A @ 7.3°W</td>
+<td>شمال أفريقيا</td>
+</tr>
+<tr>
+<td>9</td>
+<td>1.8م</td>
+<td>SVEC P-180</td>
+<td>Paksat 1R @ 38°E</td>
+<td>باكستان وأفغانستان</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2.2م</td>
+<td>Skyware Type 243</td>
+<td>Palapa D @ 113°E</td>
+<td>إندونيسيا وماليزيا</td>
+</tr>
+<tr>
+<td>11</td>
+<td>1.6م</td>
+<td>Prodelin 1.6m 1164</td>
+<td>Bangabandhu-1 @ 119.1°E</td>
+<td>بنغلاديش</td>
+</tr>
+<tr>
+<td>12</td>
+<td>2.4م</td>
+<td>Vertex RSI 2.4m</td>
+<td>Africasat-1a @ 46°E</td>
+<td>أفريقيا جنوب الصحراء</td>
+</tr>
+</table>
+
+<div class="note">
+<strong>📌 ملاحظة:</strong> جميع الأطباق مجهزة بمحركات DiSEqC 1.2 ونظام تتبع أوتوماتيكي للأقمار مع إمكانية التحكم عن بُعد عبر واجهة ويب.
+</div>
+</div>
+
+<div class="section">
+<h2>📻 أجهزة الاستقبال الاحترافية</h2>
+
+<div class="equipment-card">
+<h4>Tandberg RX1290 Multi-Decoder</h4>
+<div class="specs-list">
+<ul style="list-style: none;">
+<li>استقبال متعدد: 16 قناة HD متزامنة</li>
+<li>دعم: DVB-S2X، MPEG-4 AVC، HEVC</li>
+<li>المخرجات: 16x ASI، 4x IP (10GbE)</li>
+<li>إدارة: SNMP، Web GUI، REST API</li>
+<li>التكرار: مدخل احتياطي تلقائي</li>
+<li>السعر: $18,500</li>
+</ul>
+</div>
+</div>
+
+<div class="equipment-card">
+<h4>Tandberg TT1260 IRD Professional</h4>
+<div class="specs-list">
+<ul style="list-style: none;">
+<li>استقبال: 8 قنوات 4K UHD</li>
+<li>معالج: FPGA مخصص للفيديو</li>
+<li>فك التشفير: BISS، PowerVu، Conax</li>
+<li>المراقبة: في الوقت الفعلي مع إنذارات</li>
+<li>الواجهات: SDI، HDMI 2.1، IP Streaming</li>
+<li>السعر: $12,800</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>⚙️ إعداد نظام البث على سيرفر MENOSt</h2>
+
+<h3>1️⃣ تثبيت نظام Ubuntu Server وتحديثه</h3>
+<pre><code>sudo apt update && sudo apt upgrade -y
+sudo apt install build-essential git cmake -y</code></pre>
+
+<h3>2️⃣ تثبيت TVHeadend للاستقبال الفضائي</h3>
+<pre><code># إضافة المستودع الرسمي
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
+echo "deb https://apt.tvheadend.org/stable focal main" | sudo tee /etc/apt/sources.list.d/tvheadend.list
+
+# التثبيت
+sudo apt update
+sudo apt install tvheadend -y
+
+# إعداد المستخدم والصلاحيات
+sudo dpkg-reconfigure tvheadend</code></pre>
+
+<h3>3️⃣ تكوين Nginx مع وحدة RTMP</h3>
+<pre><code>sudo apt install nginx libnginx-mod-rtmp -y
+sudo nano /etc/nginx/nginx.conf</code></pre>
+
+<pre><code>rtmp {
+    server {
+        listen 1935;
+        chunk_size 4096;
+        allow publish all;
+        allow play all;
+
+        # القنوات الأربع الرئيسية
+        application meno_stream1 {
+            live on;
+            record off;
+            hls on;
+            hls_path /var/www/html/hls/stream1;
+            hls_fragment 3;
+            hls_playlist_length 60;
+            
+            # إعادة التوجيه إلى CDN
+            push rtmp://cdn1.example.com/live/stream1;
+        }
+        
+        application meno_stream2 {
+            live on;
+            record off;
+            hls on;
+            hls_path /var/www/html/hls/stream2;
+            
+            # تحويل إلى SRT
+            exec_push ffmpeg -i rtmp://localhost/meno_stream2/$name 
+                     -c copy -f mpegts srt://destination2.com:9000?mode=caller;
+        }
+        
+        application meno_stream3 {
+            live on;
+            record off;
+            dash on;
+            dash_path /var/www/html/dash/stream3;
+        }
+        
+        application meno_stream4 {
+            live on;
+            record all;
+            record_path /var/recordings;
+            record_unique on;
+            record_suffix .mp4;
+        }
+        
+        # قناة احتياطية للطوارئ
+        application backup {
+            live on;
+            allow publish 127.0.0.1;
+            deny publish all;
+        }
+    }
+}</code></pre>
+
+<h3>4️⃣ إعداد FFmpeg للمعالجة والتحويل</h3>
+<pre><code># تثبيت FFmpeg مع دعم الترميز الأجهزة
+sudo apt install ffmpeg nvidia-cuda-toolkit -y
+
+# مثال على تحويل البث من TVHeadend إلى RTMP
+ffmpeg -i http://localhost:9981/stream/channelid/12345 \
+       -c:v h264_nvenc -preset fast -b:v 4M \
+       -c:a aac -b:a 128k \
+       -f flv rtmp://localhost/meno_stream1/live</code></pre>
+
+<h3>5️⃣ ربط الأقمار الصناعية مع النظام</h3>
+<pre><code># إعداد محول DiSEqC للتبديل بين الأطباق
+w_scan -fs -s S20E0 -D1c -o vdr > arabsat_channels.conf
+
+# مسح القنوات من كل قمر
+for satellite in 20E 7W 42E 52.5E 105.5E 26E 13E; do
+    w_scan -fs -s S${satellite} -o vdr > channels_${satellite}.conf
+done</code></pre>
+</div>
+
+<div class="section">
+<h2>🔗 مخطط توصيل النظام الكامل</h2>
+
+<div class="diagram-box">
+<pre>
+                    🛰️ الأقمار الصناعية (12 قمر)
+                              |
+                    ┌─────────┴─────────┐
+                    │                   │
+            📡 5 أطباق رئيسية   📡 7 أطباق إضافية
+                    │                   │
+              ┌─────┴─────┐       ┌─────┴─────┐
+              │    LNBs   │       │    LNBs   │
+              └─────┬─────┘       └─────┬─────┘
+                    │                   │
+            ┌───────┴───────────────────┴───────┐
+            │        Multi-Switch Matrix        │
+            │         (32 inputs/outputs)       │
+            └───────┬───────────────────┬───────┘
+                    │                   │
+        ┌───────────┴───────┐   ┌──────┴───────────┐
+        │   Tandberg RX1290 │   │  Tandberg TT1260  │
+        └─────────┬─────────┘   └──────┬───────────┘
+                  │                     │
+    ┌─────────────┴─────────────────────┴─────────────┐
+    │                                                  │
+┌───┴────┐        ┌───┴────┐        ┌───┴────┐       │
+│ Server │        │ Server │        │ Server │       │
+│ Master │        │Secondary│       │ Backup │       │
+│ TBS6909│        │ TBS6916│        │ TBS6522│       │
+└───┬────┘        └───┬────┘        └───┬────┘       │
+    │                 │                 │             │
+    └─────────────────┴─────────────────┴─────────────┘
+                            │
+                    ┌───────┴───────┐
+                    │  MENOSt Core  │
+                    │ Nginx + RTMP  │
+                    └───────┬───────┘
+                            │
+        ┌───────┬───────┬───┴───┬───────┬───────┐
+        │       │       │       │       │       │
+    Stream1  Stream2  Stream3  Stream4  HLS    DASH
+        │       │       │       │       │       │
+        ▼       ▼       ▼       ▼       ▼       ▼
+    [CDN A] [CDN B] [CDN C] [CDN D] [Web]  [Mobile]
+</pre>
+</div>
+</div>
+
+<div class="section">
+<h2>📊 جدول التوزيع الجغرافي للبث</h2>
+
+<table>
+<tr>
+<th>رقم البث</th>
+<th>القمر المصدر</th>
+<th>البروتوكول</th>
+<th>الوجهة النهائية</th>
+<th>الدول المستهدفة</th>
+</tr>
+<tr>
+<td>Stream 1</td>
+<td>Arabsat 5C</td>
+<td>RTMP → HLS</td>
+<td>cdn.mena-region.tv</td>
+<td>السعودية، الإمارات، مصر</td>
+</tr>
+<tr>
+<td>Stream 2</td>
+<td>Turksat 4A</td>
+<td>SRT</td>
+<td>srt://turkey.broadcast.net:9000</td>
+<td>تركيا، أذربيجان، كازاخستان</td>
+</tr>
+<tr>
+<td>Stream 3</td>
+<td>AsiaSat 7</td>
+<td>RTMP → DASH</td>
+<td>stream.southeast-asia.org</td>
+<td>إندونيسيا، ماليزيا، بروناي</td>
+</tr>
+<tr>
+<td>Stream 4</td>
+<td>Africasat-1a</td>
+<td>RTMP/SRT Hybrid</td>
+<td>africa.islamic-broadcast.net</td>
+<td>نيجيريا، السنغال، مالي</td>
+</tr>
+</table>
+</div>
+
+<div class="section">
+<h2>🛡️ الأمان والمراقبة</h2>
+
+<h3>نظام المراقبة المتكامل</h3>
+<pre><code># تثبيت Zabbix للمراقبة
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-1+ubuntu22.04_all.deb
+sudo dpkg -i zabbix-release_6.0-1+ubuntu22.04_all.deb
+sudo apt update
+sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-nginx-conf zabbix-sql-scripts zabbix-agent -y
+
+# إعداد Grafana للرسوم البيانية
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+sudo apt-get update
+sudo apt-get install grafana -y
+sudo systemctl enable grafana-server
+sudo systemctl start grafana-server</code></pre>
+
+<h3>جدار الحماية وتأمين النظام</h3>
+<pre><code># إعداد UFW Firewall
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow 1935/tcp  # RTMP
+sudo ufw allow 9000/udp  # SRT
+sudo ufw allow 80/tcp    # HTTP
+sudo ufw allow 443/tcp   # HTTPS
+sudo ufw enable
+
+# تأمين SSH
+sudo nano /etc/ssh/sshd_config
+# تعطيل تسجيل الدخول بـ root
+# PermitRootLogin no
+# تفعيل المصادقة بالمفاتيح فقط
+# PasswordAuthentication no</code></pre>
+</div>
+
+<div class="cost-summary">
+<h3>💰 التكلفة الإجمالية للنظام المتكامل</h3>
+<table style="background: rgba(255,255,255,0.95); color: #2c3e50; border-radius: 10px;">
+<tr>
+<th>البند</th>
+<th>الكمية</th>
+<th>سعر الوحدة (USD)</th>
+<th>الإجمالي (USD)</th>
+</tr>
+<tr>
+<td>أجهزة البث الاحترافية</td>
+<td>3</td>
+<td>$25,000</td>
+<td>$75,000</td>
+</tr>
+<tr>
+<td>كروت TBS (6909-X V2, 6916, 6522H)</td>
+<td>3</td>
+<td>$1,265</td>
+<td>$3,797</td>
+</tr>
+<tr>
+<td>أطباق رئيسية (3-4.5م) مع LNB</td>
+<td>5</td>
+<td>$8,500</td>
+<td>$42,500</td>
+</tr>
+<tr>
+<td>أطباق إضافية (1.5-2.4م) مع LNB</td>
+<td>7</td>
+<td>$3,200</td>
+<td>$22,400</td>
+</tr>
+<tr>
+<td>Tandberg RX1290</td>
+<td>1</td>
+<td>$18,500</td>
+<td>$18,500</td>
+</tr>
+<tr>
+<td>Tandberg TT1260</td>
+<td>1</td>
+<td>$12,800</td>
+<td>$12,800</td>
+</tr>
+<tr>
+<td>Multi-Switch Matrix & Cabling</td>
+<td>1</td>
+<td>$15,000</td>
+<td>$15,000</td>
+</tr>
+<tr>
+<td>VPS MENOSt (سنوي)</td>
+<td>1</td>
+<td>$6,000</td>
+<td>$6,000</td>
+</tr>
+<tr>
+<td>تراخيص البرمجيات</td>
+<td>-</td>
+<td>$8,500</td>
+<td>$8,500</td>
+</tr>
+<tr>
+<td>التركيب والإعداد</td>
+<td>-</td>
+<td>$25,000</td>
+<td>$25,000</td>
+</tr>
+<tr style="background: #667eea; color: white; font-weight: bold;">
+<td colspan="3">الإجمالي الكلي</td>
+<td>$229,497</td>
+</tr>
+</table>
+
+<div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 10px; color: #2c3e50;">
+<strong>💡 ملاحظة:</strong> التكاليف التشغيلية الشهرية المتوقعة تتراوح بين $3,000-5,000 شاملة الصيانة والدعم الفني والترقيات.
+</div>
+</div>
+
+<div class="section">
+<h2>✅ خطوات التشغيل والاختبار النهائي</h2>
+
+<div class="success">
+<strong>المرحلة 1:</strong> التحقق من توصيل جميع الأطباق والتأكد من قوة الإشارة (Signal Quality > 85%)
+</div>
+
+<div class="success">
+<strong>المرحلة 2:</strong> تشغيل TVHeadend ومسح جميع القنوات المتاحة من الأقمار الـ 12
+</div>
+
+<div class="success">
+<strong>المرحلة 3:</strong> إعداد قنوات البث الأربع على Nginx RTMP وتجربة البث المباشر
+</div>
+
+<div class="success">
+<strong>المرحلة 4:</strong> تفعيل نظام المراقبة Zabbix/Grafana ووضع حدود الإنذار
+</div>
+
+<div class="success">
+<strong>المرحلة 5:</strong> اختبار التبديل التلقائي للنظام الاحتياطي في حالة الأعطال
+</div>
+
+<pre><code># اختبار جودة البث
+ffprobe -v quiet -print_format json -show_streams rtmp://localhost/meno_stream1/live
+
+# مراقبة استخدام الموارد
+htop
+iotop
+iftop
+
+# فحص سجلات النظام
+tail -f /var/log/nginx/error.log
+journalctl -u tvheadend -f</code></pre>
+</div>
+
+<div class="alert">
+<strong>⚠️ تنبيهات مهمة:</strong>
+<ul style="margin: 10px 0; padding-left: 20px;">
+<li>تأكد من وجود مصدر طاقة احتياطي UPS بقدرة لا تقل عن 10KVA</li>
+<li>احتفظ بنسخ احتياطية يومية من إعدادات النظام والقنوات</li>
+<li>قم بتحديث البرمجيات الأمنية بشكل دوري</li>
+<li>راقب درجة حرارة الخوادم وتأكد من كفاءة التبريد</li>
+</ul>
+</div>
+
+<div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+<h2 style="color: white; border: none;">🎯 نظام MENOSt جاهز للعمل!</h2>
+<p style="font-size: 1.2em;">
+مع هذا التكوين الاحترافي، يمكن لنظام MENOSt استقبال أكثر من 96 قناة فضائية وإعادة بث 4 قنوات عالية الجودة لتغطية جميع دول منظمة التعاون الإسلامي بكفاءة وموثوقية عالية.
+</p>
+</div>
+
+</div>
+</body>
+</html>

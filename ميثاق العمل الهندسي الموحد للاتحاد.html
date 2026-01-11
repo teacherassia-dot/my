@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ميثاق العمل الهندسي الموحد - OSBU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* OSBU Brand Colors */
+            --primary-green: #006837;
+            --dark-green: #1a4d2e;
+            --gold-yellow: #f39c12; /* Accent 1 */
+            --bronze-brown: #8B4513; /* Accent 2 */
+            --black-text: #000000;
+            --dark-grey: #2F2F2F;
+            --light-bg: #f9fdf9;
+            --white: #ffffff;
+            --border-color: #ddd;
+            
+            /* Status Colors */
+            --success: #27ae60;
+            --error: #c0392b;
+            --warning: #d35400;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-grey);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        /* Layout Structure */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--dark-green);
+            color: var(--white);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold-yellow);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-bottom: 5px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            display: block;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(255,255,255,0.1);
+            border-right-color: var(--gold-yellow);
+            padding-right: 20px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-right: 300px;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        /* Typography */
+        h1 {
+            color: var(--primary-green);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            border-bottom: 3px solid var(--gold-yellow);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        h2 {
+            color: var(--bronze-brown);
+            font-size: 1.6rem;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            background: linear-gradient(to left, transparent, rgba(139, 69, 19, 0.05));
+            padding: 10px;
+            border-right: 5px solid var(--bronze-brown);
+            border-radius: 4px;
+        }
+
+        h3 {
+            color: var(--dark-green);
+            font-size: 1.3rem;
+            margin-top: 30px;
+        }
+
+        p, li {
+            font-size: 1.05rem;
+        }
+
+        /* Custom Components */
+        
+        /* 1. Cover Page */
+        .cover-page {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, #e8f5e9 100%);
+            border: 10px double var(--primary-green);
+            margin-bottom: 60px;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .cover-title {
+            font-size: 3.5rem;
+            color: var(--primary-green);
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cover-subtitle {
+            font-size: 1.8rem;
+            color: var(--bronze-brown);
+            margin-bottom: 40px;
+        }
+
+        /* 2. Scenario Cards (Wrong vs Right) */
+        .scenario-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin: 30px 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .scenario-header {
+            background-color: var(--dark-grey);
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scenario-body {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .scenario-part {
+            flex: 1;
+            padding: 20px;
+            min-width: 300px;
+        }
+
+        .scenario-wrong {
+            background-color: #fff5f5;
+            border-left: 1px solid #eee;
+        }
+
+        .scenario-right {
+            background-color: #f0fff4;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .badge-wrong { background: var(--error); color: white; }
+        .badge-right { background: var(--success); color: white; }
+
+        /* 3. Archiving Code Box */
+        .code-box {
+            background-color: var(--dark-grey);
+            color: var(--gold-yellow);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: left;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary-green);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .naming-explanation {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .naming-tag {
+            background: #eee;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: 1px solid #ccc;
+        }
+
+        /* 4. Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #eee;
+            text-align: right;
+        }
+
+        th {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #fcfcfc; }
+        tr:hover { background-color: #f1f8e9; }
+
+        /* 5. Process Steps */
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid var(--gold-yellow);
+        }
+        
+        .step-number {
+            background: var(--primary-green);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        /* 6. Info Boxes */
+        .info-box {
+            background-color: #fffde7; /* Light Yellow */
+            border: 1px solid var(--gold-yellow);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .info-box::before {
+            content: "💡";
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 24px;
+            background: white;
+            padding: 0 5px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(100%);
+                width: 100%;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 20px;
+            }
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 15px;
+                right: 15px;
+                z-index: 1100;
+                background: var(--primary-green);
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-family: 'Cairo', sans-serif;
+            }
+            .cover-title { font-size: 2rem; }
+            .scenario-body { flex-direction: column; }
+            .scenario-wrong { border-left: none; border-bottom: 1px solid #eee; }
+        }
+        @media (min-width: 769px) {
+            .mobile-menu-btn { display: none; }
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .mobile-menu-btn { display: none; }
+            .main-content { margin: 0; padding: 0; width: 100%; }
+            body { background-color: white; -webkit-print-color-adjust: exact; }
+            .cover-page { height: 100vh; border: none; }
+            h1, h2 { page-break-before: auto; }
+            .scenario-card { page-break-inside: avoid; }
+            a { text-decoration: none; color: black; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleMenu()">☰ القائمة</button>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">OSBU</div>
+                <div style="font-size: 0.8rem; color: #ccc;">الإدارة الهندسية</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#cover" class="active">الغلاف</a></li>
+                <li><a href="#philosophy">1. الفلسفة والأهداف</a></li>
+                <li><a href="#structure">2. الهيكل والمسؤوليات</a></li>
+                <li><a href="#workflow">3. دورة العمل (Workflow)</a></li>
+                <li><a href="#scenarios">4. سيناريوهات العمل (هام)</a></li>
+                <li><a href="#archiving">5. نظام الأرشفة والتسمية</a></li>
+                <li><a href="#standards">6. المعايير الفنية للتوثيق</a></li>
+                <li><a href="#identity">7. الهوية البصرية</a></li>
+                <li><a href="#development">8. تطوير الكوادر</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Cover Page -->
+            <section id="cover" class="cover-page">
+                <div style="font-size: 5rem; color: var(--primary-green); margin-bottom: 20px;">❖</div>
+                <h1 class="cover-title">ميثاق العمل الهندسي الموحد</h1>
+                <p class="cover-subtitle">دليل السياسات، المعايير الفنية، ونظم الأرشفة</p>
+                <div style="margin-top: 50px; font-weight: bold; color: var(--dark-grey);">
+                    الإصدار: 1.0 - 2025<br>
+                    إعداد: م. عامر نوجا<br>
+                    مدير الإدارة الهندسية - اتحاد إذاعات الدول الإسلامية
+                </div>
+            </section>
+
+            <!-- Chapter 1: Philosophy -->
+            <section id="philosophy">
+                <h1>1. الفلسفة والأهداف</h1>
+                <div class="info-box">
+                    <strong>الرسالة الجوهرية:</strong> "التقنية في خدمة الإبداع، والهندسة في خدمة المحتوى."
+                </div>
+                <p>يُخطئ من يظن أن دور الإدارة الهندسية ينحصر في "إصالح الأعطال". الدور الحقيقي هو أتمتة العمليات لتحرير المبدعين من العبء التقني.</p>
+                
+                <h3>القيم الجوهرية (Core Values):</h3>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="process-step" style="flex: 1; min-width: 200px;">
+                        <div class="step-number">✓</div>
+                        <div><strong>الموثوقية:</strong><br>نسبة تشغيل (Uptime) لا تقل عن 99.5%.</div>
+                    </div>
+                    <div class="process-step" style="flex: 1; min-width: 200px;">
+                        <div class="step-number">⚡</div>
+                        <div><strong>الاستباقية:</strong><br>حل المشاكل قبل حدوثها (Proactive).</div>
+                    </div>
+                    <div class="process-step" style="flex: 1; min-width: 200px;">
+                        <div class="step-number">🤝</div>
+                        <div><strong>التمكين:</strong><br>تدريب الآخرين بدلاً من احتكار المعرفة.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 2: Structure -->
+            <section id="structure">
+                <h1>2. الهيكل والمسؤوليات (RACI)</h1>
+                <p>لتجنب تداخل الصلاحيات، نعتمد مصفوفة المسؤوليات التالية:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="40%">المهمة</th>
+                            <th>المسؤول (Responsible)</th>
+                            <th>المساءل (Accountable)</th>
+                            <th>يستشار (Consulted)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>إضافة قناة فضائية جديدة</td>
+                            <td>قسم البث</td>
+                            <td>مدير الهندسة</td>
+                            <td>فريق التحرير (للمحتوى)</td>
+                        </tr>
+                        <tr>
+                            <td>إصلاح عطل في السيرفر (NAS)</td>
+                            <td>قسم البنية التحتية</td>
+                            <td>مدير الهندسة</td>
+                            <td>الأخبار (إذا أثر على البث)</td>
+                        </tr>
+                        <tr>
+                            <td>تدريب محرر جديد على MAM</td>
+                            <td>الدعم الفني</td>
+                            <td>مدير الهندسة</td>
+                            <td>رئيس التحرير</td>
+                        </tr>
+                        <tr>
+                            <td>تصميم Workflow جديد</td>
+                            <td>مدير الهندسة</td>
+                            <td>الإدارة العليا</td>
+                            <td>رؤساء الأقسام</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Chapter 3: Workflow -->
+            <section id="workflow">
+                <h1>3. دورة العمل الهندسية</h1>
+                <p>أي طلب هندسي (صيانة، تطوير، شراء) يمر بالمراحل التالية لضمان الجودة:</p>
+                
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>استلام الطلب (Ticket):</strong>
+                        يتم عبر نظام التذاكر، موضحاً فيه (الوصف، الأولوية، الموعد المطلوب).
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>التقييم الفني:</strong>
+                        خلال 24 ساعة (للعادي) أو ساعتين (للعاجل). يتم تحديد الجدوى والتكلفة.
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>التنفيذ (Execution):</strong>
+                        <span style="color: var(--error); font-weight: bold;">ممنوع</span> إجراء تعديلات على أنظمة البث (Production) وقت الذروة.
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <strong>الاختبار والتسليم:</strong>
+                        اختبار في بيئة تجريبية (Staging) ثم التسليم مع دليل الاستخدام.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 4: Scenarios -->
+            <section id="scenarios">
+                <h1>4. سيناريوهات العمل (ميثاق التعاون)</h1>
+                <p>كيف نتصرف في المواقف الحرجة؟ أمثلة واقعية لضبط العلاقة بين الهندسة والتحرير.</p>
+
+                <!-- Scenario 1 -->
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <span>سيناريو 1: طلب عاجل أثناء حدث مباشر</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">حالة حرجة</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-part scenario-wrong">
+                            <span class="badge badge-wrong">❌ التصرف الخاطئ</span>
+                            <p><strong>المهندس:</strong> يرفض فوراً بحجة "غير موجود في العقد".<br>
+                            <strong>المراسل:</strong> يغضب ويصرخ "المنافسون أفضل منا!".</p>
+                            <p><em>النتيجة: توتر وفشل في التغطية.</em></p>
+                        </div>
+                        <div class="scenario-part scenario-right">
+                            <span class="badge badge-right">✅ التصرف الصحيح</span>
+                            <p><strong>المهندس:</strong> "فهمت، سأفحص الباندويث حالاً. إذا كان متاحاً سأنفذ، وإذا لا، سأشرح السبب التقني."<br>
+                            <strong>المراسل:</strong> يتفهم القيود التقنية ويطلب تحسينها للمرة القادمة.</p>
+                            <p><em>النتيجة: حل المشكلة أو إدارتها بهدوء.</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <span>سيناريو 2: صيانة طارئة (ثغرة أمنية)</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">أمن سيبراني</span>
+                    </div>
+                    <div class="scenario-body">
+                        <div class="scenario-part scenario-wrong">
+                            <span class="badge badge-wrong">❌ التصرف الخاطئ</span>
+                            <p>المهندس يقوم بإعادة تشغيل السيرفر فوراً دون إبلاغ أحد، مما يقطع عمل المحررين.</p>
+                        </div>
+                        <div class="scenario-part scenario-right">
+                            <span class="badge badge-right">✅ التصرف الصحيح</span>
+                            <p>يرسل المهندس تنبيهاً: "اكتشفنا ثغرة حرجة. نحتاج 5 دقائق صيانة. الخيارات المتاحة: الآن (إذا لا يوجد بث)، أو بعد ساعتين، أو ليلاً." ويختار مدير الأخبار الوقت الأنسب.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 5: Archiving -->
+            <section id="archiving">
+                <h1>5. نظام الأرشفة والتسمية (Naming Convention)</h1>
+                <p>لضمان سهولة استرجاع المواد الفيلمية، يجب الالتزام الصارم بنظام التسمية التالي في ملفات الفيديو وجداول الإكسل.</p>
+
+                <h3>صيغة التسمية المعتمدة:</h3>
+                <div class="code-box">
+                    Title_Category_Year_Part_Language
+                </div>
+                
+                <div class="naming-explanation">
+                    <span class="naming-tag">Title: الاسم الإنجليزي المختصر</span>
+                    <span class="naming-tag">Category: نوع المحتوى (D=Doc, N=News)</span>
+                    <span class="naming-tag">Year: آخر رقمين (25)</span>
+                    <span class="naming-tag">Part: رقم الجزء (P01)</span>
+                    <span class="naming-tag">Lang: اللغة (AR, EN, FR)</span>
+                </div>
+
+                <h3>مثال تطبيقي:</h3>
+                <p>فيلم "قصص الحيوان في القرآن"، وثائقي، إنتاج 2023، الجزء الأول، عربي:</p>
+                <div class="code-box" style="border-color: var(--gold-yellow); color: white;">
+                    AnimalStories_Doc_23_P01_AR
+                </div>
+
+                <h3>هيكل جدول الأرشفة (Excel):</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم الملف (Code)</th>
+                            <th>الاسم الأصلي</th>
+                            <th>التاريخ</th>
+                            <th>الفئة</th>
+                            <th>المنتج</th>
+                            <th>اللغة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td dir="ltr">AnimalStories_Doc_23_P01_AR</td>
+                            <td>قصص الحيوان في القرآن</td>
+                            <td>2023</td>
+                            <td>وثائقي</td>
+                            <td>شركة XYZ</td>
+                            <td>عربي</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Chapter 6: Technical Standards -->
+            <section id="standards">
+                <h1>6. المعايير الفنية لتوثيق الفعاليات</h1>
+                <p>شروط ملزمة لتوثيق محاضرات ومؤتمرات OSBU لضمان الجودة الاحترافية.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    
+                    <!-- Video -->
+                    <div class="info-box" style="background: white; border-top: 4px solid var(--primary-green);">
+                        <h3 style="margin-top:0;">🎥 التصوير (Video)</h3>
+                        <ul>
+                            <li><strong>عدد الكاميرات:</strong> 3 كحد أدنى (رئيسية، تفاعل، جمالية).</li>
+                            <li><strong>الجودة:</strong> Full HD 1080p كحد أدنى (يفضل 4K للأرشيف).</li>
+                            <li><strong>الثبات:</strong> استخدام حوامل (Tripods) لجميع الكاميرات الثابتة.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Audio -->
+                    <div class="info-box" style="background: white; border-top: 4px solid var(--bronze-brown);">
+                        <h3 style="margin-top:0;">🎤 الصوت (Audio)</h3>
+                        <ul>
+                            <li><strong>الميكروفونات:</strong> Lavalier للمحاضر + Shotgun للجمهور.</li>
+                            <li><strong>التزامن:</strong> منع أي تأخير (Lip Sync) بين الصوت والصورة.</li>
+                            <li><strong>النقاء:</strong> تسجيل مسار صوتي نقي (Clean Feed) بدون ضوضاء.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Lighting -->
+                    <div class="info-box" style="background: white; border-top: 4px solid var(--gold-yellow);">
+                        <h3 style="margin-top:0;">💡 الإضاءة (Lighting)</h3>
+                        <ul>
+                            <li><strong>التوزيع:</strong> إضاءة ثلاثية النقاط (Three-point lighting).</li>
+                            <li><strong>درجة اللون:</strong> تجنب الظلال القاسية وتوحيد حرارة اللون (White Balance).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>متطلبات البث المباشر (Live Stream):</h3>
+                <ul>
+                    <li>سرعة إنترنت لا تقل عن <strong>10 Mbps</strong> (Upload).</li>
+                    <li>وجود خط إنترنت احتياطي (4G/5G/Fiber).</li>
+                    <li>بدء البث التجريبي قبل 60 دقيقة من الموعد.</li>
+                </ul>
+            </section>
+
+            <!-- Chapter 7: Visual Identity -->
+            <section id="identity">
+                <h1>7. الهوية البصرية (Visual Identity)</h1>
+                <p>يجب الالتزام بالألوان والخطوط التالية في جميع المخرجات (فيديو، جرافيك، وثائق).</p>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="background: #006837; color: white; padding: 20px; flex: 1; border-radius: 8px; text-align: center;">
+                        الأخضر المؤسسي<br>#006837
+                    </div>
+                    <div style="background: #f39c12; color: white; padding: 20px; flex: 1; border-radius: 8px; text-align: center;">
+                        الذهبي/الأصفر<br>#F39C12
+                    </div>
+                    <div style="background: #8B4513; color: white; padding: 20px; flex: 1; border-radius: 8px; text-align: center;">
+                        البني/البرونزي<br>#8B4513
+                    </div>
+                    <div style="background: #000000; color: white; padding: 20px; flex: 1; border-radius: 8px; text-align: center;">
+                        الأسود<br>#000000
+                    </div>
+                </div>
+
+                <h3>الخطوط المعتمدة:</h3>
+                <ul>
+                    <li><strong>للعناوين:</strong> Cairo Bold أو GE SS Unique Bold (حجم 36-44pt).</li>
+                    <li><strong>للنصوص:</strong> Noto Sans Arabic أو GE SS Text Regular (حجم 18-24pt).</li>
+                </ul>
+            </section>
+
+            <!-- Chapter 8: Development -->
+            <section id="development">
+                <h1>8. تطوير الكوادر البشرية</h1>
+                <p>نؤمن بأن الاستثمار في المهندس هو استثمار في المؤسسة. المسار التدريبي المقترح:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المستوى</th>
+                            <th>سنوات الخبرة</th>
+                            <th>التركيز التدريبي</th>
+                            <th>الشهادات المقترحة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>مبتدئ (Junior)</strong></td>
+                            <td>0 - 1</td>
+                            <td>الأساسيات (Linux, Network, Broadcasting)</td>
+                            <td>CompTIA A+, Network+</td>
+                        </tr>
+                        <tr>
+                            <td><strong>متوسط (Mid)</strong></td>
+                            <td>2 - 4</td>
+                            <td>التخصص + القيادة (Cloud, Advanced Linux)</td>
+                            <td>CCNA, AWS Solutions Architect</td>
+                        </tr>
+                        <tr>
+                            <td><strong>خبير (Senior)</strong></td>
+                            <td>+5</td>
+                            <td>الاستراتيجية + الحوكمة (Architecture, Management)</td>
+                            <td>PMP, ITIL</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>الميزانية السنوية المقترحة:</strong> 2,000$ لكل مهندس (دورة + شهادة).</p>
+            </section>
+
+            <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center; color: #777;">
+                جميع الحقوق محفوظة © اتحاد إذاعات الدول الإسلامية (OSBU) 2025<br>
+                م.عامر نوجا -مدير الإدارة الهندسية
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking a link on mobile
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                // Remove active class from all links
+                document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
+                // Add active class to clicked link
+                link.classList.add('active');
+
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

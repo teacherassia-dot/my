@@ -1,0 +1,1562 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خارطة طريق نحو منظومة تبادل إخباري وبرامجي مستدامة</title>
+    <style>
+        :root {
+            --primary: #1b5e20;       /* أخضر غامق */
+            --secondary: #2e7d32;     /* أخضر متوسط */
+            --accent: #4caf50;        /* أخضر فاتح للتفاصيل */
+            --bg-light: #f1f8e9;      /* خلفية خضراء فاتحة جداً */
+            --white: #ffffff;
+            --text: #212121;
+            --border: #c8e6c9;
+            --code-bg: #263238;
+            --code-text: #eceff1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e8f5e9;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .document-container {
+            max-width: 210mm; /* A4 width */
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Typography */
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--white);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 40px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        h4 {
+            color: var(--primary);
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            padding-right: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: right;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bg-light);
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Consolas', monospace;
+            border-left: 5px solid var(--accent);
+        }
+
+        /* Diagram Boxes */
+        .diagram-box {
+            border: 2px dashed var(--secondary);
+            background-color: var(--bg-light);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-step {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            width: 80%;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .arrow {
+            font-size: 1.5em;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Cover Page */
+        .cover {
+            text-align: center;
+            padding: 50px 0;
+            border: 5px double var(--primary);
+            margin-bottom: 50px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cover-logo {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background-color: #e3f2fd; /* Light Blue fallback, changed to green theme below */
+            background-color: #e8f5e9;
+            border-right: 4px solid var(--secondary);
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Network Topology Visualization */
+        .network-tree ul {
+            padding-top: 20px; position: relative;
+            transition: all 0.5s;
+        }
+        .network-tree li {
+            float: right; text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+        }
+        .network-tree li::before, .network-tree li::after{
+            content: ''; position: absolute; top: 0; right: 50%;
+            border-top: 1px solid #ccc; width: 50%; height: 20px;
+        }
+        .network-tree li::after{
+            right: auto; left: 50%;
+            border-left: 1px solid #ccc;
+        }
+        .network-tree li:only-child::after, .network-tree li:only-child::before {
+            display: none;
+        }
+        .network-tree li:only-child{ padding-top: 0;}
+        .network-tree li:first-child::before, .network-tree li:last-child::after{
+            border: 0 none;
+        }
+        .network-tree li:last-child::before{
+            border-right: 1px solid #ccc;
+            border-radius: 0 5px 0 0;
+        }
+        .network-tree li:first-child::after{
+            border-radius: 5px 0 0 0;
+        }
+        .network-tree ul ul::before{
+            content: ''; position: absolute; top: 0; right: 50%;
+            border-left: 1px solid #ccc; width: 0; height: 20px;
+        }
+        .node {
+            border: 1px solid var(--secondary);
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #666;
+            font-family: arial, verdana, tahoma;
+            font-size: 11px;
+            display: inline-block;
+            border-radius: 5px;
+            background: white;
+        }
+
+        @media print {
+            body { background: white; }
+            .document-container { width: 100%; box-shadow: none; margin: 0; padding: 0; }
+            h2 { page-break-before: always; }
+            pre { white-space: pre-wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="document-container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+        <div class="cover-logo">OSBU</div>
+        <h1>خارطة طريق نحو منظومة تبادل إخباري وبرامجي مستدامة</h1>
+        <h2>دليل شامل للاتحادات الإعلامية الناشئة</h2>
+        <h3>حالة تطبيقية: اتحاد إذاعات الدول الإسلامية (OSBU)</h3>
+        
+        <div style="margin-top: 50px; text-align: right; width: 60%; margin-right: auto; margin-left: auto;">
+            <p><strong>إعداد:</strong> م. عامر نوجا</p>
+            <p><strong>المنصب:</strong> مدير الإدارة الهندسية - اتحاد OSBU</p>
+            <p><strong>التاريخ:</strong> ديسمبر 2025</p>
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <h2>المقدمة التنفيذية</h2>
+    <p>في عصر التحول الرقمي المتسارع، لم يعد الاستثمار في البنية التحتية الإعلامية ترفًا تقنيًا، بل ضرورة استراتيجية لتحقيق السيادة الإعلامية والاستقلالية التشغيلية. يقدم هذا الكتاب خارطة طريق متكاملة لإنشاء منظومة تبادل إخباري وبرامجي قائمة على أحدث التقنيات، مع حالة تطبيقية واقعية على اتحاد إذاعات الدول الإسلامية (OSBU).</p>
+
+    <h3>لماذا هذا الكتاب؟</h3>
+    <p>انطلاقًا من تجربة ميدانية امتدت لسنوات في بناء وإدارة أنظمة التبادل الإعلامي، أصبح واضحًا أن معظم الاتحادات الناشئة تواجه تحديات مشتركة:</p>
+    <ul>
+        <li><strong>غياب المرجعية الفنية:</strong> عدم وجود دليل شامل يدمج الجوانب التقنية والإدارية والمالية.</li>
+        <li><strong>الفجوة بين الهندسة والمحتوى:</strong> ضعف التنسيق بين الفرق التقنية والإخبارية.</li>
+        <li><strong>عدم استدامة الاستثمار:</strong> الوقوع في فخ الحلول المؤقتة ذات التكلفة الخفية المرتفعة.</li>
+        <li><strong>إهمال البعد البشري:</strong> التركيز على المعدات مع إهمال تأهيل الكوادر.</li>
+    </ul>
+
+    <h3>منهجية العمل</h3>
+    <p>يعتمد هذا الدليل على المنهج الهجين المتوازن، حيث يجمع بين:</p>
+    <ol>
+        <li><strong>الأصالة التقنية:</strong> استخدام أفضل الممارسات العالمية (Best Practices).</li>
+        <li><strong>المرونة التشغيلية:</strong> حلول قابلة للتطوير والتوسع (Modular &amp; Scalable).</li>
+        <li><strong>الواقعية المالية:</strong> توازن بين الجودة والتكلفة (Cost-Effective Solutions).</li>
+        <li><strong>الاستدامة البشرية:</strong> بناء فريق قادر على الاستمرارية دون الاعتماد على أفراد بعينهم.</li>
+    </ol>
+
+    <!-- Chapter 1 -->
+    <h2>الفصل الأول: الرؤية الاستراتيجية والاستدامة</h2>
+
+    <h3>1.1 السيادة الإعلامية كضرورة استراتيجية</h3>
+    <p>في مشهد إعلامي عالمي تسيطر عليه وكالات كبرى (Reuters, AFP, AP)، تصبح السيادة الإعلامية مسألة أمن ثقافي واقتصادي. الاتحادات الإعلامية الإقليمية ليست بديلاً عن الوكالات العالمية، بل شريكًا استراتيجيًا يضمن:</p>
+    <ul>
+        <li><strong>تنوع المصادر:</strong> عدم الاعتماد الكلي على سردية واحدة.</li>
+        <li><strong>خفض التكاليف:</strong> توفير ما يصل إلى 60% من ميزانيات الاشتراكات السنوية.</li>
+        <li><strong>التحكم في المحتوى:</strong> القدرة على تخصيص وتطويع المواد الإخبارية.</li>
+        <li><strong>تعزيز الهوية:</strong> إبراز القضايا المحلية والإقليمية.</li>
+    </ul>
+
+    <h3>1.2 التحول من النموذج التقليدي إلى الهجين</h3>
+    
+    <h4>النموذج التقليدي (القائم على الأقمار الصناعية فقط):</h4>
+    <div style="display: flex; gap: 20px;">
+        <div style="flex: 1; background: #e8f5e9; padding: 15px; border-radius: 8px;">
+            <strong>المميزات:</strong>
+            <ul>
+                <li>استقرار الإشارة في ظروف طبيعية</li>
+                <li>تغطية جغرافية واسعة</li>
+            </ul>
+        </div>
+        <div style="flex: 1; background: #ffebee; padding: 15px; border-radius: 8px;">
+            <strong>العيوب:</strong>
+            <ul>
+                <li>تكلفة رأسمالية عالية (أطباق + IRDs + صيانة)</li>
+                <li>عدم المرونة: صعوبة إضافة قنوات جديدة</li>
+                <li>التأثر بالعوامل الجوية (Rain Fade)</li>
+                <li>محدودية عدد القنوات المستقبلة</li>
+            </ul>
+        </div>
+    </div>
+
+    <h4>النموذج الهجين المقترح: (IP + Satellite)</h4>
+    <p class="info-box"><strong>الفلسفة:</strong> "استخدم القمر لما صُمم له (البث العام الواسع)، واستخدم الإنترنت لما يتفوق فيه (المرونة والتفاعلية)"</p>
+    
+    <p><strong>الهيكل:</strong></p>
+    <ol>
+        <li><strong>الطبقة الأولى - الاستقبال الفضائي:</strong>
+            <ul>
+                <li>للقنوات الرئيسية ذات الأهمية الاستراتيجية (5-7 قنوات).</li>
+                <li>أطباق احترافية + كروت استقبال TBS-6909X.</li>
+            </ul>
+        </li>
+        <li><strong>الطبقة الثانية - البث عبر IP:</strong>
+            <ul>
+                <li>لتوزيع المحتوى المباشر بين الأعضاء (RTMP/SRT).</li>
+                <li>لاستقبال الأحداث الطارئة والتغطيات الخاصة.</li>
+            </ul>
+        </li>
+        <li><strong>الطبقة الثالثة - السحابة الهجينة:</strong>
+            <ul>
+                <li>الآمنة للأرشفة (Cloud Backup).</li>
+                <li>للتوزيع العالمي عبر CDN عند الحاجة.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <p><strong>المزايا الاستراتيجية:</strong></p>
+    <ul>
+        <li><strong>المرونة:</strong> إضافة مصادر جديدة في دقائق بدلاً من أيام.</li>
+        <li><strong>الموثوقية:</strong> النسخ الاحتياطي التلقائي (Automatic Failover).</li>
+        <li><strong>التكلفة:</strong> خفض CAPEX بنسبة 40% مقارنة بالحل التقليدي الكامل.</li>
+        <li><strong>قابلية التوسع:</strong> دعم +100 قناة دون تغيير البنية الأساسية.</li>
+    </ul>
+
+    <h3>1.3 الاستدامة: من الاعتماد إلى الاستقلالية</h3>
+    <p>تعريف الاستدامة في السياق الإعلامي: الاستدامة لا تعني فقط "القدرة على الاستمرار"، بل القدرة على النمو الذاتي (Self-Sustaining Growth). يتطلب ذلك:</p>
+    
+    <h4>المحور المالي:</h4>
+    <ul>
+        <li>تنويع مصادر الدخل: عدم الاعتماد على الاشتراكات فقط.
+            <ul>
+                <li>خدمات تقنية (استضافة، بث، أرشفة).</li>
+                <li>تدريب متخصص (أكاديمية إعلامية).</li>
+                <li>ترخيص المحتوى (بيع حقوق البث).</li>
+                <li>فعاليات ومؤتمرات.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="info-box">
+        <strong>مثال تطبيقي من ASBU:</strong><br>
+        حقق اتحاد إذاعات الدول العربية استقلالية مالية بنسبة 40% من خلال:
+        <ul>
+            <li>تأجير بنية MENOS التحتية: 500M USD على 5 سنوات.</li>
+            <li>المهرجان العربي للإذاعة والتلفزيون: 200K USD سنوياً.</li>
+            <li>خدمات التدريب والاستشارات: 150K USD سنوياً.</li>
+        </ul>
+    </div>
+
+    <h4>المحور التقني:</h4>
+    <ul>
+        <li>الاستثمار في البرمجيات مفتوحة المصدر حيث أمكن.</li>
+        <li>نقل المعرفة: توثيق شامل للأنظمة.</li>
+        <li>التدريب المستمر: خطة سنوية لتطوير الكوادر.</li>
+    </ul>
+
+    <h4>المحور البشري:</h4>
+    <ul>
+        <li>بناء فريق متعدد الكفاءات (T-Shaped Skills).</li>
+        <li>ثقافة الابتكار: تشجيع المبادرات والحلول الذاتية.</li>
+        <li>التخطيط للاستمرارية: عدم الاعتماد على أفراد بعينهم.</li>
+    </ul>
+
+    <h3>1.4 حالة OSBU: من الفكرة إلى التطبيق</h3>
+    <p><strong>السياق:</strong> اتحاد إذاعات الدول الإسلامية يضم 57 دولة عضو بتنوع هائل في:</p>
+    <ul>
+        <li>البنية التحتية (من دول متقدمة جداً إلى دول نامية).</li>
+        <li>اللغات (العربية، الفارسية، الأوردو، الماليو، التركية...).</li>
+        <li>المناطق الزمنية (من GMT-5 إلى GMT+9).</li>
+    </ul>
+    <p><strong>التحديات الخاصة:</strong></p>
+    <ol>
+        <li>التنوع اللغوي: الحاجة لدعم ترجمة فورية.</li>
+        <li>اختلاف القدرات: بعض الأعضاء بدون بنية IP متقدمة.</li>
+        <li>الانتشار الجغرافي: صعوبة التغطية بقمر واحد.</li>
+    </ol>
+    <p><strong>الحل المقترح:</strong></p>
+    <ul>
+        <li>نموذج Hub &amp; Spoke: مركز رئيسي في جدة + نقاط إقليمية.</li>
+        <li>تقنية Adaptive SRT: تتكيف مع سرعات الإنترنت المختلفة.</li>
+        <li>منصة OSBU Cloud: للأعضاء ذوي الإمكانيات المحدودة.</li>
+    </ul>
+
+    <!-- Chapter 2 -->
+    <h2>الفصل الثاني: نظرة عامة على RTMP/SRT والسيناريو الهجين</h2>
+
+    <h3>2.1 فهم التقنيات الأساسية</h3>
+    
+    <h4>2.1.1 بروتوكول SRT (Secure Reliable Transport)</h4>
+    <p><strong>التعريف:</strong> بروتوكول مفتوح المصدر طُور بواسطة Haivision و Wowza لنقل الفيديو عالي الجودة عبر شبكات غير موثوقة.</p>
+    <p><strong>الخصائص التقنية:</strong></p>
+    <ul>
+        <li>يعمل فوق UDP: سرعة نقل أعلى من TCP.</li>
+        <li>آلية تصحيح الأخطاء (ARQ): إعادة إرسال الحزم المفقودة تلقائياً.</li>
+        <li>التشفير (AES-128/256): حماية المحتوى أثناء النقل.</li>
+        <li>Adaptive Bitrate: التكيف مع تقلبات الشبكة.</li>
+        <li>Low Latency: تأخير يتراوح بين 0.5-3 ثانية (قابل للتخصيص).</li>
+    </ul>
+    <p><strong>حالات الاستخدام المثالية:</strong> البث المباشر للأحداث الرياضية، التغطيات الإخبارية الميدانية (REMI Production)، نقل الإشارة بين الاستوديوهات، التبادل بين الاتحادات الإعلامية.</p>
+    <p><strong>القيود:</strong> يتطلب معرفة تقنية لإعداد المعاملات (Latency, Overhead)، غير مدعوم مباشرة في المتصفحات (يحتاج player خاص).</p>
+
+    <h4>2.1.2 بروتوكول RTMP (Real-Time Messaging Protocol)</h4>
+    <p><strong>التعريف:</strong> بروتوكول طورته Adobe في الأصل، أصبح معياراً صناعياً لـ ingesting الفيديو.</p>
+    <p><strong>الخصائص:</strong> يعمل فوق TCP (موثوقية أعلى لكن مع latency أكبر)، التوافق (مدعوم من جميع منصات البث Wowza, Facebook, YouTube)، البساطة (سهولة الإعداد والاستخدام).</p>
+    <p><strong>حالات الاستخدام:</strong> البث إلى منصات التواصل الاجتماعي، Push إلى خوادم البث (Streaming Servers)، التطبيقات التفاعلية.</p>
+    <p><strong>القيود:</strong> Latency أعلى (3-10 ثواني)، حساس لتقلبات الشبكة (Buffer Overruns)، أقل أماناً (بدون تشفير مدمج).</p>
+
+    <h4>2.1.3 الجدول المقارن</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>المعيار</th>
+                <th>SRT</th>
+                <th>RTMP</th>
+                <th>HLS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Latency</td>
+                <td>0.5-3s</td>
+                <td>3-10s</td>
+                <td>10-30s</td>
+            </tr>
+            <tr>
+                <td>الموثوقية</td>
+                <td>عالية</td>
+                <td>متوسطة</td>
+                <td>عالية جداً</td>
+            </tr>
+            <tr>
+                <td>الأمان</td>
+                <td>مدمج</td>
+                <td>يحتاج RTMPS</td>
+                <td>يحتاج HTTPS</td>
+            </tr>
+            <tr>
+                <td>التوافق</td>
+                <td>محدود</td>
+                <td>واسع</td>
+                <td>عالمي</td>
+            </tr>
+            <tr>
+                <td>الاستخدام المثالي</td>
+                <td>Production</td>
+                <td>Ingesting</td>
+                <td>Distribution</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2.2 تبرير السيناريو الهجين</h3>
+    <p><strong>السؤال الجوهري:</strong> لماذا لا نستخدم تقنية واحدة فقط؟<br>
+    <strong>الإجابة:</strong> لأن لكل تقنية نقاط قوة وضعف، والحل الأمثل هو الجمع الذكي بينها.</p>
+    
+    <p><strong>طبقات السيناريو الهجين:</strong></p>
+    <ul>
+        <li><strong>الطبقة 1 - الاستقبال (Satellite):</strong> التقنية DVB-S2/S2X، الأجهزة كروت TBS-6909X. الهدف: استقبال القنوات الرئيسية بجودة broadcast.</li>
+        <li><strong>الطبقة 2 - التجميع (Aggregation):</strong> التقنية IP Multicast/Unicast، البرمجيات TVHeadend + Metus Ingest. الهدف: تحويل جميع المصادر إلى streams موحدة.</li>
+        <li><strong>الطبقة 3 - التوزيع الداخلي (Internal Distribution):</strong> التقنية SRT (Caller/Listener Mode)، الشبكة VLAN مخصص للبث (QoS مفعّل). الهدف: توزيع عالي الجودة داخل المقر.</li>
+        <li><strong>الطبقة 4 - التبادل الخارجي (External Exchange):</strong> التقنية SRT (Rendezvous Mode) + RTMP Fallback، الأمان VPN + Whitelisting. الهدف: مشاركة المحتوى مع الأعضاء.</li>
+        <li><strong>الطبقة 5 - الأرشفة (Archival):</strong> التقنية NAS محلي + S3 Cloud، البرمجيات Metus MAM. الهدف: حفظ آمن طويل الأمد.</li>
+    </ul>
+
+    <h3>2.3 المخطط الهندسي الشامل</h3>
+    <div class="diagram-box">
+        <div class="flow-container">
+            <div class="flow-step">القمر الصناعي</div>
+            <div class="arrow">↓</div>
+            <div style="display:flex; gap:10px; width:100%; justify-content:center;">
+                <div class="flow-step">طبق 3.7m</div>
+                <div class="flow-step">طبق 1.8m</div>
+            </div>
+            <div class="arrow">↓</div>
+            <div class="flow-step">كرت TBS (داخل محطة العمل)</div>
+            <div class="arrow">↓</div>
+            <div class="flow-step">TVHeadend (التقاط وتحويل IP)</div>
+            <div class="arrow">↓</div>
+            <div class="flow-step">Metus Ingest (تسجيل)</div>
+            <div class="arrow">↓</div>
+            <div class="flow-step">Network Switch 10G</div>
+            <div class="arrow">↓</div>
+            <div style="display:flex; gap:10px; width:100%; justify-content:center;">
+                <div class="flow-step">MAM (أرشفة)</div>
+                <div class="flow-step">Multiviewer (مراقبة)</div>
+                <div class="flow-step">SRT Stream (توزيع)</div>
+            </div>
+            <div class="arrow">↓</div>
+            <div class="flow-step">CDN / Members</div>
+        </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <h2>الفصل الثالث: خرائط المنظومة والتدفقات</h2>
+
+    <h3>3.1 المخطط الكتلي (Block Diagram) الشامل</h3>
+    
+    <h4>3.1.1 منطقة الاستقبال (Reception Zone)</h4>
+    <div class="diagram-box" style="text-align: left;">
+        <strong>SATELLITE RECEPTION INFRASTRUCTURE</strong><br>
+        [C-Band Dish 3.7m] ──&gt; [Quattro LNB] ─┐<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        [Ku-Band Dish 1.8m] ──&gt; [Quattro LNB] ─┼──&gt; [9x8 Multiswitch]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        [Backup Dish 2.4m] ──&gt; [Quad LNB] ────┘<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        Output: 8x RG6 Coaxial Cables<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
+        <strong>SIGNAL PROCESSING &amp; CONVERSION</strong><br>
+        Primary Workstation:<br>
+        • CPU: Intel i9-13900K / Xeon Gold<br>
+        • RAM: 64GB DDR5<br>
+        • Storage: 2TB NVMe Gen4<br>
+        • Card: TBS 6909-X (8 Tuners)<br>
+        • OS: Ubuntu Server 22.04 LTS<br>
+        • Software: TVHeadend 4.3+<br>
+        Output: IP Multicast Streams (SPTS/MPTS)
+    </div>
+
+    <h4>3.1.2 منطقة المعالجة المركزية (Core Processing)</h4>
+    <div class="diagram-box" style="text-align: left;">
+        <strong>INGEST &amp; MEDIA ASSET MANAGEMENT</strong><br>
+        [Metus Ingest Server]<br>
+        ├─ Capture Engine: Real-time recording<br>
+        ├─ Metadata Extraction: Auto-tagging<br>
+        ├─ Format Conversion: MXF/MOV/MP4<br>
+        └─ QC: Automated quality check<br><br>
+        [Metus MAM Server]<br>
+        ├─ PostgreSQL Database<br>
+        ├─ Web Interface (Multi-user)<br>
+        ├─ Search &amp; Browse<br>
+        └─ Rights Management<br><br>
+        [NAS Storage 80TB+]<br>
+        ├─ RAID 6 (Protection)<br>
+        ├─ 10GbE Connectivity<br>
+        └─ Snapshot/Replication
+    </div>
+
+    <h4>3.1.3 منطقة التوزيع (Distribution Zone)</h4>
+    <div class="diagram-box" style="text-align: left;">
+        <strong>SRT/RTMP DISTRIBUTION LAYER</strong><br>
+        [Distribution Server Cluster]<br>
+        ├─ Primary: Wowza Streaming Engine<br>
+        ├─ Backup: Nimble Streamer (Active-Standby)<br>
+        └─ Load Balancer (HAProxy)<br><br>
+        Protocols Supported:<br>
+        ├─ SRT (Caller/Listener/Rendezvous)<br>
+        ├─ RTMP/RTMPS<br>
+        ├─ HLS (for web/mobile)<br>
+        └─ MPEG-DASH<br><br>
+        Output Capacity:<br>
+        ├─ 10 concurrent SRT streams<br>
+        ├─ Bandwidth: 1Gbps dedicated<br>
+        └─ Scalable via CDN (Cloudflare/AWS)
+    </div>
+
+    <h3>3.2 سير العمل التشغيلي (Operational Workflow)</h3>
+    <h4>3.2.1 سيناريو: استقبال وتوزيع حدث إخباري عاجل</h4>
+    <div class="flow-container">
+        <div class="flow-step">Breaking News Feed ➔ Satellite Dish</div>
+        <div class="arrow">↓</div>
+        <div class="flow-step">TBS Card Tuner ➔ TVHeadend</div>
+        <div class="arrow">↓</div>
+        <div class="flow-step">Quality Check (FFmpeg)</div>
+        <div style="display:flex; width:100%; justify-content:space-between;">
+            <div style="width:45%; text-align:center;">(Pass) ➔ Metus Ingest</div>
+            <div style="width:45%; text-align:center;">(Fail) ➔ Alert Engineer</div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="flow-step">Auto-Tagging ➔ MAM Database</div>
+        <div class="arrow">↓</div>
+        <div class="flow-step">Notification to Editors ➔ Editorial Decision</div>
+        <div style="display:flex; width:100%; justify-content:space-between;">
+            <div style="width:45%; text-align:center;">(Distribute Now) ➔ SRT Encoder</div>
+            <div style="width:45%; text-align:center;">(Archive Only) ➔ NAS Storage</div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="flow-step">Load Balancer ➔ Members / CDN / Cloud Backup</div>
+    </div>
+
+    <p><strong>الخطوات التفصيلية:</strong></p>
+    <ol>
+        <li><strong>الاستقبال (00:00:00):</strong> يكتشف TVHeadend إشارة جديدة على الـ transponder المخصص، ويبدأ التسجيل تلقائياً على buffer مؤقت.</li>
+        <li><strong>الفحص (00:00:05):</strong> FFmpeg يحلل جودة الصوت/الصورة، يتحقق من Black frames, Silence, Bit errors. إذا فشل الفحص: ينبه المهندس عبر Email/SMS.</li>
+        <li><strong>الفهرسة (00:00:10):</strong> Metus يستخرج الـ metadata (التاريخ، اللغة، الكلمات المفتاحية)، يولد thumbnails كل 30 ثانية، يحفظ الملف بصيغة MXF (broadcast quality).</li>
+        <li><strong>الإشعار (00:00:15):</strong> يُرسل تنبيه للمحررين عبر لوحة الويب، يعرض preview للمحتوى.</li>
+        <li><strong>القرار التحريري (00:00:30 - 00:05:00):</strong> المحرر يراجع المادة، يقرر: توزيع فوري / أرشفة / تحرير.</li>
+        <li><strong>التوزيع (00:05:00+):</strong> إذا "توزيع فوري": Wowza ينشئ SRT stream جديد، يُرسل رابط للأعضاء المشتركين، يبدأ البث خلال 10 ثواني.</li>
+        <li><strong>الأرشفة (Background):</strong> نسخة محلية على NAS (فورية)، نسخة سحابية على S3 (خلال ساعة)، حذف الـ buffer المؤقت بعد 24 ساعة.</li>
+    </ol>
+
+    <h3>3.3 خريطة الشبكة (Network Topology)</h3>
+    <div class="diagram-box">
+        <div class="network-tree">
+            <ul>
+                <li>
+                    <div class="node">Core Router (Redundant)</div>
+                    <ul>
+                        <li>
+                            <div class="node">VLAN 10 (Management)</div>
+                            <br>192.168.10.0/24<br>
+                            [Admin PCs]<br>[Backup Server]
+                        </li>
+                        <li>
+                            <div class="node">VLAN 20 (Broadcast)</div>
+                            <br>10.0.0.0/16<br>
+                            [Workstations]<br>[Encoders]<br>[Multiviewer]
+                        </li>
+                        <li>
+                            <div class="node">VLAN 30 (Archive)</div>
+                            <br>172.16.0.0/24<br>
+                            [NAS]
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <p><strong>تفاصيل التقسيم:</strong></p>
+    <ul>
+        <li><strong>VLAN 10 (Management):</strong> إدارة الأجهزة (SSH, SNMP, Web UI). عزل أمني لمنع الوصول غير المصرح.</li>
+        <li><strong>VLAN 20 (Broadcast):</strong> جميع streams النشطة. QoS: أولوية قصوى (DSCP EF). عرض النطاق المحجوز: 800Mbps.</li>
+        <li><strong>VLAN 30 (Archive):</strong> نقل الملفات للـ NAS، عمليات النسخ الاحتياطي. QoS: أولوية متوسطة (DSCP AF31).</li>
+    </ul>
+
+    <!-- Chapter 4 -->
+    <h2>الفصل الرابع: الهندسة التأسيسية</h2>
+
+    <h3>4.1 البنية التحتية الكهربائية</h3>
+    <h4>4.1.1 حساب الأحمال الكهربائية</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>المعدات</th>
+                <th>الكمية</th>
+                <th>الاستهلاك/الواحد (W)</th>
+                <th>الإجمالي (W)</th>
+                <th>عامل القدرة</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Workstation i9</td><td>2</td><td>450</td><td>900</td><td>0.95</td></tr>
+            <tr><td>Switch 10G</td><td>1</td><td>120</td><td>120</td><td>0.90</td></tr>
+            <tr><td>NAS Synology</td><td>1</td><td>200</td><td>200</td><td>0.90</td></tr>
+            <tr><td>Monitors 4K</td><td>3</td><td>80</td><td>240</td><td>1.00</td></tr>
+            <tr><td>Servers (Wowza)</td><td>2</td><td>350</td><td>700</td><td>0.95</td></tr>
+            <tr><td>Multiviewer PC</td><td>1</td><td>300</td><td>300</td><td>0.95</td></tr>
+            <tr><td>Networking (Router, etc)</td><td>-</td><td>-</td><td>150</td><td>0.90</td></tr>
+            <tr><td>Lighting (LED)</td><td>-</td><td>-</td><td>100</td><td>1.00</td></tr>
+            <tr><td><strong>المجموع</strong></td><td></td><td></td><td><strong>2,710 W</strong></td><td></td></tr>
+        </tbody>
+    </table>
+
+    <p><strong>حساب UPS المطلوب:</strong></p>
+    <ol>
+        <li>الحمل الفعلي: Total VA = 2,710 ÷ 0.92 (متوسط PF) ≈ 2,950 VA</li>
+        <li>هامش الأمان (30%): Required VA = 2,950 × 1.3 ≈ 3,835 VA</li>
+        <li>التوصية: UPS 5000 VA / 4500 W (Double Conversion Online)</li>
+    </ol>
+    <p><strong>مواصفات UPS الموصى بها:</strong> النوع (Online Double Conversion: أفضل حماية)، الجهد (220/230V ± 1% Regulated Output)، البطاريات (Sealed Lead-Acid VRLA)، وقت التشغيل المطلوب 30 دقيقة على 100% حمل، الاتصال USB/SNMP لمراقبة عن بُعد، الحماية (Surge, Spike, Lightning Protection)، الصيانة Bypass يدوي (لصيانة دون توقف).</p>
+
+    <h4>4.1.2 التأريض ومانع الصواعق</h4>
+    <p><strong>نظام التأريض (Earthing System):</strong></p>
+    <div class="diagram-box">
+        [Main Distribution Board]<br>
+        │<br>
+        ├─── [Earth Bar] ◄── [OSBU Equipment Racks]<br>
+        │      │<br>
+        │      └─── Copper Strip (25mm²)<br>
+        │<br>
+        │      ▼<br>
+        ├─── [Lightning Arrester (SPD Type 1+2)]<br>
+        │<br>
+        └─── [Earth Electrode Array]<br>
+             ├─ Rod 1 (2.5m Copper)<br>
+             ├─ Rod 2 (2.5m Copper) ← 3m spacing<br>
+             └─ Rod 3 (2.5m Copper)<br>
+             │<br>
+             └─── Measured Resistance: &lt; 5 Ω
+    </div>
+    <p><strong>خطوات التنفيذ:</strong> حفر 3 آبار بعمق 3 متر بتباعد 3 أمتار، دق قضبان نحاسية قطر 16 مم × 2.5 متر، ربط القضبان بشريط نحاسي مقطع 25 مم²، قياس المقاومة: يجب أن تكون &lt; 5 أوم، تركيب SPD (Type 1 عند مدخل الكهرباء الرئيسي، Type 2 عند لوحة توزيع غرفة السيرفرات).</p>
+
+    <h3>4.2 البنية الشبكية (Network Infrastructure)</h3>
+    <h4>4.2.1 معمارية الشبكة</h4>
+    <div class="diagram-box">
+        <strong>Core Layer</strong><br>
+        [Mikrotik CRS309-1G-8S+IN]<br>
+        • 8× 10G SFP+ Ports<br>
+        • 1× Gigabit Management<br>
+        • VLAN-aware, QoS capable<br>
+        │             │<br>
+        ▼             ▼<br>
+        <strong>Distribution</strong>   <strong>Distribution</strong><br>
+        [24-port GbE]   [24-port GbE]<br>
+        (Broadcast)     (Management)<br>
+        │             │<br>
+        ▼             ▼<br>
+        <strong>Access Layer</strong><br>
+        [PoE Switches for APs, Cameras, etc]
+    </div>
+    <p><strong>مبررات التصميم:</strong> Core 10G لضمان عدم حدوث اختناق عند نقل ملفات كبيرة (4K RAW)، Redundancy (كل workstation متصل بـ switchين مختلفين Link Aggregation)، PoE في Access لتشغيل الـ IP Cameras و Access Points بدون أسلاك إضافية.</p>
+
+    <h4>4.2.2 إعدادات QoS الحرجة</h4>
+    <table>
+        <thead>
+            <tr><th>الفئة</th><th>DSCP</th><th>الأولوية</th><th>الاستخدام</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>SRT Streams</td><td>EF (46)</td><td>7 (Highest)</td><td>Real-time Video</td></tr>
+            <tr><td>RTMP Handshakes</td><td>CS5 (40)</td><td>6</td><td>Signaling</td></tr>
+            <tr><td>MAM Database Queries</td><td>AF31 (26)</td><td>4</td><td>Transactional Data</td></tr>
+            <tr><td>Archive Transfers</td><td>AF11 (10)</td><td>2</td><td>Bulk Data</td></tr>
+            <tr><td>Web Browsing, Email</td><td>0</td><td>1</td><td>Best Effort</td></tr>
+        </tbody>
+    </table>
+
+    <p><strong>مثال إعداد على MikroTik:</strong></p>
+    <pre><code>/queue type
+add kind=pfifo name=RT-Video pfifo-limit=100
+/queue tree
+add name=Broadcast parent=ether1 packet-mark=srt-traffic \
+ priority=1 queue=RT-Video max-limit=800M
+/ip firewall mangle
+add action=mark-packet chain=prerouting \
+ dst-port=9000-9010 new-packet-mark=srt-traffic \
+ passthrough=yes protocol=udp</code></pre>
+    <p><strong>الشرح:</strong> نحدد نوع طابور خاص بالفيديو (أولوية عالية، buffer صغير)، ننشئ tree لتحديد السرعة القصوى للبث (800Mbps)، نضع علامة على حزم SRT (المنافذ 9000-9010).</p>
+
+    <h3>4.3 نظام التبريد الدقيق</h3>
+    <h4>4.3.1 حساب الحمل الحراري</h4>
+    <p><strong>معادلة BTU:</strong> BTU/hr = (Watts × 3.412) + (Room Volume × Temperature Rise × 4)</p>
+    <p><strong>التطبيق:</strong></p>
+    <ul>
+        <li>إجمالي استهلاك الطاقة: 2,710W</li>
+        <li>حرارة معدات: 2,710 × 3.412 = 9,247 BTU/hr</li>
+        <li>حرارة الغرفة (5m × 4m × 3m = 60m³, ΔT=10°C): 60 × 10 × 4 = 2,400 BTU/hr</li>
+        <li>المجموع: ~11,650 BTU/hr</li>
+        <li>هامش الأمان: 1.25 × 11,650 = 14,562 BTU/hr ≈ 1.2 طن تبريد</li>
+    </ul>
+    <p><strong>التوصية:</strong> وحدة تبريد دقيق (Precision AC) بسعة 2 طن مع: تحكم منفصل في الرطوبة (50% ± 5%)، مراقبة عن بُعد (SNMP)، فلاتر HEPA لمنع الغبار، وضع الطوارئ (Emergency Mode) عند فشل المبرد الأساسي.</p>
+
+    <h4>4.3.2 استراتيجية تدفق الهواء</h4>
+    <div class="diagram-box">
+        [Cold Aisle Containment]<br>
+        ↓↓↓ (Cold Air)<br>
+        ┌─────────────────────┐<br>
+        │ Server Rack         │<br>
+        │ [Front Intake]      │ ◄── Cold air (18-22°C)<br>
+        │                     │<br>
+        │ [Rear Exhaust]      │ ──► Hot air (28-32°C)<br>
+        └─────────────────────┘<br>
+        ↑↑↑ (Hot Air)<br>
+        [Return to AC Unit]
+    </div>
+    <p><strong>الممارسات الأفضل:</strong> فصل الممرات (Cold Aisle أمام الـ racks / Hot Aisle خلف الـ racks)، منع الاختلاط (Blanking Panels في الفتحات الفارغة)، المراقبة (حساسات حرارة في 3 نقاط: أعلى/وسط/أسفل)، الإنذار (تنبيه عند تجاوز 28°C).</p>
+
+    <!-- Chapter 5 -->
+    <h2>الفصل الخامس: المعدات والبرمجيات</h2>
+
+    <h3>5.1 أجهزة الاستقبال الفضائي</h3>
+    <h4>5.1.1 الأطباق والـ LNBs</h4>
+    <p><strong>الطبق الرئيسي (C-Band):</strong> القطر &gt; 3.7 متر (استقبال إشارات ضعيفة EIRP &lt; 40 dBW)، النوع Prime Focus (أفضل كسب للـ C-Band)، المادة Aluminum Mesh (خفيف ومقاوم للرياح)، LNB Norsat 8215 (Noise Figure: 0.6 dB)، Feedhorn Chaparral Bullseye II (تقليل الـ Cross-polarization).</p>
+    <p><strong>الطبق الثانوي (Ku-Band):</strong> القطر 1.8 متر، النوع Offset، LNB Inverto Black Ultra (0.2 dB NF).</p>
+
+    <h4>5.1.2 كروت الاستقبال (TBS-6909X)</h4>
+    <pre><code>Model: TBS 6909-X Professional
+Interface: PCIe x1 (Gen 2)
+Tuners: 8× Independent DVB-S2X
+Input: 8× F-Type Connectors
+Frequency Range: 950-2150 MHz
+Symbol Rate: 1-45 Msps
+Modulation: QPSK, 8PSK, 16APSK, 32APSK
+Features:
+ - Multistream (ISI) support
+ - VCM/ACM modes
+ - T2-MI demapping
+ - Hardware PID filtering
+OS Support: Linux (V4L), Windows (BDA)
+Power: &lt;15W total
+Dimensions: Standard PCIe bracket</code></pre>
+    <p><strong>لماذا TBS-6909X؟</strong> التكلفة (~$450 أرخص 10× من IRDs احترافية)، الكثافة (8 tuners في كرت واحد)، المرونة (برمجي يمكن إعادة تخصيص الـ tuners)، الدعم (مجتمع Linux نشط + دعم مباشر من TBS)، التحديثات (firmware updates مستمرة).</p>
+    <p><strong>التحديات والحلول:</strong> الحرارة (8 tuners نشطة) -&gt; الحل: Heatsink إضافي + تبريد مباشر. استقرار التعريفات -&gt; الحل: تثبيت kernel محدد (5.15 LTS). إعداد معقد -&gt; الحل: سكريبتات أتمتة (Ansible playbooks).</p>
+
+    <h3>5.2 السيرفرات وأجهزة الكمبيوتر</h3>
+    <h4>5.2.1 محطة العمل الرئيسية (Primary Workstation)</h4>
+    <pre><code>Purpose: Satellite Reception + Transcoding
+CPU: Intel Core i9-13900K (24 cores, 32 threads)
+ Base: 3.0 GHz, Boost: 5.8 GHz
+ Cache: 36 MB L3
+Motherboard: ASUS ProArt Z790-Creator WiFi
+ PCIe Slots: 5× PCIe 5.0/4.0
+ Network: 2× 2.5GbE + WiFi 6E
+ Thunderbolt: 2× USB4/TB4
+RAM: 64GB (2× 32GB) DDR5-5600 ECC
+ (Kingston Server Premier)
+Storage:
+ OS: 512GB Samsung 990 PRO (PCIe 4.0 NVMe)
+ Work: 2TB WD Black SN850X (PCIe 4.0)
+ Cache: 256GB Intel Optane P5800X (ultra-low latency)
+GPU: NVIDIA RTX A4000 (16GB)
+ (for hardware encoding/decoding)
+TBS Card: TBS 6909-X (in PCIe x1 slot)
+Network: Intel X550-T2 (2× 10GbE)
+Cooling: Arctic Liquid Freezer II 360mm AIO
+ + 8× Noctua NF-A14 fans
+PSU: Seasonic Prime TX-1000 (1000W 80+ Titanium)
+ (Fully Modular)
+Case: Fractal Design Define 7 XL
+ (Sound-dampened, 9× drive bays)
+OS: Ubuntu Server 22.04 LTS</code></pre>
+    <p><strong>تقدير التكلفة:</strong> $6,500.<br>
+    <strong>مبررات الاختيار:</strong> CPU i9-13900K يتفوق في الـ transcoding (Quick Sync)، RAM ECC حماية من bit flips أثناء التسجيل الطويل، Optane Cache سرعة فائقة لعمليات MAM المتكررة، RTX A4000 دعم احترافي NVENC/NVDEC للـ H.265.</p>
+
+    <h4>5.2.2 خادم التوزيع (Distribution Server)</h4>
+    <pre><code>Purpose: SRT/RTMP Distribution + HLS Origin
+CPU: AMD EPYC 7313P (16 cores, 32 threads)
+ Base: 3.0 GHz, Boost: 3.7 GHz
+Motherboard: Supermicro H12SSL-i
+RAM: 128GB (4× 32GB) DDR4-3200 ECC RDIMM
+Storage:
+ OS: 2× 480GB Enterprise SATA SSD (RAID 1)
+ Streams: 2TB NVMe (Samsung PM9A3)
+Network:
+ - Mellanox ConnectX-5 (2× 25GbE SFP28)
+ - Intel i350 (4× 1GbE)
+Redundancy: Dual PSU (800W each, Hot-swap)
+Management: IPMI 2.0 (out-of-band)
+OS: Ubuntu Server 22.04 + Wowza 4.8.24</code></pre>
+    <p><strong>تقدير التكلفة:</strong> $8,000.</p>
+
+    <h3>5.3 وحدات التخزين (Storage)</h3>
+    <h4>5.3.1 NAS للأرشفة المحلية</h4>
+    <pre><code>Model: Synology RS2423RP+ or QNAP TS-h1290FX
+Form Factor: 2U Rackmount
+Drive Bays: 12× 3.5" (Hot-swap)
+Drives: 12× Seagate Exos X18 (18TB) = 216TB RAW
+RAID Level: RAID 6 (2-disk fault tolerance)
+ Usable Capacity: ~162TB
+Network:
+ - 4× 10GbE (SFP+)
+ - 2× 2.5GbE (RJ45)
+ - Link Aggregation (LACP) support
+RAM: 32GB DDR4 ECC (expandable to 64GB)
+CPU: AMD Ryzen Embedded (quad-core)
+Features:
+ - Snapshot Replication (point-in-time recovery)
+ - SSD Cache (2× M.2 NVMe slots)
+ - Encryption (AES-256)
+ - WORM (Write Once Read Many) for compliance
+UPS Integration: Yes (via USB/Network)
+OS: Synology DSM 7.2 / QNAP QuTS Hero</code></pre>
+    <p><strong>تقدير التكلفة:</strong> NAS (بدون أقراص): $3,500 + 12× 18TB Enterprise HDD ($250 × 12 = $3,000) + 2× 1.92TB NVMe Cache ($300 × 2 = $600) = المجموع: $7,100.</p>
+
+    <p><strong>استراتيجية التخزين:</strong></p>
+    <div class="diagram-box">
+        <strong>Tier 1 (Hot):</strong> Last 7 days of content. Stored on: NVMe SSD Cache (1.92TB). Access: &lt;1ms latency.<br>
+        <strong>Tier 2 (Warm):</strong> 8-90 days old content. Stored on: RAID 6 HDD Array (162TB). Access: ~10ms latency.<br>
+        <strong>Tier 3 (Cold):</strong> 90+ days old content. Stored on: AWS S3 Glacier Deep Archive. Access: 12-48 hours retrieval. Cost: $1/TB/month.
+    </div>
+
+    <h4>5.3.2 النسخ الاحتياطي السحابي</h4>
+    <p><strong>الحساب المالي:</strong> لنفترض إنتاج يومي: 100GB، الحفظ: 5 سنوات. الإجمالي: 100GB/day × 365 days × 5 years = 182.5 TB.<br>
+    <strong>تكلفة AWS S3 Glacier Deep Archive:</strong> التخزين: 182.5TB × $1/TB/month = $182.5/month = $2,190/year. الاسترجاع (نادر): نفترض 5TB/year = $250. المجموع السنوي: $2,440.<br>
+    <strong>البديل Wasabi Hot Cloud Storage:</strong> سعر ثابت: $6.99/TB/month (بدون رسوم استرجاع). التكلفة: 182.5 × $6.99 = $1,275/month = $15,300/year.<br>
+    <strong>التوصية:</strong> استخدم S3 Glacier للمحتوى النادر الوصول، و Wasabi للمحتوى المرجعي (مثل الوثائقيات).</p>
+
+    <h3>5.4 البرمجيات الأساسية</h3>
+    <h4>5.4.1 TVHeadend (Satellite Reception)</h4>
+    <p><strong>الوصف:</strong> خادم تلفزيون مفتوح المصدر يدعم DVB-S/S2/S2X، يعمل كـ middleware بين كروت TBS والعملاء.<br>
+    <strong>الميزات الرئيسية:</strong> دعم multi-tuner (حتى 64 tuner)، EPG (Electronic Program Guide) من مصادر عدة، تسجيل مجدول (time-shift)، خادم IPTV (RTSP/HTTP/UDP output)، واجهة ويب للإدارة.</p>
+    <p><strong>الإعداد الموصى به:</strong></p>
+    <pre><code># تثبيت TVHeadend على Ubuntu 22.04
+sudo apt update
+sudo apt install -y tvheadend
+# تكوين automatic startup
+sudo systemctl enable tvheadend
+sudo systemctl start tvheadend
+# الوصول عبر المتصفح:
+# http://<server-ip>:9981</server-ip></code></pre>
+    <p><strong>ملف تكوين نموذجي (/etc/tvheadend/config):</strong></p>
+    <pre><code>{
+ "network": {
+ "name": "OSBU Satellite Network",
+ "adapters": [
+ {
+ "type": "DVB-S2",
+ "device": "/dev/dvb/adapter0",
+ "diseqc": "none",
+ "lnb": {
+ "type": "Universal Ku",
+ "low_frequency": 9750,
+ "high_frequency": 10600,
+ "switch_frequency": 11700
+ }
+ }
+ ]
+ },
+ "epg": {
+ "sources": ["eit", "opentv", "xmltv"],
+ "update_interval": 3600
+ },
+ "recording": {
+ "path": "/mnt/recordings",
+ "format": "matroska",
+ "retention_days": 7
+ }
+}</code></pre>
+
+    <h4>5.4.2 Metus Ingest + MAM</h4>
+    <p><strong>نظرة عامة:</strong> Metus هو حل متكامل لـ Ingest (التقاط الفيديو من مصادر متعددة IP streams, NDI, SDI) و MAM (إدارة الأصول الإعلامية: البحث، الفهرسة، التحكم في الحقوق).</p>
+    <p><strong>المكونات:</strong> Metus Ingest (Capture Agent, Format Detection, Metadata Extraction, QC), Metus MAM Server (PostgreSQL Database, Elasticsearch, Job Queue, RESTful API), Web Interface (Search &amp; Browse, Proxy Playback, Download/Share, Rights Management).</p>
+    <p><strong>التكلفة:</strong> License Type: Perpetual (شراء لمرة واحدة). Base License: $28,000 (Channels: 8 concurrent ingest). Add-ons: Advanced Metadata ($2,000), Multi-language Support ($1,500), REST API ($500). Optional Maintenance: $4,000/year (15% من السعر الأساسي). Total Initial: $32,000.</p>
+    
+    <p><strong>مقارنة مع Cinegy:</strong></p>
+    <table>
+        <thead>
+            <tr><th>الميزة</th><th>Metus</th><th>Cinegy</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>السعر الأولي</td><td>$32,000</td><td>$45,000</td></tr>
+            <tr><td>الصيانة السنوية</td><td>$4,000 (اختياري)</td><td>$8,000 (إلزامي)</td></tr>
+            <tr><td>سهولة الإعداد</td><td>متوسطة</td><td>معقدة</td></tr>
+            <tr><td>متطلبات الهاردوير</td><td>متوسطة</td><td>عالية (SQL Enterprise Server)</td></tr>
+            <tr><td>TCO (5 years)</td><td>$52,000</td><td>$85,000</td></tr>
+        </tbody>
+    </table>
+    <p><strong>الخلاصة:</strong> Metus هو الخيار الأمثل للميزانية المحدودة.</p>
+
+    <h4>5.4.3 Stream Labs Multiviewer</h4>
+    <p><strong>الوظيفة:</strong> عرض ومراقبة متعددة القنوات في شاشة واحدة.<br>
+    <strong>المواصفات:</strong> Product: Stream Labs Multiscreen Pro. Channels: Up to 48 simultaneous. Inputs: IP (UDP/RTP/RTSP/SRT), SDI (via Blackmagic Decklink), NDI. Outputs: 4K HDMI (up to 4 displays), Web Browser (H.264 HLS). Audio Monitoring: Solo/Mute per channel, VU meters, Loudness (LUFS) measurement. Alerts: Signal loss (freeze/black detection), Audio silence, Over/Under level, Custom triggers (via API). Platform: Windows 10/11 (hardware accelerated). License: $8,000 (perpetual, 48ch).</p>
+    <p><strong>البديل المفتوح المصدر:</strong> Vidgear Multiview (مجاني، لكن يتطلب برمجة Python):</p>
+    <pre><code># مثال بسيط لـ 4 قنوات
+from vidgear.gears import CamGear
+import cv2
+streams = [
+ CamGear(source="rtsp://source1/stream").start(),
+ CamGear(source="rtsp://source2/stream").start(),
+ CamGear(source="rtsp://source3/stream").start(),
+ CamGear(source="rtsp://source4/stream").start()
+]
+while True:
+ frames = [stream.read() for stream in streams]
+ grid = cv2.vconcat([cv2.hconcat(frames[0:2]),
+ cv2.hconcat(frames[2:4])])
+ cv2.imshow("OSBU Multiview", grid)
+ if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+ break</code></pre>
+    <p><strong>التوصية:</strong> ابدأ بـ Stream Labs للبساطة، ثم طوّر حالاً مخصصاً بـ Vidgear لاحقاً إذا احتجت ميزات خاصة.</p>
+
+    <h4>5.4.4 Wowza Streaming Engine</h4>
+    <p><strong>نظرة عامة:</strong> خادم بث احترافي يدعم جميع البروتوكولات.<br>
+    <strong>الترخيص:</strong> Edition: Wowza Streaming Engine Pro. License Type: Perpetual. Concurrent Connections: Unlimited. Streaming Protocols: RTMP/RTMPS (ingest &amp; delivery), SRT (caller/listener/rendezvous), HLS/DASH/CMAF, WebRTC (ultra-low latency), RTSP/RTP. Transcoding: Live (multi-bitrate ABR). DRM Support: Yes. CDN Integration: AWS CloudFront, Akamai, Fastly. Monitoring: REST API, JMX, SNMP. Clustering: Yes (origin-edge architecture). Pricing: Base License: $65/month (subscription) OR Perpetual: $995 (one-time, + $199/year maintenance). Recommended: Perpetual for cost control.</p>
+    <p><strong>البديل المجاني Nimble Streamer:</strong> License: Free (commercial use allowed). Limitations: No transcoding (passthrough only), Basic analytics. Advantages: Extremely low CPU usage, SRT support (recent versions), Lightweight (runs on Raspberry Pi!). Use Case: Backup server / Edge distribution.</p>
+    <p><strong>الاستراتيجية الموصى بها:</strong> [Wowza Primary] (Ingest + Transcode) ◄── [Nimble Edge 1] (لأعضاء آسيا) / [Nimble Edge 2] (لأعضاء أفريقيا) / [CloudFront CDN] (للتوزيع العالمي).</p>
+
+    <!-- Chapter 6 -->
+    <h2>الفصل السادس: إدارة التراخيص والبرمجيات المدفوعة</h2>
+
+    <h3>6.1 فلسفة إدارة التراخيص</h3>
+    <p>"التراخيص ليست تكلفة، بل استثمار في الاستمرارية". أحد أكبر الأخطاء في المشاريع الإعلامية هو التعامل مع التراخيص كـ CAPEX لمرة واحدة، في حين أن معظمها يتطلب تجديداً سنوياً أو دورياً. عدم التخطيط لهذا يؤدي إلى: توقف مفاجئ للخدمات (عند انتهاء الترخيص)، فقدان الدعم الفني (أثناء حالات الطوارئ)، ثغرات أمنية (عدم الحصول على تحديثات الأمان)، مشاكل قانونية (استخدام برمجيات منتهية الصالحية).</p>
+
+    <h3>6.2 أنواع التراخيص</h3>
+    <h4>6.2.1 التراخيص الدائمة (Perpetual Licenses)</h4>
+    <p><strong>التعريف:</strong> شراء لمرة واحدة، تمتلك البرنامج "للأبد" (مع حق الاستخدام، ليس الملكية الفكرية).<br>
+    <strong>الأمثلة في منظومتنا:</strong> Metus MAM ($32,000 تدفع مرة واحدة)، Stream Labs Multiviewer ($8,000)، Microsoft Windows Server 2022 ($1,000).<br>
+    <strong>المزايا:</strong> لا توجد تكاليف شهرية/سنوية إلزامية، يمكن الاستمرار في الاستخدام حتى لو توقفت الشركة المطورة.<br>
+    <strong>العيوب:</strong> عدم الحصول على تحديثات كبرى (major versions) بدون دفع إضافي، قد تحتاج "maintenance contract" منفصل للدعم الفني.<br>
+    <strong>استراتيجية OSBU:</strong> "نفضل التراخيص الدائمة للبرمجيات الأساسية (Core Systems)، مع ميزانية سنوية للصيانة الاختيارية".</p>
+
+    <h4>6.2.2 تراخيص الاشتراك (SaaS/Subscription)</h4>
+    <p><strong>التعريف:</strong> دفع شهري/سنوي مستمر، يتوقف البرنامج عند التوقف عن الدفع.<br>
+    <strong>الأمثلة:</strong> Wowza Streaming Engine ($65/month)، Adobe Creative Cloud ($55/month/user)، AWS Media Services (Pay-as-you-go).<br>
+    <strong>المزايا:</strong> تحديثات تلقائية دائماً، دعم فني مستمر، مرونة في التوسع (scale up/down).<br>
+    <strong>العيوب:</strong> تكلفة تراكمية عالية ($65/month × 12 × 5 years = $3,900 مقابل $995 perpetual)، الاعتماد (عدم القدرة على العمل دون اتصال إنترنت في بعض البرامج).<br>
+    <strong>متى نستخدمها؟</strong> للخدمات السحابية (لا يوجد بديل)، للبرمجيات التي تتطور بسرعة (مثل AI tools)، عند عدم اليقين من الحاجة طويلة الأمد.</p>
+
+    <h4>6.2.3 تراخيص المصادر المفتوحة (Open Source)</h4>
+    <p><strong>الأنواع الرئيسية:</strong> GPL v3 (Linux, FFmpeg) يجب نشر التعديلات كاملة. MIT (Node.js, React) لا قيود كاملة. Apache 2.0 (Hadoop, Kubernetes) يجب ذكر التعديلات. LGPL (VLC, Qt) يمكن ربطها بكود مغلق.<br>
+    <strong>التحذيرات القانونية:</strong> GPL: إذا عدّلت كود GPL وأنتجت منتجاً، يجب أن تجعل التعديلات مفتوحة المصدر أيضاً. AGPL: حتى لو استخدمت البرنامج كـ service (SaaS) بدون توزيع، يجب نشر الكود.<br>
+    <strong>البرمجيات المفتوحة في منظومتنا:</strong> TVHeadend (GPL)، FFmpeg (LGPL/GPL - حسب المكونات)، Nimble Streamer (مجاني تجارياً، لكن ليس open source)، PostgreSQL (PostgreSQL License - permissive).</p>
+
+    <h3>6.3 سجل إدارة التراخيص (License Registry)</h3>
+    <p><strong>الهدف:</strong> تتبع مركزي لجميع التراخيص، مواعيد التجديد، والمسؤولين عنها.</p>
+    <h4>6.3.1 نموذج الجدول</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th><th>البرنامج</th><th>النوع</th><th>رقم الترخيص</th><th>تاريخ الشراء</th><th>تاريخ الانتهاء</th><th>التكلفة السنوية</th><th>المسؤول</th><th>حالة التجديد</th><th>ملاحظات</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td><td>Metus MAM</td><td>Perpetual</td><td>MET-2025-OSBU-001</td><td>2025-01-15</td><td>N/A (دائم)</td><td>$4,000 (صيانة اختيارية)</td><td>م. أحمد</td><td>نشط</td><td>تجديد الصيانة: 15-01-2026</td>
+            </tr>
+            <tr>
+                <td>2</td><td>Wowza Streaming Engine</td><td>Perpetual</td><td>WSE-PRO-447291</td><td>2025-02-01</td><td>N/A</td><td>$199 (صيانة)</td><td>م. فاطمة</td><td>نشط</td><td>Maintenance until 2026-02-01</td>
+            </tr>
+            <tr>
+                <td>3</td><td>Stream Labs Multiviewer</td><td>Perpetual</td><td>SL-48CH-8832</td><td>2025-03-10</td><td>N/A</td><td>$0</td><td>م. خالد</td><td>نشط</td><td>لا يحتاج تجديد</td>
+            </tr>
+            <tr>
+                <td>4</td><td>Windows Server 2022</td><td>Perpetual</td><td>xxxxx-xxxxx-xxxxx</td><td>2025-01-20</td><td>N/A</td><td>$0</td><td>م. أحمد</td><td>نشط</td><td>مع Software Assurance حتى 2027</td>
+            </tr>
+            <tr>
+                <td>5</td><td>Adobe Premiere Pro</td><td>Subscription</td><td>team@osbu.org</td><td>2025-01-01</td><td>2026-01-01</td><td>$1,980 ($660/user × 3)</td><td>م. ليلى</td><td>تجديد قريب</td><td>Auto-renewal مفعّل</td>
+            </tr>
+            <tr>
+                <td>6</td><td>AWS S3 Glacier</td><td>Pay-as-you-go</td><td>Account: 123456789</td><td>2024-06-01</td><td>N/A (مستمر)</td><td>~$2,400</td><td>م. سعيد</td><td>نشط</td><td>فاتورة شهرية</td>
+            </tr>
+            <tr>
+                <td>7</td><td>Cloudflare Pro Plan</td><td>Subscription</td><td>CF-PRO-OSBU</td><td>2025-04-01</td><td>2026-04-01</td><td>$240</td><td>م. نور</td><td>نشط</td><td>تجديد تلقائي</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>6.3.2 الحقول الإلزامية</h4>
+    <p><strong>البيانات الأساسية:</strong> رقم الترخيص (للرجوع عند طلب الدعم الفني)، تاريخ الشراء (لحساب استهلاك الأصول Depreciation)، تاريخ الانتهاء (لضبط تنبيهات التجديد)، المسؤول (من يتابع التجديد ويحل المشاكل).<br>
+    <strong>البيانات المالية:</strong> التكلفة الأولية (CAPEX: تُحتسب مرة واحدة)، التكلفة السنوية (OPEX: تدخل في الميزانية التشغيلية)، طريقة الدفع (بطاقة ائتمان / تحويل بنكي / فاتورة).</p>
+
+    <h3>6.4 أتمتة التنبيهات (Renewal Alerts)</h3>
+    <p><strong>السيناريو الشائع:</strong> ينتهي ترخيص Wowza في منتصف حدث إخباري مباشر → البث يتوقف → كارثة!<br>
+    <strong>الحل:</strong> نظام تنبيهات مبكر.</p>
+    
+    <h4>6.4.1 جدول التنبيهات</h4>
+    <table>
+        <thead>
+            <tr><th>الفترة المتبقية</th><th>الإجراء</th><th>المسؤول</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>90 يوم</td><td>إشعار أولي عبر Email</td><td>مدير تقنية المعلومات</td></tr>
+            <tr><td>60 يوم</td><td>مراجعة الميزانية + طلب شراء</td><td>المدير المالي</td></tr>
+            <tr><td>30 يوم</td><td>تأكيد التجديد أو البحث عن بديل</td><td>الفريق الهندسي</td></tr>
+            <tr><td>14 يوم</td><td>تنبيه عاجل (Urgent Alert)</td><td>الإدارة العليا</td></tr>
+            <tr><td>7 أيام</td><td>إيقاف جميع المشاريع الجديدة حتى التجديد</td><td>مدير العمليات</td></tr>
+        </tbody>
+    </table>
+
+    <h4>6.4.2 سكريبت Python للتنبيهات التلقائية</h4>
+    <pre><code>import datetime
+import smtplib
+from email.message import EmailMessage
+
+licenses = [
+ {'name': 'Metus MAM', 'expiry': datetime.date(2026, 1, 15), 'cost': '$4,000'},
+ {'name': 'Wowza', 'expiry': datetime.date(2026, 2, 1), 'cost': '$199'},
+ # ... Add all licenses
+]
+
+def check_licenses():
+ today = datetime.date.today()
+ for lic in licenses:
+ days_left = (lic['expiry'] - today).days
+ if days_left in [90, 60, 30, 14, 7]:
+ send_alert(
+ to='admin@osbu.org',
+ subject=f"URGENT: {lic['name']} License Expiry",
+ body=f"""
+ السالم عليكم،
+
+ نود تذكيركم بأن ترخيص {lic['name']} (رقم: {lic.get('id', 'N/A')})
+ سينتهي في {lic['expiry'].strftime('%Y-%m-%d')} (بعد {days_left} يوم).
+
+ التكلفة السنوية: {lic['cost']}
+
+ يرجى اتخاذ الإجراءات اللازمة.
+
+ OSBU - نظام إدارة التراخيص
+ """
+ )
+
+def send_alert(to, subject, body):
+ msg = EmailMessage()
+ msg.set_content(body)
+ msg['Subject'] = subject
+ msg['From'] = 'licenses@osbu.org'
+ msg['To'] = to
+
+ server = smtplib.SMTP('smtp.osbu.org', 587)
+ server.starttls()
+ server.login('licenses@osbu.org', 'password')
+ server.send_message(msg)
+ server.quit()
+
+# تشغيل يومي عبر Cron:
+# 0 9 * * * /usr/bin/python3 /opt/osbu/license_checker.py</code></pre>
+
+    <h3>6.5 الميزانية التشغيلية للبرمجيات (Software OPEX)</h3>
+    <p><strong>التعريف:</strong> التكاليف المتكررة سنوياً للحفاظ على البرمجيات.</p>
+    <h4>6.5.1 الحساب التفصيلي</h4>
+    <table>
+        <thead>
+            <tr><th>البرنامج</th><th>النوع</th><th>التكلفة السنوية</th><th>الضرورة</th><th>ملاحظات</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Metus MAM Maintenance</td><td>اختياري</td><td>$4,000</td><td>متوسطة</td><td>يمكن تأجيله سنة واحدة إذا لزم</td></tr>
+            <tr><td>Wowza Maintenance</td><td>اختياري</td><td>$199</td><td>عالية</td><td>يشمل تحديثات الأمان</td></tr>
+            <tr><td>Adobe Creative Cloud (3 users)</td><td>اشتراك</td><td>$1,980</td><td>عالية</td><td>للمحررين</td></tr>
+            <tr><td>Microsoft 365 Business (10 users)</td><td>اشتراك</td><td>$1,500</td><td>عالية</td><td>Email, Office, OneDrive ($150 × 10)</td></tr>
+            <tr><td>AWS S3 Glacier</td><td>استهلاك</td><td>$2,400</td><td>عالية</td><td>للأرشفة السحابية</td></tr>
+            <tr><td>Cloudflare Pro</td><td>اشتراك</td><td>$240</td><td>متوسطة</td><td>CDN + DDoS protection</td></tr>
+            <tr><td><strong>المجموع السنوي</strong></td><td></td><td><strong>$10,319</strong></td><td></td><td></td></tr>
+        </tbody>
+    </table>
+    <p><strong>نصيحة استراتيجية:</strong> خصص 15-20% من ميزانية البرمجيات الأولية كـ OPEX سنوي. في حالتنا: CAPEX للبرمجيات: ~$40,000. OPEX السنوي المتوقع: $40,000 × 0.20 = $8,000. الواقع الفعلي: $10,319 (ضمن النطاق المقبول).</p>
+
+    <h3>6.6 الامتثال القانوني والأمني</h3>
+    <p>لماذا الترخيص الأصلي ضروري؟</p>
+    <h4>6.6.1 المخاطر القانونية</h4>
+    <p><strong>السيناريو:</strong> استخدام نسخة مقرصنة من Wowza → الشركة المطورة تكتشف (عبر telemetry) → دعوى قضائية.<br>
+    <strong>التكاليف المحتملة:</strong> الغرامة: حتى $150,000 لكل برنامج (في الولايات المتحدة)، أتعاب المحاماة: +$50,000، تعويضات إضافية إذا ثبت "الضرر المتعمد"، سمعة الاتحاد: تدمير الثقة لدى الأعضاء والشركاء.<br>
+    <strong>الحماية:</strong> شراء جميع التراخيص من الموزعين الرسميين فقط، الاحتفاظ بالفواتير وشهادات الأصالة (Certificates of Authenticity)، إجراء تدقيق سنوي (Software Audit) داخلي.</p>
+
+    <h4>6.6.2 المخاطر الأمنية</h4>
+    <p>البرمجيات المقرصنة غالباً تحتوي على: Backdoors (أبواب خلفية للاختراق)، Keyloggers (لسرقة كلمات المرور)، Cryptominers (تستنزف موارد السيرفر للتعدين)، Ransomware (قد تشفر الملفات وتطلب فدية).<br>
+    <strong>حالة واقعية (2019):</strong> قناة تلفزيونية في الشرق الأوسط استخدمت نسخة مقرصنة من برنامج مونتاج → اكتُشف malware بعد 6 أشهر → فُقد أرشيف كامل بقيمة مليون دولار.</p>
+
+    <!-- Chapter 7 -->
+    <h2>الفصل السابع: ميثاق العمل الهندسي وتطوير الكادر البشري</h2>
+
+    <h3>7.1 فلسفة الميثاق</h3>
+    <p>"التقنية في خدمة الإبداع، والهندسة في خدمة المحتوى". يُخطئ من يظن أن دور الإدارة الهندسية ينحصر في "إصلاح الأعطال" و"صيانة المعدات". الدور الحقيقي أعمق بكثير: الهندسة هي عملية أتمتة وتبسيط مستمرة، تهدف إلى تحرير المبدعين (الصحفيين، المحررين، المنتجين) من العبء التقني، ليتفرغوا لما يجيدونه: صناعة المحتوى.</p>
+
+    <h3>7.2 أهداف الميثاق</h3>
+    <ol>
+        <li>تحديد المسؤوليات بوضوح: من يفعل ماذا؟ ومتى؟</li>
+        <li>إرساء ثقافة التعاون: الهندسة والمحتوى ليسا "معسكرين منفصلين".</li>
+        <li>ضمان الاستدامة: نقل المعرفة وعدم الاعتماد على أفراد.</li>
+        <li>تعزيز المساءلة: الربط بين الأداء والمخرجات.</li>
+    </ol>
+
+    <h3>7.3 البنود الأساسية للميثاق</h3>
+    <p><strong>البند الأول: رسالة الإدارة الهندسية</strong><br>
+    الرسالة: "بناء وإدارة بنية تحتية تقنية مستقرة وآمنة ومرنة، تدعم التميز الإعلامي لاتحاد OSBU وتمّكن فرق المحتوى من تقديم أفضل إنتاج ممكن".<br>
+    القيم الجوهرية: الموثوقية (Uptime لا يقل عن 99.5%)، الاستباقية (Proactive not Reactive)، التعلم المستمر، التمكين.</p>
+
+    <p><strong>البند الثاني: هيكل الإدارة الهندسية</strong></p>
+    <div class="diagram-box">
+        مدير الإدارة الهندسية (Engineering Manager)<br>
+        │<br>
+        ├── قسم البنية التحتية: الشبكات، السيرفرات، التخزين، الكهرباء، التبريد (CCNA)<br>
+        ├── قسم الأنظمة البرمجية: Metus, Wowza, TVHeadend, scripts (Linux/Python)<br>
+        ├── قسم البث والتوزيع: SRT/RTMP streams, encoding, satellite reception<br>
+        └── قسم الدعم الفني: مساعدة فرق المحتوى، التدريب، توثيق المشاكل
+    </div>
+
+    <p><strong>البند الثالث: مصفوفة المسؤوليات (RACI Matrix)</strong><br>
+    R: Responsible (ينفذ)، A: Accountable (يتحمل المسؤولية)، C: Consulted (يُستشار)، I: Informed (يُبلغ).</p>
+    <table>
+        <thead>
+            <tr><th>المهمة</th><th>الهندسة - البث</th><th>الهندسة - البرمجيات</th><th>الهندسة - البنية</th><th>الأخبار</th><th>الإدارة العليا</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>إضافة قناة فضائية جديدة</td><td>R (تركيب)</td><td>C (تكوين)</td><td>A (اختبار)</td><td>I</td><td>I</td></tr>
+            <tr><td>إصلاح عطل في NAS</td><td>I (إذا أثر على البث)</td><td>C</td><td>A, R</td><td>I</td><td>I</td></tr>
+            <tr><td>تحديث Metus</td><td>I</td><td>A, R</td><td>C</td><td>I</td><td>C</td></tr>
+            <tr><td>تدريب محرر جديد على MAM</td><td>I</td><td>A</td><td>I</td><td>R</td><td>C</td></tr>
+            <tr><td>تصميم workflow جديد</td><td>I</td><td>A, R</td><td>C</td><td>C</td><td>C</td></tr>
+        </tbody>
+    </table>
+
+    <p><strong>البند الرابع: دورة العمل الهندسية (Engineering Workflow)</strong><br>
+    الطلب → التقييم → التخطيط → التنفيذ → الاختبار → التسليم → المتابعة.</p>
+    <ol>
+        <li>استلام الطلب: المصدر (الأخبار، التبادل، الإدارة)، الوسيلة (Ticketing System مثل osTicket).</li>
+        <li>التقييم الفني: المدة (24 ساعة للعادي، 2 ساعة للعاجل).</li>
+        <li>التخطيط: خطة عمل مفصلة (Action Plan) + نقاط الرجوع (Rollback Plan).</li>
+        <li>التنفيذ: لا تعديلات على أنظمة الإنتاج خلال أوقات الذروة.</li>
+        <li>الاختبار: Staging Environment، سيناريوهات (Happy Path, Edge Cases, Failover).</li>
+        <li>التسليم: أدلة الاستخدام والصيانة، سجل التغييرات (Change Log)، التدريب.</li>
+        <li>المتابعة: أسبوع أول مراقبة يومية، شهر أول مراجعة أسبوعية، بعد 3 أشهر تقييم شامل.</li>
+    </ol>
+
+    <h3>7.4 واجبات الأفراد</h3>
+    <h4>7.4.1 واجبات المهندس</h4>
+    <p><strong>التقنية:</strong> الحفاظ على استقرار الأنظمة (مراقبة logs، تحديثات أمنية، اختبار نسخ احتياطية)، التوثيق الشامل (Wiki داخلي، رسومات diag، comments في scripts)، الاستباقية.<br>
+    <strong>الإدارية:</strong> الالتزام بالمواعيد (SLA: عاجل 1 ساعة، عالي 4 ساعات، عادي 24 ساعة)، التواصل الفعّال (تقارير أسبوعية، لغة واضحة).<br>
+    <strong>التطويرية:</strong> التعلم المستمر (دورة سنوياً، شهادة كل سنتين، مشاركة المعرفة).</p>
+
+    <h4>7.4.2 واجبات فريق المحتوى (الأخبار/الإنتاج)</h4>
+    <p><strong>نحو الأنظمة:</strong> الاستخدام الصحيح (اتباع SOPs، عدم "الإصلاح الذاتي"، نظافة Workspace)، التبليغ المبكر (عن البطء أو الأخطاء قبل العطل الكامل).<br>
+    <strong>نحو التدريب:</strong> الانخراط الجاد، التغذية الراجعة.</p>
+
+    <h3>7.5 العلاقة بين الهندسة والأخبار: ميثاق التعاون</h3>
+    <p>المشكلة الشائعة: "المهندسون لا يفهمون ضغط العمل الإخباري" ↔ "الصحفيون لا يقدرون تعقيد الأنظمة". الحل: ميثاق تعاون واضح.</p>
+    <h4>7.5.1 المبادئ الأساسية</h4>
+    <ol>
+        <li>الاحترام المتبادل: كل طرف يعترف بأهمية الآخر.</li>
+        <li>التفاهم المشترك: فهم طبيعة العمل الإخباري vs قيود الأنظمة.</li>
+        <li>التواصل المستمر: اجتماع أسبوعي مشترك، قناة Teams/Slack مخصصة.</li>
+    </ol>
+    <h4>7.5.2 السيناريوهات العملية</h4>
+    <p><strong>سيناريو 1: طلب عاجل أثناء حدث مباشر.</strong> الموقف: مراسل يطلب رفع الجودة من 720p إلى 1080p. الصواب: المهندس يقيّم الباندويث فوراً. إذا ممكن ينفذ. إذا غير ممكن يوضح السبب ("الباندويث الحالي 5Mbps، نحتاج 8Mbps. هل يمكن تأجيل طلبات أخرى؟"). المنسق يسجل الطلب لتحسين البنية لاحقاً.</p>
+    <p><strong>سيناريو 2: صيانة طارئة خلال ساعات العمل.</strong> الموقف: ثغرة أمنية في Wowza تتطلب إعادة تشغيل. الصواب: المهندس يرسل تنبيهاً فورياً ويقترح 3 نوافذ زمنية. رئيس الأخبار يراجع الجدول ويقرر التوقيت الأنسب.</p>
+
+    <h3>7.6 برنامج تطوير الكادر البشري</h3>
+    <p>الهدف: بناء فريق متعدد الكفاءات (T-Shaped Team).</p>
+    <h4>7.6.1 المسارات التدريبية</h4>
+    <ul>
+        <li><strong>للمهندسين الجدد (0-1 سنة):</strong> Onboarding (أسبوع 1-2)، Linux Fundamentals (شهر 1)، Networking Essentials (شهر 2)، Broadcasting Basics (شهر 3)، Hands-on Projects (شهر 4-6).</li>
+        <li><strong>للمهندسين المتوسطين (2-4 سنوات):</strong> التخصص + القيادة. دورات: Advanced Linux, Cloud Platforms, PMP Fundamentals. مسؤوليات: إشراف على junior، قيادة مشاريع صغيرة.</li>
+        <li><strong>للمهندسين الكبار (+5 سنوات):</strong> الرؤية الاستراتيجية + الابتكار. دورات: Enterprise Architecture, IT Governance, Financial Management. مسؤوليات: تصميم الحلول، التفاوض، الاستراتيجية.</li>
+    </ul>
+
+    <h4>7.6.2 الشهادات الموصى بها (وميزانيتها)</h4>
+    <table>
+        <thead>
+            <tr><th>الشهادة</th><th>المستوى</th><th>التكلفة</th><th>المدة</th><th>الفائدة</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>CompTIA A+</td><td>مبتدئ</td><td>$250</td><td>شهرين</td><td>أساسيات الهاردوير</td></tr>
+            <tr><td>CompTIA Network+</td><td>مبتدئ</td><td>$350</td><td>3 أشهر</td><td>الشبكات الأساسية</td></tr>
+            <tr><td>Cisco CCNA</td><td>متوسط</td><td>$300</td><td>6 أشهر</td><td>Cisco networking</td></tr>
+            <tr><td>AWS Solutions Architect</td><td>متوسط</td><td>$150</td><td>4 أشهر</td><td>السحابة</td></tr>
+            <tr><td>Red Hat RHCSA</td><td>متوسط</td><td>$400</td><td>5 أشهر</td><td>Linux احترافي</td></tr>
+            <tr><td>PMP</td><td>متقدم</td><td>$555</td><td>سنة</td><td>إدارة المشاريع</td></tr>
+        </tbody>
+    </table>
+    <p>الميزانية السنوية الموصى بها: $2,000 لكل مهندس.</p>
+
+    <h4>7.6.3 التدريب الداخلي (Lunch &amp; Learn)</h4>
+    <p>جلسات أسبوعية (1 ساعة) حيث يقدم أحد المهندسين موضوعاً لبقية الفريق. الفوائد: نقل المعرفة الضمنية (Tacit Knowledge)، تحسين مهارات العرض، بناء ثقافة التعلم.</p>
+
+    <h3>7.7 تقييم الأداء (Performance Evaluation)</h3>
+    <p>الدورة: كل 6 أشهر. المعايير: الكفاءة التقنية (30%)، الموثوقية (25%)، التعاون (20%)، التطوير الذاتي (15%)، التوثيق (10%). المخرجات: تقرير مكتوب، خطة تطوير فردية، مكافآت/ترقيات.</p>
+
+    <!-- Chapter 8 -->
+    <h2>الفصل الثامن: التشغيل والصيانة</h2>
+
+    <h3>8.1 إجراءات التشغيل القياسية (SOPs)</h3>
+    <h4>8.1.1 SOP: إضافة قناة فضائية جديدة</h4>
+    <p>الهدف: استقبال قناة جديدة وتوزيعها عبر SRT. المسؤول: مهندس البث.</p>
+    <ol>
+        <li>جمع المعلومات: اسم القناة، القمر، التردد، الاستقطاب، Symbol Rate، FEC، التشفير.</li>
+        <li>التحقق الأولي: تغطية الطبق، توفر tuner، الباندويث.</li>
+        <li>التكوين في TVHeadend: Add Mux (Freq, Pol, SR, FEC), Scan Services, Map Channel.</li>
+        <li>اختبار الاستقبال: Signal Quality &gt; 70%، Preview، تسجيل 5 دقائق.</li>
+        <li>إنشاء SRT Stream: في Wowza (New App -&gt; Stream File -&gt; UDP Input -&gt; SRT Output).</li>
+        <li>الاختبار النهائي: Play via VLC, Latency &lt; 2s, Failover Test.</li>
+        <li>التوثيق: جدول القنوات، Network Diagram.</li>
+        <li>التسليم: إشعار للأعضاء، تدريب سريع.</li>
+    </ol>
+    <p>الوقت المتوقع: 2-3 ساعات (للمرة الأولى)، 45 دقيقة (بعد الممارسة).</p>
+
+    <h4>8.1.2 SOP: النسخ الاحتياطي اليومي</h4>
+    <p>الهدف: حماية البيانات. التكرار: يومياً 03:00 صباحاً.</p>
+    <pre><code>#!/bin/bash
+# /opt/osbu/backup_daily.sh
+DATE=$(date +%Y%m%d)
+BACKUP_DIR="/mnt/backup/daily/$DATE"
+NAS_IP="192.168.20.10"
+S3_BUCKET="s3://osbu-archive/backups"
+
+# 1. إنشاء مجلد النسخة
+mkdir -p $BACKUP_DIR
+
+# 2. نسخ قواعد بيانات Metus
+echo "[$(date)] Backing up Metus DB..."
+pg_dump -U metususer metusdb | gzip &gt; $BACKUP_DIR/metusdb.sql.gz
+
+# 3. نسخ تكوينات TVHeadend
+echo "[$(date)] Backing up TVHeadend config..."
+tar -czf $BACKUP_DIR/tvheadend.tar.gz /home/hts/.hts/tvheadend
+
+# 4. نسخ تكوينات Wowza
+echo "[$(date)] Backing up Wowza config..."
+tar -czf $BACKUP_DIR/wowza.tar.gz /usr/local/WowzaStreamingEngine/conf
+
+# 5. نسخ السكريبتات المخصصة
+tar -czf $BACKUP_DIR/scripts.tar.gz /opt/osbu/scripts
+
+# 6. رفع للـ NAS
+echo "[$(date)] Uploading to NAS..."
+rsync -avz $BACKUP_DIR/ $NAS_IP::/backups/$DATE/
+
+# 7. رفع للسحابة (كل أحد فقط)
+if [ $(date +%u) -eq 7 ]; then
+ echo "[$(date)] Uploading to S3..."
+ aws s3 sync $BACKUP_DIR $S3_BUCKET/$DATE/ --storage-class GLACIER
+fi
+
+# 8. حذف النسخ القديمة (أكثر من 30 يوم)
+find /mnt/backup/daily -type d -mtime +30 -exec rm -rf {} \;
+echo "[$(date)] Backup completed successfully!"</code></pre>
+
+    <h3>8.2 المراقبة والإنذار (Monitoring &amp; Alerting)</h3>
+    <h4>8.2.1 المؤشرات الحرجة (KPIs)</h4>
+    <table>
+        <thead>
+            <tr><th>المؤشر</th><th>العتبة الخضراء</th><th>العتبة الصفراء</th><th>العتبة الحمراء</th><th>الإجراء</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Uptime</td><td>&gt; 99.5%</td><td>99-99.5%</td><td>&lt; 99%</td><td>مراجعة فورية للأسباب</td></tr>
+            <tr><td>CPU Usage</td><td>&lt; 60%</td><td>60-80%</td><td>&gt; 80%</td><td>تحديد العمليات المستهلكة</td></tr>
+            <tr><td>RAM Usage</td><td>&lt; 70%</td><td>70-85%</td><td>&gt; 85%</td><td>إعادة تشغيل خدمات / ترقية RAM</td></tr>
+            <tr><td>Disk I/O</td><td>&lt; 50%</td><td>50-70%</td><td>&gt; 70%</td><td>فحص processes / ترقية SSD</td></tr>
+            <tr><td>Network Bandwidth</td><td>&lt; 60%</td><td>60-80%</td><td>&gt; 80%</td><td>ترقية الخط / تقليل streams</td></tr>
+            <tr><td>SRT Stream Latency</td><td>&lt; 1s</td><td>1-2s</td><td>&gt; 2s</td><td>فحص الشبكة / تقليل bitrate</td></tr>
+            <tr><td>Storage Capacity</td><td>&lt; 70%</td><td>70-85%</td><td>&gt; 85%</td><td>أرشفة/حذف ملفات قديمة</td></tr>
+        </tbody>
+    </table>
+
+    <h4>8.2.2 أدوات المراقبة</h4>
+    <p><strong>1. Prometheus + Grafana (مفتوح المصدر):</strong></p>
+    <pre><code># docker-compose.yml
+version: '3'
+services:
+ prometheus:
+ image: prom/prometheus:latest
+ volumes:
+ - ./prometheus.yml:/etc/prometheus/prometheus.yml
+ ports:
+ - 9090:9090
+ grafana:
+ image: grafana/grafana:latest
+ ports:
+ - 3000:3000
+ node-exporter:
+ image: prom/node-exporter:latest
+ ports:
+ - 9100:9100</code></pre>
+    <p><strong>2. Alertmanager للإنذارات:</strong></p>
+    <pre><code># rules.yml
+groups:
+ - name: osbu_alerts
+ rules:
+ - alert: HighCPU
+ expr: node_cpu_usage &gt; 80
+ for: 5m
+ labels:
+ severity: warning
+ - alert: StreamDown
+ expr: wowza_stream_status{channel="osbu-main"} == 0
+ for: 1m
+ labels:
+ severity: critical</code></pre>
+
+    <h3>8.3 إدارة الأعطال (Incident Management)</h3>
+    <h4>8.3.1 تصنيف الأعطال</h4>
+    <table>
+        <thead>
+            <tr><th>المستوى</th><th>الوصف</th><th>وقت الاستجابة</th><th>أمثلة</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>P1 - حرج</td><td>توقف كامل للبث</td><td>15 دقيقة</td><td>جميع SRT streams معطلة</td></tr>
+            <tr><td>P2 - عالي</td><td>تأثير كبير على الخدمة</td><td>1 ساعة</td><td>NAS غير متاح</td></tr>
+            <tr><td>P3 - متوسط</td><td>تأثير جزئي</td><td>4 ساعات</td><td>قناة واحدة معطلة</td></tr>
+            <tr><td>P4 - منخفض</td><td>لا يؤثر على الإنتاج</td><td>24 ساعة</td><td>واجهة MAM بطيئة</td></tr>
+        </tbody>
+    </table>
+
+    <h4>8.3.2 سير عمل حل العطل</h4>
+    <div class="diagram-box">
+        اكتشاف العطل ➔ الأولوية؟<br>
+        (P1) ➔ تنبيه فوري لجميع المهندسين ➔ تشكيل War Room<br>
+        (P2-P4) ➔ إنشاء تذكرة<br>
+        ↓<br>
+        التشخيص ➔ الحل معروف؟<br>
+        (نعم) ➔ التنفيذ ➔ الاختبار ➔ نجح؟ ➔ إغلاق التذكرة<br>
+        (لا) ➔ التصعيد للمورد ➔ الاختبار<br>
+        ↓<br>
+        Post-Mortem (بعد كل عطل P1/P2)
+    </div>
+
+    <p><strong>نموذج تقرير Post-Mortem:</strong></p>
+    <div class="info-box">
+        <strong># Post-Mortem: انقطاع البث المباشر - 20-12-2025</strong><br>
+        <strong>ملخص تنفيذي:</strong> في 20 ديسمبر 2025 الساعة 14:35 UTC، توقفت جميع streams عن العمل لمدة 18 دقيقة بسبب فشل القرص الصلب في Distribution Server.<br>
+        <strong>الجدول الزمني:</strong> 14:35 اكتشاف العطل (Grafana) -&gt; 14:37 تأكيد المشكلة -&gt; 14:40 تفعيل Backup Server -&gt; 14:53 عودة البث.<br>
+        <strong>السبب الجذري:</strong> فشل SSD بسبب تجاوز عدد دورات الكتابة (TBW Limit) وعدم وجود SMART monitoring.<br>
+        <strong>الإجراءات التصحيحية:</strong> 1. فوري: شراء SSD احتياطي (تم). 2. قصير: تفعيل SMART checks أسبوعية (27-12-2025). 3. متوسط: إعداد RAID 1 للأقراص الحرجة (15-01-2026).<br>
+        <strong>الدروس المستفادة:</strong> الاعتماد على قرص واحد = نقطة فشل واحدة (SPOF). النسخ الاحتياطية وحدها لا تكفي، نحتاج Redundancy فورية.<br>
+        <strong>المسؤول:</strong> م. أحمد | <strong>المراجع:</strong> م. عامر نوجا
+    </div>
+
+    <!-- Chapter 9 -->
+    <h2>الفصل التاسع: الأمن السيبراني</h2>
+
+    <h3>9.1 نموذج الطبقات الأمنية (Defense in Depth)</h3>
+    <p>"الأمن ليس منتجاً، بل عملية مستمرة".</p>
+    <ul>
+        <li><strong>الطبقة 1: الأمن المادي (Physical Security):</strong> التحكم في الدخول (بطاقات RFID + كاميرات)، الراكات (أقفال رقمية audit trail)، السجلات (تسجيل جميع الزوار).</li>
+        <li><strong>الطبقة 2: أمن الشبكة (Network Security):</strong>
+            <ul>
+                <li><strong>تقسيم الشبكات (Segmentation):</strong> VLAN 10 (Management) محمي بـ ACLs صارمة، VLAN 20 (Broadcast) معزول عن الإنترنت، VLAN 30 (Archive) وصول للسحابة فقط، VLAN 40 (Guest WiFi) معزول تماماً.</li>
+                <li><strong>الجدار الناري (Firewall Rules):</strong> منع الوصول للـ Management VLAN من الإنترنت، السماح فقط لـ SRT ports من IPs معروفة، منع دول معينة (Geo-blocking).</li>
+                <li><strong>VPN للوصول الآمن:</strong> استخدام WireGuard VPN بدلاً من فتح المنافذ.</li>
+            </ul>
+        </li>
+        <li><strong>الطبقة 3: أمن التطبيقات (Application Security):</strong> إدارة كلمات المرور (Bitwarden self-hosted)، المصادقة الثنائية (2FA) على جميع الحسابات الحرجة، تقليل الصلاحيات (Least Privilege).</li>
+        <li><strong>الطبقة 4: أمن البيانات (Data Security):</strong> التشفير أثناء النقل (SRT AES-256, HTTPS)، استخدام SSL/TLS (Let's Encrypt).</li>
+    </ul>
+
+    <h3>9.2 التطبيقات العملية</h3>
+    <p><strong>Firewall Rules (pfSense/FortiGate):</strong> قاعدة 1: السماح بـ UDP 9000-9010 (SRT) من White-listed IPs. قاعدة 2: حظر TCP 22 (SSH) من الإنترنت. قاعدة 3: السماح HTTPS 443 للـ Metus. قاعدة 4: Deny All.</p>
+    <p><strong>تشفير الاتصالات:</strong> تفعيل AES-256 لكل SRT Stream بـ Passphrase قوية. استخدام SSH Keys فقط وتعطيل Password Authentication.</p>
+    <p><strong>مكافحة البرمجيات الخبيثة:</strong> فحص أسبوعي تلقائي بـ ClamAV، حظر IPs التي تحاول تسجيل دخول فاشل بـ Fail2Ban.</p>
+
+    <h3>9.3 إدارة الهويات والوصول (IAM)</h3>
+    <p><strong>مبدأ الصلاحية الدنيا:</strong> مدير هندسة (مسؤول أعلى)، صحفي (محرر: قراءة/كتابة)، متدرب (مشاهد: قراءة فقط).<br>
+    <strong>المصادقة الثنائية:</strong> إلزامية لكل الحسابات الإدارية (Wowza, Metus, SSH) باستخدام Google Authenticator أو Authy.</p>
+
+    <!-- Chapter 10 -->
+    <h2>الفصل العاشر: درء الكوارث واستمرارية الأعمال</h2>
+
+    <h3>10.1 تصنيف المخاطر</h3>
+    <table>
+        <thead>
+            <tr><th>المخاطر</th><th>الاحتمالية</th><th>التأثير</th><th>الأولوية</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>حريق في غرفة السيرفرات</td><td>منخفض</td><td>كارثي</td><td>حرج</td></tr>
+            <tr><td>هجوم Ransomware</td><td>متوسط</td><td>عالي جداً</td><td>حرج</td></tr>
+            <tr><td>فشل السيرفر الرئيسي</td><td>متوسط</td><td>عالي</td><td>عالي</td></tr>
+            <tr><td>انقطاع الإنترنت</td><td>عالي</td><td>متوسط</td><td>متوسط</td></tr>
+            <tr><td>خطأ بشري (حذف ملفات)</td><td>عالي</td><td>متوسط</td><td>متوسط</td></tr>
+        </tbody>
+    </table>
+
+    <h3>10.2 استراتيجية النسخ الاحتياطي (3-2-1 Rule)</h3>
+    <p>3 نسخ من كل ملف مهم. 2 وسائط مختلفة (NAS محلي + Cloud). 1 نسخة خارج الموقع (AWS S3 Glacier في منطقة جغرافية مختلفة).</p>
+    <p><strong>جدول النسخ الاحتياطي:</strong></p>
+    <ul>
+        <li>إعدادات الأنظمة: يومي (Git + NAS)، الاحتفاظ 30 يوم.</li>
+        <li>المحتوى الحديث (&lt; 30 يوم): كل 4 ساعات (NAS Snapshot)، الاحتفاظ 30 يوم.</li>
+        <li>الأرشيف الكامل: أسبوعي (AWS S3 Glacier)، الاحتفاظ دائم.</li>
+    </ul>
+
+    <h3>10.3 خطط الاستعادة</h3>
+    <p><strong>المستهدف RTO/RPO:</strong> زمن الاستعادة (RTO) &lt; 2 ساعة للخدمات الحرجة. نقطة الاستعادة (RPO) &lt; 4 ساعات (أقصى بيانات يمكن فقدانها).</p>
+    <p><strong>سيناريو: فشل كامل للسيرفر الرئيسي:</strong> 0-15 دقيقة: تفعيل Hot Standby. 15-60 دقيقة: استعادة آخر Snapshot من NAS. 60-120 دقيقة: إعادة تكوين الشبكة وإشعار المستخدمين.</p>
+
+    <!-- Chapter 11 -->
+    <h2>الفصل الحادي عشر: النموذج المالي وجدول الكميات</h2>
+
+    <h3>11.1 التكاليف الرأسمالية (CAPEX)</h3>
+    <table>
+        <thead>
+            <tr><th>البند</th><th>الوصف</th><th>الكمية</th><th>الوحدة</th><th>السعر</th><th>الإجمالي</th></tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="6"><strong>السيرفرات</strong></td></tr>
+            <tr><td>SRT Gateway</td><td>Xeon Gold, 128GB RAM</td><td>2</td><td>$8,000</td><td>$16,000</td></tr>
+            <tr><td>MAM Server</td><td>Xeon Silver, 64GB RAM</td><td>2</td><td>$6,000</td><td>$12,000</td></tr>
+            <tr><td colspan="6"><strong>التخزين</strong></td></tr>
+            <tr><td>NAS (Synology)</td><td>16× 8TB RAID 6</td><td>1</td><td>$12,000</td><td>$12,000</td></tr>
+            <tr><td colspan="6"><strong>الشبكات</strong></td></tr>
+            <tr><td>Spine Switch</td><td>MikroTik CRS309</td><td>2</td><td>$600</td><td>$1,200</td></tr>
+            <tr><td>Leaf Switch</td><td>10GbE 24-port</td><td>4</td><td>$800</td><td>$3,200</td></tr>
+            <tr><td>Firewall</td><td>FortiGate 60F</td><td>1</td><td>$1,500</td><td>$1,500</td></tr>
+            <tr><td colspan="6"><strong>الطاقة</strong></td></tr>
+            <tr><td>UPS (2N)</td><td>10 kVA × 2</td><td>2</td><td>$3,500</td><td>$7,000</td></tr>
+            <tr><td>Generator</td><td>50 kVA Diesel</td><td>1</td><td>$15,000</td><td>$15,000</td></tr>
+            <tr><td colspan="6"><strong>التبريد</strong></td></tr>
+            <tr><td>Precision AC</td><td>10 Ton</td><td>1</td><td>$12,000</td><td>$12,000</td></tr>
+            <tr><td colspan="6"><strong>الأقمار (Hybrid)</strong></td></tr>
+            <tr><td>أطباق Ku-Band</td><td>1.2م</td><td>7</td><td>$150</td><td>$1,050</td></tr>
+            <tr><td>TBS Cards</td><td>8 tuners</td><td>3</td><td>$450</td><td>$1,350</td></tr>
+            <tr><td colspan="6"><strong>البرمجيات</strong></td></tr>
+            <tr><td>Wowza SE</td><td>Perpetual</td><td>2</td><td>$1,995</td><td>$3,990</td></tr>
+            <tr><td>Metus MAM</td><td>Perpetual</td><td>1</td><td>$32,000</td><td>$32,000</td></tr>
+            <tr><td colspan="6"><strong>البنية التحتية</strong></td></tr>
+            <tr><td>Rack</td><td>42U مع PDU وتبريد</td><td>2</td><td>$1,500</td><td>$3,000</td></tr>
+            <tr><td>الكابلات والتوصيلات</td><td>Cat6a, Fiber</td><td>-</td><td>-</td><td>$2,000</td></tr>
+            <tr><td>التركيب والتدريب</td><td>-</td><td>-</td><td>-</td><td>$8,000</td></tr>
+            <tr><td>احتياطي 10%</td><td>-</td><td>-</td><td>-</td><td>$13,129</td></tr>
+            <tr><td><strong>الإجمالي</strong></td><td></td><td></td><td></td><td><strong>$144,419</strong></td></tr>
+        </tbody>
+    </table>
+
+    <h3>11.2 التكاليف التشغيلية السنوية (OPEX)</h3>
+    <table>
+        <thead>
+            <tr><th>البند</th><th>السنة الأولى</th><th>السنة الثانية</th><th>السنة الثالثة</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>الرواتب (10 موظفين)</td><td>$180,000</td><td>$190,000</td><td>$200,000</td></tr>
+            <tr><td>صيانة البرمجيات</td><td>$9,544</td><td>$10,144</td><td>$10,744</td></tr>
+            <tr><td>AWS S3 Glacier</td><td>$3,600</td><td>$3,000</td><td>$2,400</td></tr>
+            <tr><td>الكهرباء</td><td>$12,000</td><td>$12,500</td><td>$13,000</td></tr>
+            <tr><td>الإنترنت (2× 1Gbps)</td><td>$24,000</td><td>$24,000</td><td>$24,000</td></tr>
+            <tr><td>صيانة الأجهزة</td><td>$8,000</td><td>$10,000</td><td>$12,000</td></tr>
+            <tr><td>التدريب والتطوير</td><td>$15,000</td><td>$18,000</td><td>$20,000</td></tr>
+            <tr><td>احتياطي طوارئ (10%)</td><td>$25,094</td><td>$26,764</td><td>$28,334</td></tr>
+            <tr><td><strong>الإجمالي</strong></td><td><strong>$276,038</strong></td><td><strong>$294,408</strong></td><td><strong>$311,678</strong></td></tr>
+        </tbody>
+    </table>
+
+    <h3>11.3 توقعات الإيرادات (5 سنوات)</h3>
+    <table>
+        <thead>
+            <tr><th>السنة</th><th>منصة التبادل</th><th>الأكاديمية</th><th>بيع المحتوى</th><th>المهرجان</th><th>الخدمات التقنية</th><th>الإجمالي</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>2026</td><td>$50,000</td><td>$60,000</td><td>$80,000</td><td>$50,000</td><td>$60,000</td><td>$300,000</td></tr>
+            <tr><td>2027</td><td>$100,000</td><td>$125,000</td><td>$150,000</td><td>$100,000</td><td>$125,000</td><td>$600,000</td></tr>
+            <tr><td>2028</td><td>$347,000</td><td>$200,000</td><td>$250,000</td><td>$203,000</td><td>$200,000</td><td>$1,200,000</td></tr>
+            <tr><td>2029</td><td>$495,000</td><td>$255,000</td><td>$400,000</td><td>$350,000</td><td>$300,000</td><td>$1,800,000</td></tr>
+            <tr><td>2030</td><td>$600,000</td><td>$400,000</td><td>$600,000</td><td>$500,000</td><td>$400,000</td><td>$2,500,000</td></tr>
+        </tbody>
+    </table>
+
+    <h3>11.4 تحليل العائد على الاستثمار (ROI)</h3>
+    <ul>
+        <li>الاستثمار الأولي (CAPEX): $144,419.</li>
+        <li>التكاليف التشغيلية (5 سنوات): 1.45 مليون $.</li>
+        <li>إجمالي الإيرادات (5 سنوات): 6.4 مليون $.</li>
+        <li>صافي الربح: 4.8 مليون $.</li>
+        <li>ROI: (4.8 ÷ 1.59) × 100 = 302%.</li>
+        <li>نقطة التعادل (Break-even): نهاية السنة الثانية (2027).</li>
+    </ul>
+
+    <!-- Chapter 12 -->
+    <h2>الفصل الثاني عشر: الخاتمة والتوصيات</h2>
+
+    <h3>12.1 الإنجازات المتوقعة</h3>
+    <p>من خلال تطبيق هذا الدليل، سيحقق اتحاد OSBU: استقلالية تقنية كاملة من خلال امتلاك البنية التحتية، استدامة مالية بنسبة 50% بحلول 2030، ريادة إقليمية في مجال التبادل الإخباري الرقمي، بناء كادر بشري مؤهل يخدم 57 دولة عضو.</p>
+
+    <h3>12.2 التوصيات الاستراتيجية</h3>
+    <ul>
+        <li><strong>قصيرة المدى (2026):</strong> تنفيذ المرحلة التجريبية (Pilot) مع 5 دول أعضاء، تعيين مدير هندسة وفريق نواة من 3 مهندسين، شراء البرمجيات الأساسية (Metus, Wowza).</li>
+        <li><strong>متوسطة المدى (2027-2028):</strong> التوسع ليشمل 20 دولة عضو، إطلاق الأكاديمية الإعلامية رسمياً، بناء مركز بيانات احتياطي (Disaster Recovery Site) في دولة عضو ثانية.</li>
+        <li><strong>طويلة المدى (2029-2030):</strong> تحقيق التغطية الكاملة لـ 57 دولة، إطلاق منصات تحليلات AI (التعرف على الوجوه، تحليل المشاعر)، تأسيس شبكة CDN خاصة بدلاً من الاعتماد على Cloudflare/Amazon.</li>
+    </ul>
+
+    <h3>12.3 رسالة ختامية</h3>
+    <p class="info-box" style="text-align: center; font-size: 1.2em;">"التقنية لا تُشترى، بل تُبنى بالعقول المُدرَّبة والإرادة الجماعية"</p>
+    <p>نجاح هذا المشروع لا يعتمد فقط على شراء أفضل الأجهزة أو البرمجيات، بل على: الالتزام المؤسسي بالتطوير المستمر، الاستثمار في البشر قبل الحديد، الشراكة الحقيقية بين الإدارات (هندسة، محتوى، مالية). ليكن هذا الدليل خارطة طريق حية تُحدَّث مع كل تطور تقني، ولتكن منظومة OSBU نموذجاً يُحتذى لكل الاتحادات الإعلامية الناشئة.</p>
+    <p>انتهى الدليل</p>
+
+    <h3>ملحق: قائمة المراجع والموارد</h3>
+    <p><strong>الوثائق المرجعية:</strong> 1. دليل الاستدامة المالية (مرفق). 2. مقترح مركز التبادل – م. عوض عيد (مرفق). 3. خطة تطوير الكوادر الهندسية 2025 (مرفق).</p>
+    <p><strong>المعايير التقنية:</strong> SMPTE 2110: بث IP احترافي، SRT Alliance: www.srtalliance.org، EBU Tech 3285: توصيات الأرشفة الإعلامية.</p>
+    <p><strong>الأدوات البرمجية:</strong> Wowza: www.wowza.com، Metus: www.metus.com، FFmpeg: ffmpeg.org، Zabbix: www.zabbix.com.</p>
+
+    <hr style="border: 1px solid var(--border); margin: 30px 0;">
+    <div style="text-align: center; font-size: 0.9em; color: #666;">
+        <p>إعداد: م. عامر نوجا | البريد الإلكتروني: amirnuja@ibuj.org</p>
+        <p>الترخيص: هذا الدليل مُخصص للاستخدام الداخلي لاتحاد OSBU والاتحادات الشقيقة. يُحظر النسخ التجاري دون إذن كتابي.</p>
+    </div>
+
+</div>
+
+
+
+</body></html>

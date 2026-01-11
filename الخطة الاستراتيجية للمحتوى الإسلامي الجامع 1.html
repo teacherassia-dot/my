@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطة تطوير المحتوى الإسلامي - الإصدار التوافقي</title>
+    <style>
+        :root {
+            --primary: #0f766e; /* Emerald 700 */
+            --secondary: #fbbf24; /* Amber 400 */
+            --accent: #134e4a; /* Emerald 900 */
+            --bg: #f0fdfa;
+            --text: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(15, 118, 110, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--secondary);
+            padding-right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .card-desc {
+            color: #4b5563;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #e0f2f1;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(to left, #fff, #fffbeb);
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .highlight-title {
+            color: #b45309;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .ai-feature {
+            background: #1e293b;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .ai-content {
+            flex: 2;
+        }
+
+        .ai-visual {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            height: 200px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--accent);
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #f59e0b;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .ai-feature {
+                flex-direction: column;
+            }
+            .ai-visual {
+                width: 100%;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>الخطة الاستراتيجية للمحتوى الإسلامي الجامع</h1>
+            <p class="subtitle">مبادرات قائمة على المشتركات، بأسماء الأنبياء المتفق عليهم، مدعومة بتقنيات الذكاء الاصطناعي</p>
+        </header>
+
+        <h2 class="section-title">🏛️ فعاليات ومسابقات بأسماء الأنبياء (عليهم السلام)</h2>
+        <div class="grid">
+            <!-- Card 1 -->
+            <div class="card">
+                <span class="card-icon">📜</span>
+                <div class="card-title">جائزة النبي داود (ع) للمزامير القرآنية</div>
+                <p class="card-desc">مسابقة عالمية في التلاوة والأصوات الحسنة، تيمناً بمزامير داود عليه السلام. تركز على الخشوع والأداء الصوتي دون الدخول في الخلافات الفقهية للقراءات.</p>
+                <span class="tag">الميزانية: 300,000 ريال</span>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <span class="card-icon">🤝</span>
+                <div class="card-title">ملتقى النبي إبراهيم (ع) للحوار</div>
+                <p class="card-desc">باعتباره أباً للأنبياء ومحط إجماع، يركز الملتقى على تعزيز المشتركات بين المذاهب الإسلامية ونبذ الفرقة والتركيز على التوحيد الخالص.</p>
+                <span class="tag">الميزانية: 200,000 ريال</span>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <span class="card-icon">⚖️</span>
+                <div class="card-title">أولمبياد النبي شعيب (ع) للعدالة</div>
+                <p class="card-desc">مسابقات في البحث العلمي حول العدالة الاقتصادية والاجتماعية في الإسلام، وحقوق العمال والمكاييل، مستوحاة من دعوة النبي شعيب.</p>
+                <span class="tag">الميزانية: 150,000 ريال</span>
+            </div>
+        </div>
+
+        <h2 class="section-title">📚 أولمبياد الفقه والمواريث وتصحيح المفاهيم</h2>
+        <div class="grid">
+            <div class="card" style="grid-column: span 1 / -1;">
+                <span class="card-icon">🧠</span>
+                <div class="card-title">مسار الفقه المقارن وتصحيح المفاهيم الجنائية</div>
+                <p class="card-desc">برنامج تعليمي وتنافسي يهدف إلى توضيح فلسفة العقوبات في الإسلام.</p>
+                
+                <div class="highlight-box">
+                    <span class="highlight-title">📌 محور خاص: الحدود والتعزير</span>
+                    <p>دراسة تحليلية توضح أن الأصل في الحدود هو "الدرء بالشبهات"، وأنها نادرة التطبيق وتعمل كزاجر مجتمعي (الردع العام) أكثر من كونها للتطبيق اليومي.</p>
+                    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 10px 0;">
+                    <p><strong>دراسة حالة:</strong> قصة الرسول (ص) مع المرأة المخزومية. يتم تسليط الضوء على سياق القصة لبيان أن الشريعة لا تحابي أحداً في الحقوق (العدالة المطلقة)، ولكن في نفس الوقت يتم شرح كيف أن "الستر" و "التوبة" هما الأصل في التعامل مع العصاة قبل الوصول للقضاء، وكيف أن العقوبات التعزيرية هي البديل الأوسع تطبيقاً.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">🤖 الذكاء الاصطناعي والفتوى الرقمية</h2>
+        <div class="ai-feature">
+            <div class="ai-content">
+                <h3 style="font-size: 1.8rem; margin-bottom: 15px;">مشروع "الهدهد" للفتوى الذكية</h3>
+                <p style="margin-bottom: 20px; opacity: 0.9;">
+                    نظام ذكاء اصطناعي متطور لتقديم الفتاوى والإجابات الشرعية للمسلمين وغير المسلمين.
+                </p>
+                <ul style="list-style: none; margin-bottom: 20px;">
+                    <li style="margin-bottom: 10px;">✅ <strong>لغير المسلمين:</strong> إجابات مبسطة عن الإسلام، الشبهات، والحكمة من التشريعات بلغات متعددة.</li>
+                    <li style="margin-bottom: 10px;">✅ <strong>للمسلمين:</strong> فتاوى في العبادات والمعاملات اليومية بناءً على المذاهب المعتبرة.</li>
+                    <li style="margin-bottom: 10px;">🔄 <strong>نظام التحويل الذكي:</strong> إذا لم تكن إجابة البوت مقنعة أو كانت المسألة معقدة وحساسة، يقوم النظام آلياً بجدولة موعد أو فتح محادثة مباشرة مع مفتي بشري متخصص.</li>
+                </ul>
+                <a href="#" class="btn">عرض النموذج الأولي</a>
+            </div>
+            <div class="ai-visual">
+                🤖 + 👳‍♂️
+            </div>
+        </div>
+
+    </div>
+
+
+
+</body></html>

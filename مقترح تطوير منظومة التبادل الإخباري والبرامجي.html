@@ -1,0 +1,712 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطة تطوير منظومة التبادل الإخباري والبرامجي - OSBU</title>
+    <!-- استدعاء مكتبة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- استدعاء خط Tajawal للجزء الجديد -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* تدرجات الأخضر */
+            --primary-color: #145a32; /* أخضر غامق رسمي */
+            --secondary-color: #27ae60; /* أخضر حيوي */
+            --accent-color: #e8f5e9; /* أخضر فاتح جداً للخلفيات */
+            --highlight-color: #f1c40f; /* أصفر ذهبي للإبراز */
+            --bg-color: #f0f7f4; /* خلفية عامة مائلة للأخضر الرمادي */
+            --text-color: #1c2e20;
+            --white: #ffffff;
+            --card-shadow: 0 4px 10px rgba(20, 90, 50, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #0b3d20);
+            color: var(--white);
+            padding: 50px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 10px;
+            color: #a3e4b6;
+        }
+
+        .nav-bar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+            overflow-x: auto;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: var(--primary-color);
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-weight: 600;
+            border-radius: 25px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border: 1px solid transparent;
+            /* Flexbox لمحاذاة الأيقونة مع النص */
+            display: flex;
+            align-items: center;
+            gap: 8px; 
+        }
+
+        .nav-bar a i {
+            font-size: 1.1em; /* حجم الأيقونة */
+        }
+
+        .nav-bar a:hover, .nav-bar a.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            box-shadow: 0 4px 8px rgba(20, 90, 50, 0.3);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+            border-right: 6px solid var(--secondary-color);
+            scroll-margin-top: 100px;
+            transition: transform 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-2px);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-box {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Grid Layout for Points */
+        .grid-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .point-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e8f5e9;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .point-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--secondary-color);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(20, 90, 50, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .point-card:hover::before {
+            opacity: 1;
+        }
+
+        .point-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        ul {
+            padding-right: 20px;
+            margin: 0;
+            color: #555;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Diagram Styles */
+        .diagram-container {
+            background: var(--accent-color);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+            border: 1px dashed var(--secondary-color);
+        }
+
+        .flow-chart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .flow-step {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+            width: 150px;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .badge-tech { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+        .badge-ai { background: #f1f8e9; color: #33691e; border: 1px solid #dcedc8; }
+        .badge-media { background: #e0f2f1; color: #004d40; border: 1px solid #b2dfdb; }
+
+        /* Budget Table Styles */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .budget-table th, .budget-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .budget-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        .budget-table tr:last-child td {
+            border-bottom: none;
+        }
+        .budget-table tr:hover {
+            background-color: #f9fff9;
+        }
+        .cost-type {
+            font-weight: bold;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        .capex { background: #145a32; color: #fff; } /* تأسيسي - أخضر غامق */
+        .opex { background: #a5d6a7; color: #1b5e20; } /* تشغيلي - أخضر فاتح */
+
+        /* --- STYLES FOR INTEGRATED SYSTEM GRID (NEW) --- */
+        .systems-wrapper {
+            background-color: #f8fcf9;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border: 1px solid #d0e6d5;
+        }
+        .systems-header-title {
+            text-align: center;
+            color: var(--primary-color);
+            font-family: 'Tajawal', sans-serif;
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+        }
+        .systems-header-subtitle {
+            text-align: center;
+            color: #666;
+            font-family: 'Tajawal', sans-serif;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+        }
+        .system-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #eee;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(20, 90, 50, 0.15);
+            border-color: var(--secondary-color);
+        }
+        .system-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            margin-top: 0;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .system-card p {
+            font-size: 0.85rem;
+            color: #555;
+            margin: 0;
+            line-height: 1.4;
+        }
+        /* ----------------------------------------------- */
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 50px;
+            border-top: 5px solid var(--highlight-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8rem; }
+            .flow-chart { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+            .nav-bar { justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>مقترح تطوير منظومة التبادل الإخباري والبرامجي</h1>
+    <p>اتحاد OSBU | رؤية مستقبلية خضراء للتحول الرقمي المستدام</p>
+</header>
+
+<!-- القائمة العلوية مع الأيقونات -->
+<nav class="nav-bar">
+    <a href="#engineering" class="active">
+        <i class="fa-solid fa-laptop-code"></i> الحلول الهندسية
+    </a>
+    <a href="#content">
+        <i class="fa-solid fa-photo-film"></i> المحتوى والأرشيف
+    </a>
+    <a href="#exchange">
+        <i class="fa-solid fa-cloud-arrow-up"></i> التبادل السحابي
+    </a>
+    <a href="#ai">
+        <i class="fa-solid fa-robot"></i> الذكاء الاصطناعي
+    </a>
+    <a href="#management">
+        <i class="fa-solid fa-chart-line"></i> الإدارة والتحليلات
+    </a>
+    <a href="#budget">
+        <i class="fa-solid fa-file-invoice-dollar"></i> الميزانية والتكاليف
+    </a>
+</nav>
+
+<div class="container">
+
+    <!-- مقدمة -->
+    <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: #fff; border-radius: 15px; border: 1px solid #e0e0e0;">
+        <h3 style="color: var(--primary-color); margin-top: 0;">الرؤية العامة</h3>
+        <p style="max-width: 800px; margin: 0 auto; color: #555;">يهدف هذا المقترح إلى نقل وحدة التبادل في اتحاد OSBU من الطرق التقليدية إلى بيئة عمل رقمية ذكية ومستدامة تعتمد على الأتمتة (Automation)، الحوسبة السحابية (Cloud Computing)، والذكاء الاصطناعي (AI)، لضمان تدفق إخباري سريع ودقيق.</p>
+    </div>
+
+    <!-- القسم الأول: الحلول الهندسية -->
+    <section id="engineering">
+        <h2><div class="icon-box">1</div> الحلول الهندسية والتقنية المتقدمة</h2>
+        <div class="grid-points">
+            <div class="point-card">
+                <h3><span class="badge badge-tech">Python &amp; API</span> الشريط الإخباري الذكي</h3>
+                <p>تطوير نظام شريط إخباري آلي (Automated Ticker) يعتمد على:</p>
+                <ul>
+                    <li>جلب الأخبار العاجلة وأحوال الطقس للدول الأعضاء تلقائياً عبر تقنيات <strong>RSS Feeds</strong> و <strong>APIs</strong>.</li>
+                    <li>استخدام لغة <strong>Python</strong> لمعالجة البيانات وتحديث الشريط فورياً دون تدخل بشري.</li>
+                    <li>تأهيل الكادر الهندسي عبر دورات متخصصة في برمجة بايثون للأتمتة.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3><span class="badge badge-tech">Streaming</span> تكامل البث الرقمي</h3>
+                <p>تعزيز البث عبر وسائل التواصل الاجتماعي:</p>
+                <ul>
+                    <li>ربط الشريط الإخباري ببرمجيات البث المباشر (مثل OBS/vMix) للبث الموحد على السوشيال ميديا.</li>
+                    <li>تطوير واجهات تفاعلية (Interactive Overlays) وروابط ذكية تظهر أثناء البث الحي.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- بداية الجزء المدمج: النظام الموحد -->
+        <div class="systems-wrapper">
+            <h3 class="systems-header-title">النظام الموحد لإدارة التبادل الإخباري</h3>
+            <p class="systems-header-subtitle">Unified System for News Exchange Management</p>
+            
+            <div class="systems-grid">
+                <div class="system-card" onclick="alert('نظام تحليل وتصنيف المحتوى الإعلامي')">
+                    <h4>1. نظام تحليل وتصنيف المحتوى الإعلامي</h4>
+                    <p>Media Content Analysis and Classification System</p>
+                </div>
+                <div class="system-card" onclick="alert('ترجمة فورية مدعومة بالذكاء الاصطناعي')">
+                    <h4>2. ترجمة فورية مدعومة بالذكاء الاصطناعي</h4>
+                    <p>AI-Powered Real-Time Translation</p>
+                </div>
+                <div class="system-card" onclick="alert('نظام أرشفة ذكي للمحتوى الإعلامي')">
+                    <h4>3. نظام أرشفة ذكي للمحتوى الإعلامي</h4>
+                    <p>Smart Media Content Archiving System</p>
+                </div>
+                <div class="system-card" onclick="alert('تطبيق الكشف عن الأخبار الزائفة')">
+                    <h4>4. تطبيق الكشف عن الأخبار الزائفة</h4>
+                    <p>Fake News Detection Application</p>
+                </div>
+                <div class="system-card" onclick="alert('تحليل الجمهور والمشاهدة')">
+                    <h4>5. تحليل الجمهور والمشاهدة</h4>
+                    <p>Audience and Viewership Analysis</p>
+                </div>
+                <div class="system-card" onclick="alert('نظام توليد الأخبار أو التقارير التلقائي')">
+                    <h4>6. نظام توليد الأخبار أو التقارير التلقائي</h4>
+                    <p>Automated News or Report Generation System</p>
+                </div>
+                <div class="system-card" onclick="alert('تحليل محتوى الفيديو باستخدام الرؤية الحاسوبية')">
+                    <h4>7. تحليل محتوى الفيديو باستخدام الرؤية الحاسوبية</h4>
+                    <p>Video Content Analysis Using Computer Vision</p>
+                </div>
+                <div class="system-card" onclick="alert('تطبيق إدارة حقوق الملكية الفكرية')">
+                    <h4>8. تطبيق إدارة حقوق الملكية الفكرية</h4>
+                    <p>Intellectual Property Management Application</p>
+                </div>
+                <div class="system-card" onclick="alert('تطبيق إنتاج الإعلانات الذكية')">
+                    <h4>9. تطبيق إنتاج الإعلانات الذكية</h4>
+                    <p>Smart Advertising Production Application</p>
+                </div>
+                <div class="system-card" onclick="alert('نظام توصيات للمحتوى الإعلامي')">
+                    <h4>10. نظام توصيات للمحتوى الإعلامي</h4>
+                    <p>Media Content Recommendation System</p>
+                </div>
+                <div class="system-card" onclick="alert('نظام مونتاج ذكي')">
+                    <h4>11. نظام مونتاج ذكي</h4>
+                    <p>Intelligent Video Editing System</p>
+                </div>
+                <div class="system-card" onclick="alert('نظام جرافيكس ذكي')">
+                    <h4>12. نظام جرافيكس ذكي</h4>
+                    <p>Intelligent Graphics System</p>
+                </div>
+                <div class="system-card" onclick="alert('نظام إدارة الأشرطة الإخبارية')">
+                    <h4>13. نظام إدارة الأشرطة الإخبارية</h4>
+                    <p>News Ticker Management System</p>
+                </div>
+            </div>
+        </div>
+        <!-- نهاية الجزء المدمج -->
+
+        <!-- مخطط توضيحي -->
+        <div class="diagram-container">
+            <h4 style="color: var(--primary-color);">مخطط عمل الشريط الإخباري الآلي</h4>
+            <div class="flow-chart">
+                <div class="flow-step">مصادر الأخبار (RSS/API)</div>
+                <div class="arrow">←</div>
+                <div class="flow-step">محرك المعالجة (Python Script)</div>
+                <div class="arrow">←</div>
+                <div class="flow-step">توليد الجرافيك (CG System)</div>
+                <div class="arrow">←</div>
+                <div class="flow-step">البث المباشر (YouTube/Social)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الثاني: المحتوى والأرشيف -->
+    <section id="content">
+        <h2><div class="icon-box">2</div> إدارة المحتوى الرقمي والأرشفة</h2>
+        <div class="grid-points">
+            <div class="point-card">
+                <h3><span class="badge badge-media">Archive</span> الأرشيف الرقمي الموحد</h3>
+                <ul>
+                    <li><strong>أرشيف الصور:</strong> إنشاء بنك صور مركزي لأحداث الاتحاد بجودة عالية.</li>
+                    <li><strong>أرشيف الدورات:</strong> جدولة فيديوهات الدورات التدريبية وإعادة هيكلة قوائم التشغيل (Playlists).</li>
+                    <li><strong>إعادة تدوير المحتوى:</strong> تحويل فعاليات فيسبوك السابقة إلى عروض تقديمية وفيديوهات ملخصة.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3><span class="badge badge-media">News</span> التغطية الإخبارية العالمية</h3>
+                <ul>
+                    <li><strong>قناة النصوص (Text Channel):</strong> بث مباشر لوكالات الأنباء العالمية على شكل نصوص متتابعة.</li>
+                    <li><strong>الأحداث المصورة:</strong> واجهة لاستجلاب صور الأحداث العالمية الهامة آلياً وعرضها كـ Slideshow.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3><span class="badge badge-media">Special</span> تغطيات خاصة</h3>
+                <ul>
+                    <li><strong>الملف الفلسطيني:</strong> بث تقارير متخصصة (موشن جرافيك، فيديو، بودكاست).</li>
+                    <li><strong>أخبار الدول الأعضاء:</strong> شريط "عاجل" مخصص لأخبار الدول الأعضاء يتم تغذيته آلياً.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الثالث: آليات التبادل -->
+    <section id="exchange">
+        <h2><div class="icon-box">3</div> منظومة التبادل السحابي (Cloud Exchange)</h2>
+        <p>تحويل آلية تبادل المواد من الطرق التقليدية إلى الحلول السحابية لضمان السرعة والأمان.</p>
+        
+        <div class="grid-points">
+            <div class="point-card">
+                <h3><span class="badge badge-tech">Cloud</span> التوزيع عبر Google Drive</h3>
+                <p>اعتماد سياسة التخزين السحابي:</p>
+                <ul>
+                    <li>رفع مواد التبادل (فيديو/صوت) على سحابة الاتحاد (Google Drive Enterprise).</li>
+                    <li>نظام صلاحيات (Permissions) صارم يمنح حق الوصول للمخولين فقط.</li>
+                    <li>بث مواد التبادل المسموح بها علنياً على قناة اليوتيوب.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3><span class="badge badge-media">Live</span> البث الحي للفعاليات</h3>
+                <ul>
+                    <li>بث الدورات التدريبية للدول الأعضاء بشكل حي.</li>
+                    <li>نقل أحداث حية مختارة من الدول الأعضاء (Video Feed).</li>
+                    <li>بث حركة التبادلات (Feed Monitoring) صوت وصورة مع إحصائيات.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الرابع: الذكاء الاصطناعي -->
+    <section id="ai">
+        <h2><div class="icon-box">4</div> الذكاء الاصطناعي والابتكار (AI &amp; Innovation)</h2>
+        <div class="grid-points">
+            <div class="point-card">
+                <h3><span class="badge badge-ai">AI Bot</span> المساعد الذكي (OSBU Bot)</h3>
+                <p>تطوير شات بوت (Chatbot) ذكي على الموقع الإلكتروني:</p>
+                <ul>
+                    <li>الرد الآلي على استفسارات الأعضاء والجمهور.</li>
+                    <li>توفير معلومات عن الدورات، مواعيد البث، وطرق التبادل.</li>
+                    <li>يعمل على مدار الساعة 24/7.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3><span class="badge badge-ai">AI News</span> نشرات الأخبار الآلية</h3>
+                <p>إنتاج وبث نشرات إخبارية باستخدام مذيعين افتراضيين (AI Avatars):</p>
+                <ul>
+                    <li>بث النشرات بثلاث لغات عالمية.</li>
+                    <li>تقليل تكلفة الإنتاج وسرعة إصدار الموجزات الإخبارية.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الخامس: الإدارة والتحليلات -->
+    <section id="management">
+        <h2><div class="icon-box">5</div> الإدارة والتحليلات</h2>
+        <p>لضمان نجاح المقترحات السابقة، نوصي بإضافة طبقة إدارية وتحليلية للمنظومة:</p>
+        
+        <div class="grid-points">
+            <div class="point-card">
+                <h3>لوحة قيادة مركزية (Central Dashboard)</h3>
+                <p>شاشة موحدة للإدارة تعرض:</p>
+                <ul>
+                    <li>حجم التبادل اليومي (عدد المواد المرفوعة والمحملة).</li>
+                    <li>أكثر الدول الأعضاء نشاطاً في التبادل.</li>
+                    <li>حالة البث المباشر والخوادم.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3>نظام مراقبة الجودة الآلي</h3>
+                <p>قبل النشر أو التبادل:</p>
+                <ul>
+                    <li>فحص آلي لجودة الفيديو والصوت.</li>
+                    <li>التحقق من حقوق الملكية الفكرية للمواد المرفوعة.</li>
+                </ul>
+            </div>
+            <div class="point-card">
+                <h3>أمن المعلومات (Cybersecurity)</h3>
+                <p>حماية منظومة التبادل:</p>
+                <ul>
+                    <li>تأمين حسابات السوشيال ميديا بالمصادقة الثنائية.</li>
+                    <li>تشفير بيانات الأعضاء على السحابة.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم السادس: الميزانية والتكاليف -->
+    <section id="budget">
+        <h2><div class="icon-box">6</div> دراسة التكاليف والموارد المطلوبة</h2>
+        <p>دراسة تقديرية للنفقات التأسيسية (CAPEX) والتشغيلية (OPEX) مع التركيز على الحلول الاقتصادية.</p>
+
+        <div style="overflow-x: auto;">
+            <table class="budget-table">
+                <thead>
+                    <tr>
+                        <th>البند (Category)</th>
+                        <th>التفاصيل التقنية</th>
+                        <th>نوع التكلفة</th>
+                        <th>مستوى التكلفة المتوقع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>تطوير البرمجيات (Python/API)</strong></td>
+                        <td>برمجة سكربتات الشريط الإخباري وجلب البيانات</td>
+                        <td><span class="cost-type capex">تأسيسي</span></td>
+                        <td>منخفض (جهود ذاتية)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>واجهات البث (Graphics)</strong></td>
+                        <td>شراء قوالب vMix/OBS احترافية</td>
+                        <td><span class="cost-type capex">تأسيسي</span></td>
+                        <td>متوسط</td>
+                    </tr>
+                    <tr>
+                        <td><strong>التخزين السحابي</strong></td>
+                        <td>اشتراك Google Workspace Enterprise</td>
+                        <td><span class="cost-type opex">تشغيلي (شهري)</span></td>
+                        <td>متوسط</td>
+                    </tr>
+                    <tr>
+                        <td><strong>تغذية البيانات (Data Feeds)</strong></td>
+                        <td>اشتراك API لوكالات الأنباء والطقس</td>
+                        <td><span class="cost-type opex">تشغيلي (سنوي)</span></td>
+                        <td>مرتفع</td>
+                    </tr>
+                    <tr>
+                        <td><strong>المذيع الافتراضي (AI Avatar)</strong></td>
+                        <td>اشتراك منصات مثل HeyGen أو Synthesia</td>
+                        <td><span class="cost-type opex">تشغيلي (شهري)</span></td>
+                        <td>متوسط</td>
+                    </tr>
+                    <tr>
+                        <td><strong>التدريب والتطوير</strong></td>
+                        <td>دورات بايثون وإدارة محتوى</td>
+                        <td><span class="cost-type capex">تأسيسي</span></td>
+                        <td>متوسط</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grid-points" style="margin-top: 30px;">
+            <div class="point-card" style="border-color: var(--secondary-color); background-color: #f1f8e9;">
+                <h3 style="color: var(--primary-color);">العائد على الاستثمار (ROI)</h3>
+                <ul>
+                    <li><strong>توفير الوقت:</strong> تقليل زمن معالجة الأخبار بنسبة 70% بفضل الأتمتة.</li>
+                    <li><strong>خفض التكاليف:</strong> الاستغناء عن أجهزة الاستقبال التقليدية المكلفة.</li>
+                    <li><strong>الانتشار:</strong> زيادة الوصول للجمهور عبر السوشيال ميديا بنسبة متوقعة 40%.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>جميع الحقوق محفوظة © م.عامر نوجا اتحاد OSBU للتبادل الإخباري والبرامجي</p>
+    <p style="font-size: 0.9rem; opacity: 0.8;">تم إعداد هذا العرض لغايات التخطيط الاستراتيجي والتطوير الإداري</p>
+</footer>
+
+<script>
+    // Script to handle active nav state
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-bar a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(a => {
+            a.classList.remove('active');
+            if (a.getAttribute('href').includes(current)) {
+                a.classList.add('active');
+            }
+        });
+    });
+</script>
+
+
+
+</body></html>

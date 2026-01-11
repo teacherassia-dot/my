@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقييم  الشامل لخطة عمل OSBU - 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1200px;
+            background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 50%, #e0f2fe 100%);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #14b8a6 100%);
+            padding: 25px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .manager-info {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .manager-info h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .manager-info p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .slide-container {
+            min-height: 500px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid linear-gradient(90deg, #06b6d4 0%, #14b8a6 100%);
+        }
+
+        .slide-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.25);
+        }
+
+        .slide h2 {
+            color: #0f766e;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .slide-subtitle {
+            color: #0e7490;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .content-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f0fdfa 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-right: 5px solid #14b8a6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(20, 184, 166, 0.15);
+        }
+
+        .content-card h3 {
+            color: #0d9488;
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .content-card p {
+            color: #0f766e;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .highlight-box {
+            background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #10b981;
+        }
+
+        .highlight-box h4 {
+            color: #047857;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .list-item {
+            color: #065f46;
+            margin: 10px 20px;
+            line-height: 1.6;
+        }
+
+        .final-message {
+            background: linear-gradient(135deg, #0891b2 0%, #0d9488 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 20px 40px -10px rgba(8, 145, 178, 0.3);
+        }
+
+        .final-message h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .final-message p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .vision-statement {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .vision-statement p {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.9;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #cbd5e1;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(6, 182, 212, 0.2);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.3);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-indicator {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            width: 30px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%);
+        }
+
+        .appreciation {
+            background: linear-gradient(145deg, #fef3c7 0%, #fef9c3 100%);
+            border: 2px solid #fbbf24;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .appreciation h4 {
+            color: #92400e;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .appreciation p {
+            color: #78350f;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <div class="logo">📊</div>
+                <div>
+                    <h1>التقييم الشامل لخطة عمل OSBU</h1>
+                    <p class="header-subtitle">نحو ريادة هندسية مستدامة | 31 ديسمبر 2025</p>
+                </div>
+            </div>
+            <div class="manager-info">
+                <h3>م. عامر نوجا</h3>
+                <p>مدير الإدارة الهندسية بالاتحاد</p>
+            </div>
+        </div>
+
+        <!-- Slides Container -->
+        <div class="slide-container">
+            <!-- Slide 1: Introduction -->
+            <div class="slide active">
+                <div class="slide-header">
+                    <div class="slide-icon">🚀</div>
+                    <div>
+                        <h2>مقدمة العرض </h2>
+                        <p class="slide-subtitle">اجتماع اللجنة الهندسية - ختام عام 2025</p>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h3>نظرة عامة على الإنجازات</h3>
+                    <p>عرض استراتيجي يدمج الإنجازات التأسيسية مع الطفرة النوعية في تطوير الكوادر والأدوات الذكية، مما يعكس رؤية متكاملة لبناء منظومة هندسية رائدة.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">63%</div>
+                        <div class="stat-label">نسبة الإنجاز الكلية</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">90%</div>
+                        <div class="stat-label">تقليل التكاليف</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">دولة جديدة (توسع دولي)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">56</div>
+                        <div class="stat-label">نشاط تدريبي متخصص</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Foundation Achievements -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">📚</div>
+                    <div>
+                        <h2>الإنجازات النوعية: التأسيس المنهجي</h2>
+                        <p class="slide-subtitle">بناء الأسس الراسخة للعمل الهندسي</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>1. مصفوفة معايير تقييم العطاءات</h3>
+                    <p>إنجاز استراتيجي يضمن الشفافية والموضوعية في اختيار الشركات المنفذة للمنصة السحابية. هذا يعكس نضجاً مؤسسياً في إدارة المشتريات.</p>
+                </div>
+
+                <div class="content-card">
+                    <h3>2. الكتاب المرجعي الهندسي</h3>
+                    <p>وثيقة تأسيسية شاملة تُعد الأولى من نوعها للاتحادات الإعلامية الناشئة، تغطي جميع الجوانب من البنية التحتية إلى الأمن السيبراني.</p>
+                </div>
+
+                <div class="content-card">
+                    <h3>3. ميثاق العمل الهندسي</h3>
+                    <p>يُعتبر فعلاً الأول من نوعه في مجال الاتحادات الإعلامية، وهو إنجاز رائد يضع معايير مهنية للعمل الهندسي في القطاع الإعلامي.</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Human Capital Development -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">👥</div>
+                    <div>
+                        <h2>بناء العقول والأدوات الذكية</h2>
+                        <p class="slide-subtitle">الاستثمار في رأس المال البشري والتقني</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>خطة تطوير الكوادر الهندسية (2025-2027)</h3>
+                    <p>وثيقة استراتيجية شاملة تنقل المهندسين من التشغيل التقليدي إلى عصر الـ Broadcast IT Engineering:</p>
+                    <ul class="list-item">
+                        <li><strong>التحول النوعي:</strong> من مهندس تشغيل إلى Broadcast IT Engineer</li>
+                        <li><strong>البرامج الشاملة:</strong> 56 نشاطاً تدريبياً في AI, Cloud, Cybersecurity</li>
+                        <li><strong>الشراكات العالمية:</strong> Sony, AWS, Azure للشهادات الدولية</li>
+                        <li><strong>المختبرات المحاكية:</strong> Simulation Labs للتدريب الآمن</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h3>تطبيق "مستشار هندسة البث وتكاليف CDN"</h3>
+                    <p>حل رقمي مبتكر تم تطويره داخلياً:</p>
+                    <ul class="list-item">
+                        <li><strong>الذكاء المالي:</strong> حساب دقيق لتكاليف CDN في ثوانٍ</li>
+                        <li><strong>المرجعية الفنية:</strong> قاعدة بيانات شاملة للمعايير الهندسية</li>
+                        <li><strong>التطوير الداخلي:</strong> توفير تكاليف الاستشارات الخارجية</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 4: Technical & Financial Studies -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">📈</div>
+                    <div>
+                        <h2>الدراسات الفنية والمالية المتقدمة</h2>
+                        <p class="slide-subtitle">التحليل العميق والحلول المبتكرة</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">$32.2K</div>
+                        <div class="stat-label">(مرحليا)CAPEX الأولي</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$1.4M</div>
+                        <div class="stat-label">العائد السنوي الطموح المتوقع (2028)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1900%</div>
+                        <div class="stat-label">ROI خلال 5 سنوات</div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>الدراسات المنجزة</h4>
+                    <ul class="list-item">
+                        <li>دراسات مقارنة شاملة لأنظمة إدارة المحتوى (Metus vs Cinegy vs Others)</li>
+                        <li>تحليل دقيق للتكاليف: CAPEX مقابل OPEX السنوي</li>
+                        <li>النموذج الهجين الذي يوفر 60% من التكاليف مقارنة بالحلول التقليدية</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>الأتمتة والتحول الرقمي</h4>
+                    <ul class="list-item">
+                        <li>تطبيقات التقارير الآلية: تحسين كفاءة المتابعة اليومية</li>
+                        <li>نظام متابعة الأداء: بيانات حية (Real-time) عن التبادلات</li>
+                        <li>أتمتة العمليات الروتينية: تحرير الكوادر للتركيز على المهام الإبداعية</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 5: Current Status Analysis -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">🎯</div>
+                    <div>
+                        <h2>تحليل الوضع الحالي</h2>
+                        <p class="slide-subtitle">سبتمبر 2025 - نقاط القوة والتحديات</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>نقاط القوة الاستراتيجية</h3>
+                    <ul class="list-item">
+                        <li><strong>الابتكار المالي:</strong> الحلول الذكية بـ 10% من الميزانية الأصلية</li>
+                        <li><strong>التوسع الدولي:</strong> 12 دولة من 36 دولة غير عربية (اختراق أسواق جديدة)</li>
+                        <li><strong>إغلاق دائرة الاستدامة:</strong> دمج Hardware مع Humanware</li>
+                        <li><strong>الابتكار الداخلي:</strong> تطوير البرمجيات داخلياً (In-house Development)</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h3>التحديات وخطط المواجهة</h3>
+                    <ul class="list-item">
+                        <li><strong>التحدي المالي:</strong> تم تحويله إلى فرصة لابتكار حلول أكثر كفاءة</li>
+                        <li><strong>التحدي الزمني:</strong> التأخير في بعض الفقرات مُبرر بالعائد الاستثماري المتوقع</li>
+                        <li><strong>تحدي التدريب الدولي:</strong> تمت معالجته عبر خطة تدريب رقمية شاملة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 6: Recommendations -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">⚡</div>
+                    <div>
+                        <h2>التوصيات الاستراتيجية</h2>
+                        <p class="slide-subtitle">محاور العرض المقترحة للإدارة</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>المحور الأول: الإنجاز مقابل الاستثمار</h4>
+                    <ul class="list-item">
+                        <li>استثمار أولي: $72,200 (CAPEX)</li>
+                        <li>عائد متوقع سنوي: $كبير  بحلول 2028</li>
+                        <li>ROI متوقع:اكبر من 1000% خلال 5 سنوات</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>المحور الثاني: النموذج الهجين كميزة تنافسية</h4>
+                    <ul class="list-item">
+                        <li>توفير 90% من تكاليف التركيبات</li>
+                        <li>مرونة أعلى بـ 300% من الأنظمة التقليدية</li>
+                        <li>قابلية توسع لا محدودة</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>المحور الثالث: الريادة المعرفية</h4>
+                    <ul class="list-item">
+                        <li>أول ميثاق هندسي للاتحادات الإعلامية</li>
+                        <li>دليل مرجعي شامل يصبح معياراً للقطاع</li>
+                        <li>نظام أتمتة يرفع الكفاءة التشغيلية بنسبة 40%</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>المحور الرابع: الاستثمار في العقول والأدوات</h4>
+                    <ul class="list-item">
+                        <li>عرض هيكلية الخطة التدريبية (56 نشاطاً)</li>
+                        <li>عرض حي (Live Demo) لتطبيق "مستشار هندسة البث"</li>
+                        <li>إبراز شهادات (CompTIA, CCNA, PMP) كمعايير جديدة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 7: Defense Points -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">🛡️</div>
+                    <div>
+                        <h2>نقاط القوة الداعمة للخطة</h2>
+                        <p class="slide-subtitle">الأسس الراسخة للنجاح</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>الشفافية الكاملة</h3>
+                    <p>مصفوفة المعايير تضمن اختيار أفضل المورّدين بموضوعية تامة، مع توثيق كامل لكل قرار.</p>
+                </div>
+
+                <div class="content-card">
+                    <h3>التوثيق الشامل</h3>
+                    <p>كل قرار مدعوم بدراسة فنية ومالية مفصلة، مما يضمن المصداقية والمهنية.</p>
+                </div>
+
+                <div class="content-card">
+                    <h3>المرونة الاستراتيجية</h3>
+                    <p>القدرة على التكيف مع قيود الميزانية دون التضحية بالجودة أو الأهداف الاستراتيجية.</p>
+                </div>
+
+                <div class="content-card">
+                    <h3>البُعد الدولي</h3>
+                    <p>التوسع خارج النطاق العربي يفتح آفاقاً جديدة للنمو والريادة العالمية.</p>
+                </div>
+            </div>
+
+            <!-- Slide 8: Executive Summary -->
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-icon">🌍</div>
+                    <div>
+                        <h2>الخلاصة التنفيذية</h2>
+                        <p class="slide-subtitle">معادلة النجاح المتكاملة</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>تقييم الأداء العام</h3>
+                    <p>الخطة تسير بشكل ممتاز رغم التحديات. النسبة الإجمالية للإنجاز 63% تعكس تقدماً حقيقياً، خاصة مع الأخذ بعين الاعتبار الإنجازات النوعية والتوفير المالي الضخم والتوسع الدولي الناجح.</p>
+                </div>
+
+                <div class="final-message">
+                    <h3>الرسالة </h3>
+                    <p>لقد نجحنا  بفضل الله في سبتمبر 2025 في صياغة معادلة النجاح الكاملة:</p>
+                    
+                    <div class="vision-statement">
+                        <p>
+                            "بشغفنا الهندسي وأفكارنا الإبداعية وخططنا الاستراتيجية المدروسة، نحن جاهزون ليس فقط للتشغيل الاحترافي، بل لقيادة القطاع وصناعة التميز هندسياً وتدريبياً.
+                            <br><br>
+                            نبني اليوم أسساً راسخة، كل مرحلة تؤسس بحكمة للتي تليها، نخلق حلولاً ذكية تتجاوز التحديات، ونرسم مساراً واضحاً نحو حضور عالمي مؤثر للاتحاد.
+                            <br><br>
+                            مع اكتمال المنظومة الهندسية بالحد الأدنى من المهندسين المتخصصين، سنحول الرؤية إلى واقع ملموس يعزز مكانة الاتحاد كرائد في الابتكار الإعلامي الهندسي."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">🏗️</div>
+                        <div class="stat-label">بنية تحتية ذكية<br>وفرت 90% من التكاليف</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">🎓</div>
+                        <div class="stat-label">كوادر مؤهلة<br>Broadcast IT Engineers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">💻</div>
+                        <div class="stat-label">أدوات رقمية<br>تطبيقات ذكية مبتكرة</div>
+                    </div>
+                </div>
+
+                <div class="appreciation">
+                    <h4>كلمة شكر وتقدير</h4>
+                    <p>
+                        أتقدم بخالص الشكر والتقدير لأعضاء اللجنة الهندسية الموقرة على ثقتهم ودعمهم المستمر.
+                        <br>
+                        إن نجاحنا اليوم هو ثمرة العمل الجماعي والرؤية المشتركة نحو التميز.
+                        <br>
+                        معاً نبني مستقبلاً هندسياً مشرقاً للاتحاد.
+                    </p>
+                    <p style="margin-top: 20px; font-weight: bold; color: #92400e;">
+                        م. عامر نوجا
+                        <br>
+                        مدير الإدارة الهندسية بالاتحاد
+                        <br>
+                        31 ديسمبر 2025
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" onclick="previousSlide()">السابق</button>
+            
+            <div class="slide-indicator" id="slideIndicator">
+                <!-- Dots will be generated by JavaScript -->
+            </div>
+            
+            <button class="nav-button" onclick="nextSlide()">التالي</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Initialize slide indicators
+        function initializeIndicators() {
+            const indicatorContainer = document.getElementById('slideIndicator');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => goToSlide(i);
+                indicatorContainer.appendChild(dot);
+            }
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+
+            // Update indicators
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.remove('active');
+                if (i === index) {
+                    dot.classList.add('active');
+                }
+            });
+
+            // Update navigation buttons
+            const prevButton = document.querySelector('.nav-button');
+            const nextButton = document.querySelectorAll('.nav-button')[1];
+            
+            prevButton.disabled = index === 0;
+            nextButton.disabled = index === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                previousSlide();
+            } else if (e.key === 'ArrowLeft') {
+                nextSlide();
+            }
+        });
+
+        // Initialize
+        initializeIndicators();
+        showSlide(0);
+    </script>
+</body>
+</html>
